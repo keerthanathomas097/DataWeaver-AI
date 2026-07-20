@@ -5,13 +5,11 @@ export async function getWorkspaces() {
   return data;
 }
 
-export async function createWorkspace({ name, domain, description, color, iconName }) {
+export async function createWorkspace({ name, domain, description }) {
   const { data } = await client.post('/workspaces/', {
     name,
     research_domain: domain,
     description,
-    color,
-    icon_name: iconName,
   });
   return data;
 }

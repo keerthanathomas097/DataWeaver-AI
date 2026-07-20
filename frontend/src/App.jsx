@@ -31,7 +31,8 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import CreateWorkspaceModal from './components/CreateWorkspaceModal';
 import { useAuth } from './context/AuthContext';
-import { getDashboardData, createWorkspace } from './api/mockData';
+import { getDashboardData } from './api/mockData';
+import * as workspaceApi from './api/workspaceApi';
 
 // Map icon string names to React Lucide components
 const iconMap = {
@@ -85,9 +86,125 @@ export default function App() {
     const loadData = async () => {
       try {
         const res = await getDashboardData();
+        let dbWorkspaces = [];
+        try {
+          dbWorkspaces = await workspaceApi.getWorkspaces();
+        } catch (apiErr) {
+          console.error('Failed to load workspaces from API, using mock', apiErr);
+        }
+
+        // If user has no workspaces in DB, let's pre-populate the DB with the mock workspaces!
+        if (dbWorkspaces.length === 0) {
+          const mockWorkspacesToCreate = [
+            {
+              name: 'Brain Tumor MRI Research',
+              domain: 'Medical Imaging',
+              description: 'Brain tumor dataset profiling, labeling and harmonization.'
+            },
+            {
+              name: 'Agricultural Leaf Disease Study',
+              domain: 'Agriculture',
+              description: 'Tomato, Grape, and Apple leaf disease classification.'
+            },
+            {
+              name: 'Medical Image Classification',
+              domain: 'Medical Imaging',
+              description: 'Multi-modal chest X-ray and diagnostic scan collections.'
+            },
+            {
+              name: 'Chest X-Ray Pneumonia Diagnosis',
+              domain: 'Medical Imaging',
+              description: 'Pediatric chest scans control study.'
+            }
+          ];
+
+          // Create mock workspaces in the DB
+          for (const mockWs of mockWorkspacesToCreate) {
+            try {
+              await workspaceApi.createWorkspace(mockWs);
+            } catch (err) {
+              console.error('Error seeding mock workspace', err);
+            }
+          }
+          
+          // Re-fetch workspaces
+          try {
+            dbWorkspaces = await workspaceApi.getWorkspaces();
+          } catch (err) {
+            console.error('Error fetching after seed', err);
+          }
+        }
+
+        // Map domain to dynamic category, color and icon on the frontend
+        const mapDomainToVisuals = (domain) => {
+          if (!domain) return { category: 'Other', color: '#64748B', iconName: 'Folder' };
+          const lower = domain.toLowerCase();
+          if (lower.includes('medical') || lower.includes('brain') || lower.includes('chest')) {
+            return { category: 'Medical', color: '#3B82F6', iconName: 'Microscope' };
+          }
+          if (lower.includes('agriculture') || lower.includes('leaf') || lower.includes('crop') || lower.includes('plant')) {
+            return { category: 'Agriculture', color: '#10B981', iconName: 'Sprout' };
+          }
+          if (lower.includes('biology') || lower.includes('clinical') || lower.includes('gene')) {
+            return { category: 'Biology', color: '#8B5CF6', iconName: 'Activity' };
+          }
+          if (lower.includes('vision') || lower.includes('computer')) {
+            return { category: 'Vision', color: '#6366F1', iconName: 'Eye' };
+          }
+          return { category: 'General', color: '#3B82F6', iconName: 'Folder' };
+        };
+
+        const mappedWorkspaces = dbWorkspaces.map(ws => {
+          const visuals = mapDomainToVisuals(ws.research_domain);
+          
+          // Retain mock statistical values for the seeded original workspaces
+          let datasetsCount = 0;
+          let imagesCount = '0';
+          let qualityScore = null;
+
+          if (ws.name === 'Brain Tumor MRI Research') {
+            datasetsCount = 6;
+            imagesCount = '24.5k';
+            qualityScore = 91;
+          } else if (ws.name === 'Agricultural Leaf Disease Study') {
+            datasetsCount = 4;
+            imagesCount = '12.8k';
+            qualityScore = 86;
+          } else if (ws.name === 'Medical Image Classification') {
+            datasetsCount = 8;
+            imagesCount = '48.2k';
+            qualityScore = 88;
+          } else if (ws.name === 'Chest X-Ray Pneumonia Diagnosis') {
+            datasetsCount = 3;
+            imagesCount = '5.6k';
+            qualityScore = 94;
+          }
+
+          return {
+            id: ws.id,
+            name: ws.name,
+            domain: ws.research_domain,
+            category: visuals.category,
+            description: ws.description || '',
+            color: visuals.color,
+            iconName: visuals.iconName,
+            datasetsCount: datasetsCount,
+            imagesCount: imagesCount,
+            imagesRaw: parseInt(imagesCount) || 0,
+            qualityScore: qualityScore,
+            collaborators: ['#3B82F6', '#10B981', '#6366F1'].slice(0, (datasetsCount % 3) + 1),
+            status: 'Active',
+            lastModified: 'Just now'
+          };
+        });
+
+        // Update stats activeWorkspaces
+        res.stats.activeWorkspaces.value = mappedWorkspaces.length;
+        res.workspaces = mappedWorkspaces;
+
         setDashboardData(res);
-        if (res.workspaces.length > 0) {
-          setActiveWorkspace(res.workspaces[0].id);
+        if (mappedWorkspaces.length > 0) {
+          setActiveWorkspace(mappedWorkspaces[0].id);
         }
       } catch (err) {
         console.error('Error loading dashboard data', err);
@@ -99,11 +216,68 @@ export default function App() {
   }, []);
 
   const handleCreateWorkspace = async (formData) => {
-    const created = await createWorkspace(formData);
-    const updated = await getDashboardData();
-    setDashboardData(updated);
-    setActiveWorkspace(created.id);
-    setActiveTab('workspace'); // Direct routing to empty workspace onboarding
+    try {
+      const created = await workspaceApi.createWorkspace({
+        name: formData.name,
+        domain: formData.domain,
+        description: formData.description
+      });
+      
+      const mapDomainToVisuals = (domain) => {
+        if (!domain) return { category: 'Other', color: '#64748B', iconName: 'Folder' };
+        const lower = domain.toLowerCase();
+        if (lower.includes('medical') || lower.includes('brain') || lower.includes('chest')) {
+          return { category: 'Medical', color: '#3B82F6', iconName: 'Microscope' };
+        }
+        if (lower.includes('agriculture') || lower.includes('leaf') || lower.includes('crop') || lower.includes('plant')) {
+          return { category: 'Agriculture', color: '#10B981', iconName: 'Sprout' };
+        }
+        if (lower.includes('biology') || lower.includes('clinical') || lower.includes('gene')) {
+          return { category: 'Biology', color: '#8B5CF6', iconName: 'Activity' };
+        }
+        if (lower.includes('vision') || lower.includes('computer')) {
+          return { category: 'Vision', color: '#6366F1', iconName: 'Eye' };
+        }
+        return { category: 'General', color: '#3B82F6', iconName: 'Folder' };
+      };
+
+      const visuals = mapDomainToVisuals(created.research_domain);
+
+      const mappedCreated = {
+        id: created.id,
+        name: created.name,
+        domain: created.research_domain,
+        category: visuals.category,
+        description: created.description || '',
+        color: visuals.color,
+        iconName: visuals.iconName,
+        datasetsCount: 0,
+        imagesCount: '0',
+        imagesRaw: 0,
+        qualityScore: null,
+        collaborators: ['#3B82F6'],
+        status: 'Active',
+        lastModified: 'Just now'
+      };
+
+      setDashboardData(prev => ({
+        ...prev,
+        stats: {
+          ...prev.stats,
+          activeWorkspaces: {
+            ...prev.stats.activeWorkspaces,
+            value: prev.workspaces.length + 1
+          }
+        },
+        workspaces: [mappedCreated, ...prev.workspaces]
+      }));
+
+      setActiveWorkspace(created.id);
+      setActiveTab('workspace'); // Direct routing to empty workspace onboarding
+    } catch (err) {
+      console.error('Error creating workspace via backend API', err);
+      alert('Failed to create workspace on backend. Check console for details.');
+    }
   };
 
   if (loading) {
