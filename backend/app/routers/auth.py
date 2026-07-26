@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
-from sqlmodel import Session
+from sqlmodel import Session, select
 from app.database import get_session
 from app.schemas.user import UserSignup, UserLogin, UserRead, Token
 from app.services import auth_service
@@ -42,7 +42,12 @@ def signup(data: UserSignup, session: Session = Depends(get_session)):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     user = auth_service.create_user(session, data.email, data.password, data.full_name)
-    return user
+    return UserRead(
+    id=user.user_id,
+    email=user.user_email,
+    full_name=user.user_full_name,
+    is_admin=user.user_is_admin
+)
 
 @router.get("/verify-email")
 def verify_email(token: str, session: Session = Depends(get_session)):
@@ -56,9 +61,9 @@ def login(data: UserLogin, session: Session = Depends(get_session)):
     user = auth_service.authenticate_user(session, data.email, data.password)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
-    if not user.email_verified:
+    if not user.user_email_verified:
         raise HTTPException(status_code=403, detail="Please verify your email before logging in")
-    token = auth_service.create_access_token(str(user.id))
+    token = auth_service.create_access_token(str(user.user_id))
     return Token(access_token=token)
 @router.get("/google/login")
 async def google_login(request: Request):
@@ -80,9 +85,51 @@ async def google_callback(request: Request, session: Session = Depends(get_sessi
         google_id=user_info["sub"],
     )
 
-    access_token = auth_service.create_access_token(str(user.id))
+    access_token = auth_service.create_access_token(str(user.user_id))
     return RedirectResponse(url=f"{settings.frontend_url}/oauth-success?token={access_token}")
 
 @router.get("/me", response_model=UserRead)
 def get_me(current_user: User = Depends(get_current_user)):
-    return current_user
+   return UserRead(
+    id=current_user.user_id,
+    email=current_user.user_email,
+    full_name=current_user.user_full_name,
+    is_admin=current_user.user_is_admin
+)
+
+@router.get("/users", response_model=list[UserRead])
+def list_users(
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    if not current_user.user_is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized to view user directory")
+    users = session.exec(select(User)).all()
+    return [
+        UserRead(
+            id=u.user_id,
+            email=u.user_email,
+            full_name=u.user_full_name,
+            is_admin=u.user_is_admin
+        )
+        for u in users
+    ]
+
+@router.put("/users/{user_id}/toggle-admin")
+def toggle_user_admin(
+    user_id: uuid.UUID,
+    current_user: User = Depends(get_current_user),
+    session: Session = Depends(get_session)
+):
+    if not current_user.user_is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized to perform administrative actions")
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    if user.user_id == current_user.user_id:
+        raise HTTPException(status_code=400, detail="Cannot toggle your own administrative privileges")
+    user.user_is_admin = not user.user_is_admin
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return {"message": "User admin status updated", "is_admin": user.user_is_admin}

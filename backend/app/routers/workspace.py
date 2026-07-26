@@ -15,12 +15,20 @@ def create_workspace(
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    return workspace_service.create_workspace(
+    ws = workspace_service.create_workspace(
         session=session,
-        user_id=current_user.id,
+        user_id=current_user.user_id,
         name=data.name,
         research_domain=data.research_domain,
         description=data.description
+    )
+    return WorkspaceRead(
+        id=ws.workspace_id,
+        name=ws.workspace_name,
+        research_domain=ws.workspace_research_domain,
+        description=ws.workspace_description,
+        created_at=ws.workspace_created_at,
+        updated_at=ws.workspace_updated_at
     )
 
 @router.get("/", response_model=list[WorkspaceRead])
@@ -28,7 +36,18 @@ def list_workspaces(
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    return workspace_service.get_workspaces_for_user(session, current_user.id)
+    workspaces = workspace_service.get_workspaces_for_user(session, current_user.user_id)
+    return [
+        WorkspaceRead(
+            id=ws.workspace_id,
+            name=ws.workspace_name,
+            research_domain=ws.workspace_research_domain,
+            description=ws.workspace_description,
+            created_at=ws.workspace_created_at,
+            updated_at=ws.workspace_updated_at
+        )
+        for ws in workspaces
+    ]
 
 @router.get("/{workspace_id}", response_model=WorkspaceRead)
 def get_workspace(
@@ -36,7 +55,14 @@ def get_workspace(
     session: Session = Depends(get_session),
     current_user: User = Depends(get_current_user),
 ):
-    workspace = workspace_service.get_workspace_by_id(session, workspace_id, current_user.id)
+    workspace = workspace_service.get_workspace_by_id(session, workspace_id, current_user.user_id)
     if not workspace:
         raise HTTPException(status_code=404, detail="Workspace not found")
-    return workspace
+    return WorkspaceRead(
+        id=workspace.workspace_id,
+        name=workspace.workspace_name,
+        research_domain=workspace.workspace_research_domain,
+        description=workspace.workspace_description,
+        created_at=workspace.workspace_created_at,
+        updated_at=workspace.workspace_updated_at
+    )

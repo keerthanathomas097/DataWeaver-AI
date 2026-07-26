@@ -25,14 +25,20 @@ import {
   Layers,
   Sparkles,
   RefreshCw,
-  CheckCircle2
+  CheckCircle2,
+  Users,
+  Shield,
+  Search,
+  Lock
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import CreateWorkspaceModal from './components/CreateWorkspaceModal';
+import DiscoverDatasets from './components/DiscoverDatasets';
 import { useAuth } from './context/AuthContext';
 import { getDashboardData } from './api/mockData';
 import * as workspaceApi from './api/workspaceApi';
+import * as authApi from './api/authApi';
 
 // Map icon string names to React Lucide components
 const iconMap = {
@@ -72,11 +78,310 @@ const mockWorkspaceDatasets = {
   ]
 };
 
+function AdminDashboardView({ setActiveTab }) {
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    responseTime: '14ms',
+    dbStatus: 'Connected',
+  });
+  const [loadingStats, setLoadingStats] = useState(true);
+
+  useEffect(() => {
+    const fetchAdminStats = async () => {
+      try {
+        const usersList = await authApi.getUsers();
+        setStats(prev => ({
+          ...prev,
+          totalUsers: usersList.length,
+        }));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingStats(false);
+      }
+    };
+    fetchAdminStats();
+  }, []);
+
+  return (
+    <div className="space-y-8 animate-in fade-in-50 duration-200">
+      <div>
+        <h2 className="font-extrabold text-[24px] text-slate-900 tracking-tight">
+          Admin Command Center
+        </h2>
+        <p className="text-[14px] text-slate-500 font-medium mt-1">
+          System status monitoring, security logging, and enterprise user access control.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-white border border-slate-100/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Users</span>
+            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+              <Users size={16} />
+            </div>
+          </div>
+          <p className="text-[28px] font-extrabold text-slate-800 mt-3">
+            {loadingStats ? <Loader2 size={20} className="animate-spin text-slate-400" /> : stats.totalUsers}
+          </p>
+          <p className="text-[11px] text-emerald-600 font-semibold mt-2">Active registered accounts</p>
+        </div>
+
+        <div className="bg-white border border-slate-100/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">System Health</span>
+            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+              <Activity size={16} />
+            </div>
+          </div>
+          <p className="text-[28px] font-extrabold text-slate-800 mt-3">Healthy</p>
+          <p className="text-[11px] text-emerald-600 font-semibold mt-2 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            All nodes online
+          </p>
+        </div>
+
+        <div className="bg-white border border-slate-100/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Database Status</span>
+            <div className="p-2 bg-purple-50 text-purple-600 rounded-xl">
+              <Database size={16} />
+            </div>
+          </div>
+          <p className="text-[28px] font-extrabold text-slate-800 mt-3">{stats.dbStatus}</p>
+          <p className="text-[11px] text-purple-600 font-semibold mt-2">PostgreSQL 15 Cluster</p>
+        </div>
+
+        <div className="bg-white border border-slate-100/80 rounded-2xl p-5 shadow-xs hover:shadow-md transition-all">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">API Latency</span>
+            <div className="p-2 bg-amber-50 text-amber-600 rounded-xl">
+              <Zap size={16} />
+            </div>
+          </div>
+          <p className="text-[28px] font-extrabold text-slate-800 mt-3">{stats.responseTime}</p>
+          <p className="text-[11px] text-slate-400 font-medium mt-2">Average response threshold</p>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 bg-white border border-slate-100/80 rounded-2xl p-6 space-y-4">
+          <h3 className="text-[15px] font-bold text-slate-800">System Activity Log</h3>
+          <div className="divide-y divide-slate-50 text-[13px]">
+            <div className="py-3 flex justify-between items-center">
+              <div>
+                <p className="font-semibold text-slate-700">API GET /auth/users called</p>
+                <p className="text-slate-400 text-[11px]">System Administrator fetched user directory</p>
+              </div>
+              <span className="text-slate-400 font-mono text-[11px]">Just now</span>
+            </div>
+            <div className="py-3 flex justify-between items-center">
+              <div>
+                <p className="font-semibold text-slate-700">Database Connection verified</p>
+                <p className="text-slate-400 text-[11px]">Connection active pool size: 8</p>
+              </div>
+              <span className="text-slate-400 font-mono text-[11px]">5 min ago</span>
+            </div>
+            <div className="py-3 flex justify-between items-center">
+              <div>
+                <p className="font-semibold text-slate-700">Token Issuer verified</p>
+                <p className="text-slate-400 text-[11px]">Enforced JWT signature validation HS256</p>
+              </div>
+              <span className="text-slate-400 font-mono text-[11px]">10 min ago</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white border border-slate-100/80 rounded-2xl p-6 space-y-5 flex flex-col justify-between">
+          <div>
+            <h3 className="text-[15px] font-bold text-slate-800">Administrative Tasks</h3>
+            <p className="text-[13px] text-slate-400 mt-1">Quick links to platform utilities.</p>
+          </div>
+          <div className="space-y-3">
+            <button 
+              onClick={() => setActiveTab('admin-users')}
+              className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-100 rounded-xl text-slate-700 hover:text-blue-600 transition-all font-bold text-[13px] group"
+            >
+              <span>Manage Users & Roles</span>
+              <ArrowRight size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+            </button>
+            <button 
+              className="w-full flex items-center justify-between p-3.5 bg-slate-50 hover:bg-blue-50 border border-slate-100 hover:border-blue-100 rounded-xl text-slate-700 hover:text-blue-600 transition-all font-bold text-[13px] group"
+              onClick={() => alert("Enterprise backup created successfully!")}
+            >
+              <span>Backup System Registry</span>
+              <ArrowRight size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminUsersView() {
+  const { user: authUser } = useAuth();
+  const [usersList, setUsersList] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [search, setSearch] = useState('');
+  const [togglingId, setTogglingId] = useState(null);
+
+  const loadUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      const data = await authApi.getUsers();
+      setUsersList(data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
+  useEffect(() => {
+    loadUsers();
+  }, []);
+
+  const handleToggleAdmin = async (userId, currentIsAdmin) => {
+    if (userId === authUser?.id) {
+      alert("You cannot revoke your own administrator privileges.");
+      return;
+    }
+    try {
+      setTogglingId(userId);
+      await authApi.toggleAdmin(userId);
+      setUsersList(prev => prev.map(u => u.id === userId ? { ...u, is_admin: !currentIsAdmin } : u));
+    } catch (err) {
+      console.error("Failed to toggle admin role", err);
+      alert(err?.response?.data?.detail || "Failed to update user role.");
+    } finally {
+      setTogglingId(null);
+    }
+  };
+
+  const filteredUsers = usersList.filter(u => 
+    u.email.toLowerCase().includes(search.toLowerCase()) || 
+    (u.full_name && u.full_name.toLowerCase().includes(search.toLowerCase()))
+  );
+
+  return (
+    <div className="space-y-6 animate-in fade-in-50 duration-200">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-extrabold text-[22px] text-slate-800 tracking-tight">
+            User Directory
+          </h2>
+          <p className="text-[13px] text-slate-400 font-medium">
+            View registered credentials, monitor roles, and assign administrative capabilities.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-100/80 rounded-2xl overflow-hidden shadow-xs">
+        <div className="p-4 border-b border-slate-50 bg-slate-50/50 flex items-center justify-between gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input
+              type="text"
+              placeholder="Search by name or email..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full pl-9.5 pr-4 py-2 text-[13px] bg-white border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400 transition-all"
+            />
+          </div>
+          <div className="text-[12px] text-slate-400 font-medium">
+            Showing {filteredUsers.length} of {usersList.length} users
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-left text-[13px]">
+            <thead>
+              <tr className="bg-slate-50 text-slate-400 font-bold uppercase tracking-wider border-b border-slate-100">
+                <th className="px-6 py-3.5 text-[10px]">Name</th>
+                <th className="px-6 py-3.5 text-[10px]">Email Address</th>
+                <th className="px-6 py-3.5 text-[10px]">Role Status</th>
+                <th className="px-6 py-3.5 text-[10px] text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50 font-medium text-slate-600">
+              {loadingUsers ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center justify-center gap-3">
+                      <Loader2 className="animate-spin text-blue-600" size={24} />
+                      <span className="text-slate-400 text-[13px]">Fetching user records...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : filteredUsers.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-12 text-center text-slate-400">
+                    No matching user accounts found.
+                  </td>
+                </tr>
+              ) : (
+                filteredUsers.map(userItem => (
+                  <tr key={userItem.id} className="hover:bg-slate-50/40 transition-colors">
+                    <td className="px-6 py-4 font-bold text-slate-800">
+                      {userItem.full_name || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 text-slate-500 font-mono">
+                      {userItem.email}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                        userItem.is_admin 
+                          ? 'bg-blue-50 text-blue-600 border border-blue-100' 
+                          : 'bg-slate-50 text-slate-500 border border-slate-200'
+                      }`}>
+                        {userItem.is_admin ? 'ADMINISTRATOR' : 'RESEARCHER'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        disabled={togglingId === userItem.id || userItem.id === authUser?.id}
+                        onClick={() => handleToggleAdmin(userItem.id, userItem.is_admin)}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold border transition-all ${
+                          userItem.is_admin
+                            ? 'bg-rose-50 text-rose-600 border-rose-100 hover:bg-rose-100'
+                            : 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100'
+                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                      >
+                        {togglingId === userItem.id ? (
+                          <Loader2 size={12} className="animate-spin mx-auto" />
+                        ) : userItem.is_admin ? (
+                          'Demote to User'
+                        ) : (
+                          'Promote to Admin'
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const { user: authUser } = useAuth();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasInitializedTab, setHasInitializedTab] = useState(false);
+
+  useEffect(() => {
+    if (authUser && !hasInitializedTab) {
+      setActiveTab(authUser.is_admin ? 'admin-dashboard' : 'dashboard');
+      setHasInitializedTab(true);
+    }
+  }, [authUser, hasInitializedTab]);
   const [activeWorkspace, setActiveWorkspace] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,47 +398,7 @@ export default function App() {
           console.error('Failed to load workspaces from API, using mock', apiErr);
         }
 
-        // If user has no workspaces in DB, let's pre-populate the DB with the mock workspaces!
-        if (dbWorkspaces.length === 0) {
-          const mockWorkspacesToCreate = [
-            {
-              name: 'Brain Tumor MRI Research',
-              domain: 'Medical Imaging',
-              description: 'Brain tumor dataset profiling, labeling and harmonization.'
-            },
-            {
-              name: 'Agricultural Leaf Disease Study',
-              domain: 'Agriculture',
-              description: 'Tomato, Grape, and Apple leaf disease classification.'
-            },
-            {
-              name: 'Medical Image Classification',
-              domain: 'Medical Imaging',
-              description: 'Multi-modal chest X-ray and diagnostic scan collections.'
-            },
-            {
-              name: 'Chest X-Ray Pneumonia Diagnosis',
-              domain: 'Medical Imaging',
-              description: 'Pediatric chest scans control study.'
-            }
-          ];
 
-          // Create mock workspaces in the DB
-          for (const mockWs of mockWorkspacesToCreate) {
-            try {
-              await workspaceApi.createWorkspace(mockWs);
-            } catch (err) {
-              console.error('Error seeding mock workspace', err);
-            }
-          }
-          
-          // Re-fetch workspaces
-          try {
-            dbWorkspaces = await workspaceApi.getWorkspaces();
-          } catch (err) {
-            console.error('Error fetching after seed', err);
-          }
-        }
 
         // Map domain to dynamic category, color and icon on the frontend
         const mapDomainToVisuals = (domain) => {
@@ -296,7 +561,7 @@ export default function App() {
   const displayUser = {
     name: authUser?.full_name || user.name,
     email: authUser?.email || user.email,
-    role: user.role,
+    role: authUser?.is_admin ? 'System Administrator' : (user.role || 'Lead Researcher'),
     avatar: user.avatar,
   };
 
@@ -353,7 +618,7 @@ export default function App() {
   return (
     <div className="flex bg-slate-50/50 min-h-screen text-slate-800 antialiased font-sans">
       {/* Sidebar Navigation */}
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isAdmin={authUser?.is_admin} />
 
       {/* Main Panel */}
       <div className="flex-1 flex flex-col min-w-0">
@@ -372,7 +637,13 @@ export default function App() {
 
         {/* Routing Area */}
         <main className="flex-1 p-8 overflow-y-auto max-w-7xl w-full mx-auto">
-          {activeTab === 'dashboard' ? (
+          {authUser?.is_admin ? (
+            activeTab === 'admin-users' ? (
+              <AdminUsersView />
+            ) : (
+              <AdminDashboardView setActiveTab={setActiveTab} />
+            )
+          ) : activeTab === 'dashboard' ? (
             <div className="space-y-8 animate-in fade-in-50 duration-200">
               {/* Welcome banner */}
               <div>
@@ -1078,6 +1349,13 @@ export default function App() {
                 ))}
               </div>
             </div>
+          ) : activeTab === 'discover' ? (
+            <DiscoverDatasets 
+              workspaces={workspaces}
+              activeWorkspace={activeWorkspace}
+              setActiveWorkspace={setActiveWorkspace}
+              setActiveTab={setActiveTab}
+            />
           ) : (
             /* Sub-module View Placeholder */
             <div className="bg-white border border-slate-100/80 rounded-2xl p-8 max-w-2xl mx-auto text-center space-y-6 shadow-sm my-12 animate-in fade-in-50 duration-200">

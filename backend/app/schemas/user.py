@@ -20,6 +20,7 @@ class UserRead(BaseModel):
     id: uuid.UUID
     email: str
     full_name: str | None
+    is_admin: bool
 
 class Token(BaseModel):
     access_token: str

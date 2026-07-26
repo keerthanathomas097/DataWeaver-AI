@@ -12,9 +12,9 @@ def create_workspace(
 
     workspace = Workspace(
         user_id=user_id,
-        name=name,
-        research_domain=research_domain,
-        description=description,
+        workspace_name=name,
+        workspace_research_domain=research_domain,
+        workspace_description=description,
     )
 
     session.add(workspace)
@@ -23,7 +23,9 @@ def create_workspace(
     return workspace
 
 def get_workspaces_for_user(session: Session, user_id: uuid.UUID) -> list[Workspace]:
-    return session.exec(select(Workspace).where(Workspace.user_id == user_id)).all()
+    return session.exec(
+        select(Workspace).where(Workspace.user_id == user_id)
+    ).all()
 
 def get_workspace_by_id(session: Session, workspace_id: uuid.UUID, user_id: uuid.UUID) -> Workspace | None:
     workspace = session.get(Workspace, workspace_id)

@@ -8,7 +8,7 @@ const USER_KEY = 'dw_user';
 
 function readStoredUser() {
   try {
-    const raw = localStorage.getItem(USER_KEY);
+    const raw = sessionStorage.getItem(USER_KEY);
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -16,17 +16,25 @@ function readStoredUser() {
 }
 
 function persistSession(token, user) {
-  localStorage.setItem(TOKEN_KEY, token);
-  localStorage.setItem(USER_KEY, JSON.stringify(user));
+  sessionStorage.setItem(TOKEN_KEY, token);
+  sessionStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
 function clearSession() {
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(USER_KEY);
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
 }
 
 export function AuthProvider({ children }) {
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
+  // Purge legacy persistent localStorage tokens once on mount
+  React.useEffect(() => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  }, []);
+
+  const [token, setToken] = useState(() => sessionStorage.getItem(TOKEN_KEY));
   const [user, setUser] = useState(() => readStoredUser());
   const [loading, setLoading] = useState(false);
 
@@ -60,8 +68,8 @@ export function AuthProvider({ children }) {
     try {
       const { access_token } = await authApi.login({ email, password });
       
-      // Store token locally and in state first so Axios interceptor picks it up for the next call
-      localStorage.setItem(TOKEN_KEY, access_token);
+      // Store token in sessionStorage and state first so Axios interceptor picks it up for the next call
+      sessionStorage.setItem(TOKEN_KEY, access_token);
       setToken(access_token);
 
       // Retrieve full user details from FastAPI database
@@ -86,10 +94,11 @@ export function AuthProvider({ children }) {
       const createdUser = await authApi.signup({ email, password, full_name });
       const { access_token } = await authApi.login({ email, password });
       const sessionUser = {
-        id: createdUser.id,
-        email: createdUser.email,
-        full_name: createdUser.full_name,
-      };
+  id: createdUser.id,
+  email: createdUser.email,
+  full_name: createdUser.full_name,
+  is_admin: createdUser.is_admin,
+};
 
       persistSession(access_token, sessionUser);
       setToken(access_token);
@@ -105,7 +114,7 @@ export function AuthProvider({ children }) {
 }, []);
 
 const applyGoogleToken = useCallback((access_token) => {
-  localStorage.setItem(TOKEN_KEY, access_token);
+  sessionStorage.setItem(TOKEN_KEY, access_token);
   setToken(access_token);
   // The existing verifySession useEffect will now automatically
   // fire because `token` changed, fetching the real user via getMe()

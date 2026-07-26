@@ -21,63 +21,92 @@ def create_access_token(user_id: str) -> str:
     return jwt.encode(payload, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
 
 def get_user_by_email(session: Session, email: str) -> User | None:
-    return session.exec(select(User).where(User.email == email)).first()
+    return session.exec(select(User).where(User.user_email == email)).first()
 
 def create_user(session: Session, email: str, password: str, full_name: str) -> User:
     token = secrets.token_urlsafe(32)
+
     user = User(
-        email=email,
-        password_hash=hash_password(password),
-        full_name=full_name,
-        verification_token=token,
-        token_expires_at=datetime.utcnow() + timedelta(hours=24),
+        user_email=email,
+        user_password_hash=hash_password(password),
+        user_full_name=full_name,
+        user_verification_token=token,
+        user_token_expires_at=datetime.utcnow() + timedelta(hours=24),
     )
+
     session.add(user)
     session.commit()
     session.refresh(user)
-    send_verification_email(user.email, token)
+
+    send_verification_email(user.user_email, token)
+
     return user
 
 def authenticate_user(session: Session, email: str, password: str) -> User | None:
     user = get_user_by_email(session, email)
-    if not user or not user.password_hash:
+
+    if not user or not user.user_password_hash:
         return None
-    if not verify_password(password, user.password_hash):
+
+    if not verify_password(password, user.user_password_hash):
         return None
+
     return user
 
 def verify_email_token(session: Session, token: str) -> User | None:
-    user = session.exec(select(User).where(User.verification_token == token)).first()
+    user = session.exec(
+        select(User).where(User.user_verification_token == token)
+    ).first()
+
     if not user:
         return None
-    if user.token_expires_at and user.token_expires_at < datetime.utcnow():
+
+    if (
+        user.user_token_expires_at
+        and user.user_token_expires_at < datetime.utcnow()
+    ):
         return None
-    user.email_verified = True
-    user.verification_token = None
-    user.token_expires_at = None
+
+    user.user_email_verified = True
+    user.user_verification_token = None
+    user.user_token_expires_at = None
+
     session.add(user)
     session.commit()
     session.refresh(user)
+
     return user
-def get_or_create_google_user(session: Session, email: str, full_name: str, google_id: str) -> User:
+
+def get_or_create_google_user(
+    session: Session,
+    email: str,
+    full_name: str,
+    google_id: str,
+) -> User:
+
     user = get_user_by_email(session, email)
+
     if user:
-        if not user.google_id:
-            user.google_id = google_id
-            user.email_verified = True  # Google already verified this email
+        if not user.user_google_id:
+            user.user_google_id = google_id
+            user.user_email_verified = True
+
             session.add(user)
             session.commit()
             session.refresh(user)
+
         return user
 
     user = User(
-        email=email,
-        full_name=full_name,
-        google_id=google_id,
-        email_verified=True,  # trust Google's verification
-        password_hash=None,   # no password for OAuth-only users
+        user_email=email,
+        user_full_name=full_name,
+        user_google_id=google_id,
+        user_email_verified=True,
+        user_password_hash=None,
     )
+
     session.add(user)
     session.commit()
     session.refresh(user)
+
     return user

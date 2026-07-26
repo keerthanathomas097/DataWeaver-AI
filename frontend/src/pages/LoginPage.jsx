@@ -21,8 +21,8 @@ export default function LoginPage() {
     setGoogleNotice('');
 
     try {
-      await login({ email, password });
-      navigate('/', { replace: true });
+     await login({ email, password });
+     navigate("/", { replace: true });
     } catch (err) {
       setError(getAuthErrorMessage(err));
     }

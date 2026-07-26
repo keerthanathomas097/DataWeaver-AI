@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import * as authApi from "../api/authApi";
 
 export default function OAuthSuccess() {
   const [searchParams] = useSearchParams();
@@ -15,7 +16,7 @@ export default function OAuthSuccess() {
     } else {
       navigate("/login", { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, applyGoogleToken, navigate]);
 
   return <p>Signing you in...</p>;
 }

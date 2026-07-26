@@ -12,16 +12,23 @@ import {
   Download, 
   BookOpen, 
   Settings, 
-  HelpCircle 
+  HelpCircle,
+  ShieldAlert,
+  Users
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab }) {
-  const mainNav = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'discover', label: 'Discover Datasets', icon: Compass },
-    { id: 'upload', label: 'Upload Dataset', icon: UploadCloud },
-    { id: 'workspaces', label: 'Workspaces', icon: FolderOpen },
-  ];
+export default function Sidebar({ activeTab, setActiveTab, isAdmin }) {
+  const mainNav = isAdmin
+    ? [
+        { id: 'admin-dashboard', label: 'Admin Dashboard', icon: LayoutDashboard },
+        { id: 'admin-users', label: 'User Management', icon: Users },
+      ]
+    : [
+        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { id: 'discover', label: 'Discover Datasets', icon: Compass },
+        { id: 'upload', label: 'Upload Dataset', icon: UploadCloud },
+        { id: 'workspaces', label: 'Workspaces', icon: FolderOpen },
+      ];
 
   const analysisTools = [
     { id: 'profiling', label: 'Dataset Profiling', icon: BarChart3 },
@@ -103,12 +110,14 @@ export default function Sidebar({ activeTab, setActiveTab }) {
         </div>
 
         {/* Analysis Tools Section */}
-        <div className="space-y-1">
-          <p className="px-4 text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-2">
-            Analysis Tools
-          </p>
-          {renderNavItems(analysisTools)}
-        </div>
+        {!isAdmin && (
+          <div className="space-y-1">
+            <p className="px-4 text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-2">
+              Analysis Tools
+            </p>
+            {renderNavItems(analysisTools)}
+          </div>
+        )}
       </div>
 
       {/* Footer Nav */}

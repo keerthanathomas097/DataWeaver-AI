@@ -4,12 +4,12 @@ from datetime import datetime
 import uuid
 
 class Workspace(SQLModel, table=True):
-    __tablename__ = "workspaces"
+    __tablename__ = "tbl_workspaces"
 
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    user_id: uuid.UUID = Field(foreign_key="users.id")
-    name: str
-    research_domain: str
-    description: Optional[str] = None
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    workspace_id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(foreign_key="tbl_users.user_id")
+    workspace_name: str
+    workspace_research_domain: str
+    workspace_description: Optional[str] = None
+    workspace_created_at: datetime = Field(default_factory=datetime.utcnow)
+    workspace_updated_at: datetime = Field(default_factory=datetime.utcnow)

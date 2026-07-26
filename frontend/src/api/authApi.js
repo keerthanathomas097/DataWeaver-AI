@@ -15,6 +15,16 @@ export async function getMe() {
   return data;
 }
 
+export async function getUsers() {
+  const { data } = await client.get('/auth/users');
+  return data;
+}
+
+export async function toggleAdmin(userId) {
+  const { data } = await client.put(`/auth/users/${userId}/toggle-admin`);
+  return data;
+}
+
 export function getAuthErrorMessage(error) {
   const detail = error?.response?.data?.detail;
   if (typeof detail === 'string') return detail;
