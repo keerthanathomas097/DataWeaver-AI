@@ -12,6 +12,9 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from app.services.oauth_service import oauth
 from app.config import settings
+from app.schemas.password_reset import ForgotPasswordRequest, ResetPasswordRequest
+
+
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -65,6 +68,17 @@ def login(data: UserLogin, session: Session = Depends(get_session)):
         raise HTTPException(status_code=403, detail="Please verify your email before logging in")
     token = auth_service.create_access_token(str(user.user_id))
     return Token(access_token=token)
+@router.post("/forgot-password")
+def forgot_password(data: ForgotPasswordRequest, session: Session = Depends(get_session)):
+    auth_service.create_password_reset_token(session, data.email)
+    return {"message": "If an account with that email exists, a reset link has been sent."}
+
+@router.post("/reset-password")
+def reset_password(data: ResetPasswordRequest, session: Session = Depends(get_session)):
+    success = auth_service.reset_password(session, data.token, data.new_password)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset link")
+    return {"message": "Password reset successfully. You can now log in."}
 @router.get("/google/login")
 async def google_login(request: Request):
     redirect_uri = settings.google_redirect_uri

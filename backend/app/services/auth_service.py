@@ -6,6 +6,8 @@ from sqlmodel import Session, select
 from app.models.user import User
 from app.config import settings
 from app.services.email_service import send_verification_email
+from app.models.password_reset_token import PasswordResetToken
+from app.services.email_service import send_password_reset_email
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -110,3 +112,45 @@ def get_or_create_google_user(
     session.refresh(user)
 
     return user
+def create_password_reset_token(session: Session, email: str) -> bool:
+    user = get_user_by_email(session, email)
+    if not user:
+        return False  # deliberately don't reveal whether the email exists
+
+    token = secrets.token_urlsafe(32)
+    reset_entry = PasswordResetToken(
+        user_id=user.user_id,
+        password_reset_token=token,
+        password_reset_expires_at=datetime.utcnow() + timedelta(hours=1),
+    )
+    session.add(reset_entry)
+    session.commit()
+
+    send_password_reset_email(user.user_email, token)
+    return True
+
+def reset_password(session: Session, token: str, new_password: str) -> bool:
+    reset_entry = session.exec(
+        select(PasswordResetToken).where(
+            PasswordResetToken.password_reset_token == token,
+            PasswordResetToken.password_reset_used == False,
+        )
+    ).first()
+
+    if not reset_entry:
+        return False
+
+    if reset_entry.password_reset_expires_at < datetime.utcnow():
+        return False
+
+    user = session.get(User, reset_entry.user_id)
+    if not user:
+        return False
+
+    user.user_password_hash = hash_password(new_password)
+    reset_entry.password_reset_used = True
+
+    session.add(user)
+    session.add(reset_entry)
+    session.commit()
+    return True

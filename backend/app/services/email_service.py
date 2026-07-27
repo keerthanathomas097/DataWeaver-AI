@@ -23,3 +23,23 @@ def send_verification_email(to_email: str, token: str):
         server.starttls()
         server.login(settings.gmail_address, settings.gmail_app_password)
         server.sendmail(settings.gmail_address, to_email, message.as_string())
+def send_password_reset_email(to_email: str, token: str):
+    reset_link = f"http://localhost:5173/reset-password?token={token}"
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Reset your DataWeaver AI password"
+    message["From"] = f"DataWeaver AI <{settings.gmail_address}>"
+    message["To"] = to_email
+
+    html_content = f"""
+        <p>We received a request to reset your DataWeaver AI password.</p>
+        <p>Click the link below to choose a new password:</p>
+        <p><a href="{reset_link}">{reset_link}</a></p>
+        <p>This link expires in 1 hour. If you didn't request this, you can ignore this email.</p>
+    """
+    message.attach(MIMEText(html_content, "html"))
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(settings.gmail_address, settings.gmail_app_password)
+        server.sendmail(settings.gmail_address, to_email, message.as_string())

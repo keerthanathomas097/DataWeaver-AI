@@ -15,6 +15,16 @@ export async function getMe() {
   return data;
 }
 
+export async function forgotPassword({ email }) {
+  const { data } = await client.post('/auth/forgot-password', { email });
+  return data;
+}
+
+export async function resetPassword({ token, new_password }) {
+  const { data } = await client.post('/auth/reset-password', { token, new_password });
+  return data;
+}
+
 export async function getUsers() {
   const { data } = await client.get('/auth/users');
   return data;
