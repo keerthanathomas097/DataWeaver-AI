@@ -4,6 +4,8 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
 from app.routers import auth
 from app.routers import workspace
+from app.routers import auth, workspace, discovery
+
 
 app = FastAPI()
 
@@ -20,3 +22,4 @@ app.add_middleware(
 app.include_router(auth.router)
 
 app.include_router(workspace.router)
+app.include_router(discovery.router)
