@@ -7,13 +7,13 @@ from app.models.user import User
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 
 @router.get("/search", response_model=DiscoverySearchResponse)
-def search_datasets(
+async def search_datasets(
     query: str = Query(..., min_length=1),
     sources: list[str] | None = Query(default=None),
     limit: int = Query(default=10, le=50),
     current_user: User = Depends(get_current_user),
 ):
-    results, succeeded = discovery_service.search_all_sources(query, sources, limit)
+    results, succeeded = await discovery_service.search_all_sources(query, sources, limit)
     return DiscoverySearchResponse(
         query=query,
         results=results,

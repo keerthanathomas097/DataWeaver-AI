@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     huggingface_api_key: str
     github_api_key: str
     roboflow_api_key: str
+    kaggle_username: str
+    kaggle_key: str
 
     class Config:
         env_file = ".env"

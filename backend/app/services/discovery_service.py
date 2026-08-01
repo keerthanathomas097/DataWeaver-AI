@@ -2,7 +2,11 @@ import httpx
 from app.schemas.discovery import NormalizedDataset
 from app.config import settings
 import asyncio
+import os
+from app.config import settings
 
+os.environ["KAGGLE_USERNAME"] = settings.kaggle_username
+os.environ["KAGGLE_KEY"] = settings.kaggle_key
 # ============ NO-KEY SOURCES ============
 
 def search_zenodo(query: str, limit: int = 10) -> list[NormalizedDataset]:
@@ -148,7 +152,7 @@ def search_kaggle(query: str, limit: int = 10) -> list[NormalizedDataset]:
             name=item.title,
             description=item.subtitle,
             url=f"https://www.kaggle.com/datasets/{item.ref}",
-            license=item.licenseName,
+            license=getattr(item, "licenseName", None) or getattr(item, "license_name", None),
         ))
     return results
 
@@ -186,22 +190,28 @@ SEARCH_FUNCTIONS = {
     "roboflow": search_roboflow,
 }
 
-def search_all_sources(query: str, sources: list[str] | None = None, limit: int = 10) -> tuple[list[NormalizedDataset], list[str]]:
+async def search_all_sources(query: str, sources: list[str] | None = None, limit: int = 10) -> tuple[list[NormalizedDataset], list[str]]:
     sources_to_search = sources or list(SEARCH_FUNCTIONS.keys())
-    all_results = []
-    succeeded = []
 
-    for source_name in sources_to_search:
+    async def run_source(source_name: str):
         search_fn = SEARCH_FUNCTIONS.get(source_name)
         if not search_fn:
-            continue
+            return source_name, []
         try:
-            results = search_fn(query, limit)
+            results = await asyncio.to_thread(search_fn, query, limit)
+            return source_name, results
+        except Exception as e:
+            print(f"Search failed for {source_name}: {e}")
+            return source_name, []
+
+    tasks = [run_source(name) for name in sources_to_search]
+    outcomes = await asyncio.gather(*tasks)
+
+    all_results = []
+    succeeded = []
+    for source_name, results in outcomes:
+        if results:
             all_results.extend(results)
             succeeded.append(source_name)
-        except Exception as e:
-            # one source failing shouldn't break the whole search
-            print(f"Search failed for {source_name}: {e}")
-            continue
 
     return all_results, succeeded
