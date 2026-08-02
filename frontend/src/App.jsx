@@ -29,7 +29,10 @@ import {
   Users,
   Shield,
   Search,
-  Lock
+  Lock,
+  X,
+  Check,
+  Tag
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -39,6 +42,7 @@ import { useAuth } from './context/AuthContext';
 import { getDashboardData } from './api/mockData';
 import * as workspaceApi from './api/workspaceApi';
 import * as authApi from './api/authApi';
+import { getWorkspaceDatasets } from './api/datasetApi';
 
 // Map icon string names to React Lucide components
 const iconMap = {
@@ -385,6 +389,45 @@ export default function App() {
   const [activeWorkspace, setActiveWorkspace] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [workspaceDatasets, setWorkspaceDatasets] = useState([]);
+  const [loadingDatasets, setLoadingDatasets] = useState(false);
+  const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+  const [selectedDataset, setSelectedDataset] = useState(null);
+  const [mergeMode, setMergeMode] = useState(false);
+  const [secondMergeDataset, setSecondMergeDataset] = useState(null);
+
+  useEffect(() => {
+    setSelectedDataset(null);
+    setMergeMode(false);
+    setSecondMergeDataset(null);
+    setIsAddMenuOpen(false);
+  }, [activeWorkspace]);
+
+  useEffect(() => {
+    if (!activeWorkspace || activeTab !== 'workspace') {
+      return;
+    }
+    let isMounted = true;
+    const fetchDatasets = async () => {
+      setLoadingDatasets(true);
+      try {
+        const data = await getWorkspaceDatasets(activeWorkspace);
+        if (isMounted) {
+          setWorkspaceDatasets(data);
+        }
+      } catch (err) {
+        console.error('Failed to load workspace datasets:', err);
+      } finally {
+        if (isMounted) {
+          setLoadingDatasets(false);
+        }
+      }
+    };
+    fetchDatasets();
+    return () => {
+      isMounted = false;
+    };
+  }, [activeWorkspace, activeTab]);
 
   // Load initial workspace profile information
   useEffect(() => {
@@ -419,30 +462,22 @@ export default function App() {
           return { category: 'General', color: '#3B82F6', iconName: 'Folder' };
         };
 
-        const mappedWorkspaces = dbWorkspaces.map(ws => {
+        const mappedWorkspaces = await Promise.all(dbWorkspaces.map(async ws => {
           const visuals = mapDomainToVisuals(ws.research_domain);
           
-          // Retain mock statistical values for the seeded original workspaces
           let datasetsCount = 0;
           let imagesCount = '0';
+          let imagesRaw = 0;
           let qualityScore = null;
 
-          if (ws.name === 'Brain Tumor MRI Research') {
-            datasetsCount = 6;
-            imagesCount = '24.5k';
-            qualityScore = 91;
-          } else if (ws.name === 'Agricultural Leaf Disease Study') {
-            datasetsCount = 4;
-            imagesCount = '12.8k';
-            qualityScore = 86;
-          } else if (ws.name === 'Medical Image Classification') {
-            datasetsCount = 8;
-            imagesCount = '48.2k';
-            qualityScore = 88;
-          } else if (ws.name === 'Chest X-Ray Pneumonia Diagnosis') {
-            datasetsCount = 3;
-            imagesCount = '5.6k';
-            qualityScore = 94;
+          try {
+            const datasets = await getWorkspaceDatasets(ws.id);
+            datasetsCount = datasets.length;
+            imagesRaw = datasets.reduce((sum, ds) => sum + (ds.dataset_image_count || 0), 0);
+            imagesCount = imagesRaw >= 1000 ? (imagesRaw / 1000).toFixed(1) + 'k' : imagesRaw.toString();
+            qualityScore = datasetsCount > 0 ? 85 : null;
+          } catch (apiErr) {
+            console.error('Failed to load datasets for workspace', ws.id, apiErr);
           }
 
           return {
@@ -455,16 +490,25 @@ export default function App() {
             iconName: visuals.iconName,
             datasetsCount: datasetsCount,
             imagesCount: imagesCount,
-            imagesRaw: parseInt(imagesCount) || 0,
+            imagesRaw: imagesRaw,
             qualityScore: qualityScore,
             collaborators: ['#3B82F6', '#10B981', '#6366F1'].slice(0, (datasetsCount % 3) + 1),
             status: 'Active',
             lastModified: 'Just now'
           };
-        });
+        }));
 
-        // Update stats activeWorkspaces
-        res.stats.activeWorkspaces.value = mappedWorkspaces.length;
+        // Calculate dynamic dashboard stats
+        const totalWorkspaces = mappedWorkspaces.length;
+        const totalDatasetsCount = mappedWorkspaces.reduce((sum, w) => sum + w.datasetsCount, 0);
+        const totalImagesCountRaw = mappedWorkspaces.reduce((sum, w) => sum + w.imagesRaw, 0);
+
+        res.stats.activeWorkspaces.value = totalWorkspaces;
+        res.stats.datasets.value = totalDatasetsCount;
+        res.stats.imagesManaged.value = totalImagesCountRaw >= 1000 
+          ? (totalImagesCountRaw / 1000).toFixed(1) + 'k' 
+          : totalImagesCountRaw.toString();
+
         res.workspaces = mappedWorkspaces;
 
         setDashboardData(res);
@@ -1050,10 +1094,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Check if workspace is empty (0 datasets) */}
-              {currentWorkspaceObj.datasetsCount === 0 ? (
+              {/* Check if workspace datasets are loading */}
+              {loadingDatasets ? (
+                <div className="bg-white border border-slate-100/80 rounded-2xl p-12 text-center shadow-xs flex flex-col items-center justify-center gap-3">
+                  <Loader2 className="animate-spin text-blue-600" size={24} />
+                  <span className="text-slate-400 text-[13px] font-medium">Retrieving workspace datasets...</span>
+                </div>
+              ) : workspaceDatasets.length === 0 ? (
                 /* Empty Onboarding State View */
-                <div className="space-y-8">
+                <div className="space-y-8 animate-in fade-in-50 duration-200">
                   {/* Empty onboarding notification block */}
                   <div className="bg-white border border-slate-100/80 rounded-2xl p-10 text-center max-w-3xl mx-auto shadow-xs border-dashed border-2 border-slate-200/80">
                     <div className="w-14 h-14 rounded-2xl bg-blue-50/50 text-blue-600 flex items-center justify-center mx-auto mb-5.5">
@@ -1132,8 +1181,8 @@ export default function App() {
                   </div>
                 </div>
               ) : (
-                /* Loaded Workspace Detail Page (Displays mock datasets) */
-                <div className="space-y-6">
+                /* Loaded Workspace Detail Page (Displays dynamic datasets) */
+                <div className="space-y-6 animate-in fade-in-50 duration-200">
                   {/* Statistics strip */}
                   <div className="grid grid-cols-3 gap-5">
                     <div className="bg-white border border-slate-100/80 rounded-xl p-4 flex items-center gap-3">
@@ -1145,7 +1194,7 @@ export default function App() {
                           Datasets Count
                         </p>
                         <p className="text-[17px] font-extrabold text-slate-700 mt-1 leading-none">
-                          {currentWorkspaceObj.datasetsCount}
+                          {workspaceDatasets.length}
                         </p>
                       </div>
                     </div>
@@ -1159,7 +1208,10 @@ export default function App() {
                           Images Count
                         </p>
                         <p className="text-[17px] font-extrabold text-slate-700 mt-1 leading-none">
-                          {currentWorkspaceObj.imagesCount}
+                          {(() => {
+                            const sum = workspaceDatasets.reduce((acc, ds) => acc + (ds.dataset_image_count || 0), 0);
+                            return sum >= 1000 ? (sum / 1000).toFixed(1) + 'k' : sum.toString();
+                          })()}
                         </p>
                       </div>
                     </div>
@@ -1173,7 +1225,9 @@ export default function App() {
                           Quality Score
                         </p>
                         <p className="text-[17px] font-extrabold text-emerald-600 mt-1 leading-none">
-                          {currentWorkspaceObj.qualityScore}%
+                          {currentWorkspaceObj.qualityScore !== null && currentWorkspaceObj.qualityScore !== undefined
+                            ? `${currentWorkspaceObj.qualityScore}%`
+                            : '85%'}
                         </p>
                       </div>
                     </div>
@@ -1183,22 +1237,66 @@ export default function App() {
                   <div className="bg-white border border-slate-100/80 rounded-2xl overflow-hidden shadow-xs">
                     <div className="px-5 py-4 border-b border-slate-100/80 flex items-center justify-between">
                       <h3 className="font-bold text-[15px] text-slate-800">
-                        Workspace Datasets ({currentWorkspaceObj.datasetsCount})
+                        Workspace Datasets ({workspaceDatasets.length})
                       </h3>
                       
-                      <button 
-                        onClick={() => setActiveTab('upload')}
-                        className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[12px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
-                      >
-                        <Plus size={14} />
-                        <span>Add Dataset</span>
-                      </button>
+                      <div className="relative">
+                        <button 
+                          onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
+                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[12px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                        >
+                          <Plus size={14} />
+                          <span>Add Dataset</span>
+                        </button>
+
+                        {isAddMenuOpen && (
+                          <>
+                            <div 
+                              className="fixed inset-0 z-10" 
+                              onClick={() => setIsAddMenuOpen(false)} 
+                            />
+                            <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-200 rounded-xl shadow-lg py-1.5 z-20 animate-in fade-in slide-in-from-top-1 duration-100">
+                              <button
+                                onClick={() => {
+                                  setActiveTab('discover');
+                                  setIsAddMenuOpen(false);
+                                }}
+                                className="w-full flex items-center gap-2.5 px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 font-semibold transition-colors text-left cursor-pointer"
+                              >
+                                <Compass size={15} className="text-blue-500" />
+                                <span>Discover Datasets</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setActiveTab('upload');
+                                  setIsAddMenuOpen(false);
+                                }}
+                                className="w-full flex items-center gap-2.5 px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 font-semibold transition-colors text-left cursor-pointer"
+                              >
+                                <UploadCloud size={15} className="text-green-500" />
+                                <span>Upload Dataset</span>
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setActiveTab('paper-analysis');
+                                  setIsAddMenuOpen(false);
+                                }}
+                                className="w-full flex items-center gap-2.5 px-4 py-2 text-[13px] text-slate-700 hover:bg-slate-50 font-semibold transition-colors text-left cursor-pointer"
+                              >
+                                <FileText size={15} className="text-purple-500" />
+                                <span>Analyze Research Paper</span>
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
                     </div>
 
                     <div className="overflow-x-auto">
                       <table className="w-full text-left text-[13px] border-collapse">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                            <th className="px-4 py-3 w-10"></th>
                             <th className="px-5 py-3">Dataset Name</th>
                             <th className="px-5 py-3">Format</th>
                             <th className="px-5 py-3">Dimensions</th>
@@ -1208,59 +1306,230 @@ export default function App() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-50 text-slate-600 font-medium">
-                          {(mockWorkspaceDatasets[currentWorkspaceObj.id] || []).map((ds, idx) => (
-                            <tr key={idx} className="hover:bg-slate-50/40 transition-colors">
-                              <td className="px-5 py-3.5 text-slate-800 font-bold">{ds.name}</td>
-                              <td className="px-5 py-3.5">
-                                <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[11px] font-bold">
-                                  {ds.format}
-                                </span>
-                              </td>
-                              <td className="px-5 py-3.5 text-slate-500 font-mono text-[12px]">{ds.dimensions}</td>
-                              <td className="px-5 py-3.5 text-slate-700 font-semibold">{ds.count}</td>
-                              <td className="px-5 py-3.5">{ds.size}</td>
-                              <td className="px-5 py-3.5 text-slate-400">{ds.date}</td>
-                            </tr>
-                          ))}
+                          {workspaceDatasets.map((ds, idx) => {
+                            const isSelected = selectedDataset?.dataset_id === ds.dataset_id;
+                            const isFirstMergeDataset = mergeMode && isSelected;
+                            const isSecondMergeDatasetCandidate = mergeMode && !isSelected;
+
+                            return (
+                              <tr 
+                                key={ds.dataset_id || idx} 
+                                onClick={() => {
+                                  if (mergeMode) {
+                                    if (ds.dataset_id === selectedDataset?.dataset_id) return;
+                                    setSecondMergeDataset(ds);
+                                  } else {
+                                    if (isSelected) {
+                                      setSelectedDataset(null);
+                                    } else {
+                                      setSelectedDataset(ds);
+                                    }
+                                  }
+                                }}
+                                className={`cursor-pointer transition-colors ${
+                                  isFirstMergeDataset 
+                                    ? 'bg-blue-50/70 border-l-4 border-l-blue-500' 
+                                    : isSelected
+                                    ? 'bg-blue-50/60 hover:bg-blue-50/80'
+                                    : isSecondMergeDatasetCandidate
+                                    ? 'hover:bg-amber-50/30'
+                                    : 'hover:bg-slate-50/40'
+                                }`}
+                              >
+                                <td className="px-4 py-3.5 text-center" onClick={(e) => e.stopPropagation()}>
+                                  <input 
+                                    type="checkbox" 
+                                    checked={isSelected}
+                                    onChange={() => {
+                                      if (mergeMode) {
+                                        if (ds.dataset_id === selectedDataset?.dataset_id) return;
+                                        setSecondMergeDataset(ds);
+                                      } else {
+                                        if (isSelected) {
+                                          setSelectedDataset(null);
+                                        } else {
+                                          setSelectedDataset(ds);
+                                        }
+                                      }
+                                    }}
+                                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                                  />
+                                </td>
+                                <td className="px-5 py-3.5 text-slate-800 font-bold">{ds.dataset_name}</td>
+                                <td className="px-5 py-3.5">
+                                  <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[11px] font-bold">
+                                    {ds.dataset_source_type}
+                                  </span>
+                                </td>
+                                <td className="px-5 py-3.5 text-slate-500 font-mono text-[12px]">Variable</td>
+                                <td className="px-5 py-3.5 text-slate-700 font-semibold">
+                                  {ds.dataset_image_count >= 1000 
+                                    ? (ds.dataset_image_count / 1000).toFixed(1) + 'k images' 
+                                    : (ds.dataset_image_count || 0) + ' images'}
+                                </td>
+                                <td className="px-5 py-3.5">
+                                  {ds.dataset_image_count ? `${(ds.dataset_image_count * 0.15).toFixed(0)} MB` : '0 MB'}
+                                </td>
+                                <td className="px-5 py-3.5 text-slate-400">
+                                  {ds.dataset_created_at 
+                                    ? new Date(ds.dataset_created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+                                    : 'Just now'}
+                                </td>
+                              </tr>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>
                   </div>
 
-                  {/* Actions Dashboard Panel */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <button 
-                      onClick={() => setActiveTab('profiling')}
-                      className="p-4 bg-white border border-slate-100/80 hover:border-blue-300 rounded-xl font-bold text-slate-700 hover:text-blue-600 hover:shadow-xs transition-all flex items-center justify-between group"
-                    >
-                      <span className="text-[13px]">Profile Datasets</span>
-                      <RefreshCw size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
-                    </button>
-                    
-                    <button 
-                      onClick={() => setActiveTab('labels')}
-                      className="p-4 bg-white border border-slate-100/80 hover:border-blue-300 rounded-xl font-bold text-slate-700 hover:text-blue-600 hover:shadow-xs transition-all flex items-center justify-between group"
-                    >
-                      <span className="text-[13px]">Manage AI Labels</span>
-                      <ArrowRight size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
-                    </button>
+                  {/* Contextual Actions Panel */}
+                  {selectedDataset && (
+                    <div className="bg-slate-900 text-white border border-slate-800 rounded-2xl p-5 shadow-lg animate-in slide-in-from-bottom-2 duration-200">
+                      {mergeMode ? (
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 animate-pulse">
+                              <Sparkles size={20} />
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">Merge Mode Active</p>
+                              <h4 className="font-extrabold text-[15px] text-white mt-1.5">
+                                Select a second dataset to merge with <span className="text-blue-400 font-black">"{selectedDataset.dataset_name}"</span>
+                              </h4>
+                            </div>
+                          </div>
+                          
+                          <button 
+                            onClick={() => {
+                              setMergeMode(false);
+                            }}
+                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer"
+                          >
+                            Cancel Merge
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                              <Database size={20} />
+                            </div>
+                            <div>
+                              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">Selected Dataset</p>
+                              <h4 className="font-extrabold text-[15px] text-white mt-1.5">{selectedDataset.dataset_name}</h4>
+                            </div>
+                          </div>
 
-                    <button 
-                      onClick={() => setActiveTab('duplicates')}
-                      className="p-4 bg-white border border-slate-100/80 hover:border-blue-300 rounded-xl font-bold text-slate-700 hover:text-blue-600 hover:shadow-xs transition-all flex items-center justify-between group"
-                    >
-                      <span className="text-[13px]">Check duplicates</span>
-                      <ArrowRight size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
-                    </button>
+                          <div className="flex items-center gap-2.5 flex-wrap">
+                            <button 
+                              onClick={() => alert(`Starting Dataset Profiling for "${selectedDataset.dataset_name}". (Coming Soon)`)}
+                              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <RefreshCw size={14} />
+                              <span>Profile</span>
+                            </button>
+                            <button 
+                              onClick={() => alert(`Initiating Duplicate Detection for "${selectedDataset.dataset_name}". (Coming Soon)`)}
+                              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <AlertTriangle size={14} />
+                              <span>Detect Duplicates</span>
+                            </button>
+                            <button 
+                              onClick={() => alert(`Opening AI Label Manager for "${selectedDataset.dataset_name}". (Coming Soon)`)}
+                              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Tag size={14} />
+                              <span>Manage Labels</span>
+                            </button>
+                            <button 
+                              onClick={() => setMergeMode(true)}
+                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Sparkles size={14} />
+                              <span>Merge</span>
+                            </button>
+                            <button 
+                              onClick={() => setSelectedDataset(null)}
+                              className="px-3 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-all cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
-                    <button 
-                      onClick={() => setActiveTab('merge-advisor')}
-                      className="p-4 bg-white border border-slate-100/80 hover:border-blue-300 rounded-xl font-bold text-slate-700 hover:text-blue-600 hover:shadow-xs transition-all flex items-center justify-between group"
-                    >
-                      <span className="text-[13px]">Merge Datasets</span>
-                      <ArrowRight size={15} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
-                    </button>
-                  </div>
+                  {/* Merge Confirmation Modal Dialog */}
+                  {secondMergeDataset && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-150">
+                      <div 
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" 
+                        onClick={() => setSecondMergeDataset(null)}
+                      />
+
+                      <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl relative z-10 p-6 space-y-6 animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                          <h3 className="font-extrabold text-[18px] text-slate-900 flex items-center gap-2">
+                            <Sparkles className="text-blue-500" size={20} />
+                            <span>Merge Datasets</span>
+                          </h3>
+                          <button
+                            onClick={() => setSecondMergeDataset(null)}
+                            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                          >
+                            <X size={20} />
+                          </button>
+                        </div>
+
+                        <div className="space-y-4">
+                          <p className="text-[13px] text-slate-500 font-medium">
+                            You have selected the following two datasets from the workspace to merge:
+                          </p>
+                          
+                          <div className="flex items-center justify-between gap-4 bg-slate-50 p-4.5 rounded-xl border border-slate-100">
+                            <div className="flex-1 text-center bg-white p-3 rounded-lg border border-slate-200/60">
+                              <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Dataset A</span>
+                              <span className="font-bold text-slate-800 text-[13px] block mt-1 truncate">{selectedDataset?.dataset_name}</span>
+                            </div>
+                            <div className="p-1 bg-slate-200 rounded-full text-slate-500 shrink-0">
+                              <ArrowRight size={14} />
+                            </div>
+                            <div className="flex-1 text-center bg-white p-3 rounded-lg border border-slate-200/60">
+                              <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Dataset B</span>
+                              <span className="font-bold text-slate-800 text-[13px] block mt-1 truncate">{secondMergeDataset?.dataset_name}</span>
+                            </div>
+                          </div>
+
+                          <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-[12px] text-blue-600 font-semibold leading-relaxed">
+                            Note: Interactive merging algorithms, duplicate resolution, and consolidated vector index synthesis will be completed in the next sprint.
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+                          <button
+                            onClick={() => setSecondMergeDataset(null)}
+                            className="flex-1 py-2.5 border border-slate-200 rounded-xl text-[13px] font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={() => {
+                              alert(`Interactive merge request initiated for "${selectedDataset?.dataset_name}" and "${secondMergeDataset?.dataset_name}". (Coming Soon)`);
+                              setSecondMergeDataset(null);
+                              setMergeMode(false);
+                              setSelectedDataset(null);
+                            }}
+                            className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-blue-600/10 cursor-pointer"
+                          >
+                            Initialize Merge
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                 </div>
               )}

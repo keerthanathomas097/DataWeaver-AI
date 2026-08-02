@@ -33,6 +33,7 @@ import {
   AlertTriangle
 } from 'lucide-react';
 import { searchDatasets, getDiscoveryErrorMessage } from '../api/discoveryApi';
+import { addDatasetToWorkspace, getDatasetErrorMessage } from '../api/datasetApi';
 
 // Sample Dataset Repositories
 const REPOSITORIES = [
@@ -340,6 +341,8 @@ export default function DiscoverDatasets({
   // UI Detail Drawer / Toast state
   const [selectedDatasetDetails, setSelectedDatasetDetails] = useState(null);
   const [toastMessage, setToastMessage] = useState('');
+  const [addingStatus, setAddingStatus] = useState({});
+  const [addingError, setAddingError] = useState({});
 
   // Toggle single repository checkbox
   const toggleSource = (source) => {
@@ -451,11 +454,32 @@ export default function DiscoverDatasets({
     pubYear
   ]);
 
-  const handleAddWorkspaceClick = (datasetName) => {
-    const wsObj = workspaces.find(w => w.id === targetWorkspaceId) || workspaces[0];
-    const wsName = wsObj ? wsObj.name : 'Target Workspace';
-    setToastMessage(`Successfully added "${datasetName}" to "${wsName}"!`);
-    setTimeout(() => setToastMessage(''), 3500);
+  const handleAddWorkspaceClick = async (ds) => {
+    const dsId = ds.id;
+    setAddingStatus(prev => ({ ...prev, [dsId]: 'loading' }));
+    setAddingError(prev => ({ ...prev, [dsId]: null }));
+    const workspaceId = activeWorkspace || targetWorkspaceId;
+
+    try {
+      await addDatasetToWorkspace(workspaceId, {
+        dataset_name: ds.name,
+        dataset_source_type: ds.source,
+        dataset_source_url: ds.sourceUrl,
+        dataset_license: ds.license,
+        dataset_image_count: ds.imagesRaw,
+      });
+
+      setAddingStatus(prev => ({ ...prev, [dsId]: 'success' }));
+      const wsObj = workspaces.find(w => w.id === workspaceId) || workspaces[0];
+      const wsName = wsObj ? wsObj.name : 'Target Workspace';
+      setToastMessage(`Successfully added "${ds.name}" to "${wsName}"!`);
+      setTimeout(() => setToastMessage(''), 3500);
+    } catch (err) {
+      console.error('Failed to add dataset to workspace:', err);
+      const errMsg = getDatasetErrorMessage(err);
+      setAddingStatus(prev => ({ ...prev, [dsId]: 'error' }));
+      setAddingError(prev => ({ ...prev, [dsId]: errMsg }));
+    }
   };
 
   return (
@@ -987,29 +1011,61 @@ export default function DiscoverDatasets({
                   </div>
 
                   {/* Card Actions Footer */}
-                  <div className="flex items-center justify-between border-t border-slate-100 mt-5 pt-3.5">
-                    <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
-                      <Calendar size={13} />
-                      <span>{ds.date}</span>
-                    </span>
+                  <div className="border-t border-slate-100 mt-5 pt-3.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                        <Calendar size={13} />
+                        <span>{ds.date}</span>
+                      </span>
 
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => setSelectedDatasetDetails(ds)}
-                        className="px-3 py-1.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-[12px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
-                      >
-                        <Info size={13} />
-                        <span>View Details</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedDatasetDetails(ds)}
+                          className="px-3 py-1.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-[12px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
+                        >
+                          <Info size={13} />
+                          <span>View Details</span>
+                        </button>
 
-                      <button
-                        onClick={() => handleAddWorkspaceClick(ds.name)}
-                        className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[12px] font-semibold transition-all cursor-pointer flex items-center gap-1 shadow-sm"
-                      >
-                        <Bookmark size={13} />
-                        <span>Add to Workspace</span>
-                      </button>
+                        <button
+                          onClick={() => handleAddWorkspaceClick(ds)}
+                          disabled={addingStatus[ds.id] === 'loading'}
+                          className={`px-3.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all cursor-pointer flex items-center gap-1 shadow-sm ${
+                            addingStatus[ds.id] === 'success'
+                              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                              : addingStatus[ds.id] === 'error'
+                              ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                              : addingStatus[ds.id] === 'loading'
+                              ? 'bg-blue-400 text-white cursor-not-allowed'
+                              : 'bg-blue-600 hover:bg-blue-700 text-white'
+                          }`}
+                        >
+                          {addingStatus[ds.id] === 'loading' ? (
+                            <Loader2 size={13} className="animate-spin" />
+                          ) : addingStatus[ds.id] === 'success' ? (
+                            <Check size={13} />
+                          ) : addingStatus[ds.id] === 'error' ? (
+                            <AlertTriangle size={13} />
+                          ) : (
+                            <Bookmark size={13} />
+                          )}
+                          <span>
+                            {addingStatus[ds.id] === 'loading'
+                              ? 'Adding...'
+                              : addingStatus[ds.id] === 'success'
+                              ? 'Added'
+                              : addingStatus[ds.id] === 'error'
+                              ? 'Failed'
+                              : 'Add to Workspace'}
+                          </span>
+                        </button>
+                      </div>
                     </div>
+                    {addingError[ds.id] && (
+                      <p className="text-[11px] text-rose-600 font-semibold mt-2 text-right">
+                        {addingError[ds.id]}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1183,6 +1239,13 @@ export default function DiscoverDatasets({
               </div>
             </div>
 
+            {addingError[selectedDatasetDetails.id] && (
+              <div className="p-3 bg-rose-50 border border-rose-100 rounded-xl text-[12px] text-rose-600 font-semibold mb-4 flex items-start gap-2 animate-in fade-in duration-200">
+                <AlertTriangle size={16} className="shrink-0 mt-0.5" />
+                <span>{addingError[selectedDatasetDetails.id]}</span>
+              </div>
+            )}
+
             <div className="pt-6 border-t border-slate-100 flex items-center gap-3">
               <button
                 onClick={() => setSelectedDatasetDetails(null)}
@@ -1191,13 +1254,38 @@ export default function DiscoverDatasets({
                 Close Preview
               </button>
               <button
-                onClick={() => {
-                  handleAddWorkspaceClick(selectedDatasetDetails.name);
-                  setSelectedDatasetDetails(null);
+                onClick={async () => {
+                  await handleAddWorkspaceClick(selectedDatasetDetails);
                 }}
-                className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[14px] font-semibold shadow-md"
+                disabled={addingStatus[selectedDatasetDetails.id] === 'loading'}
+                className={`flex-1 py-2.5 rounded-xl text-[14px] font-semibold shadow-md transition-all flex items-center justify-center gap-1.5 ${
+                  addingStatus[selectedDatasetDetails.id] === 'success'
+                    ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    : addingStatus[selectedDatasetDetails.id] === 'error'
+                    ? 'bg-rose-600 hover:bg-rose-700 text-white'
+                    : addingStatus[selectedDatasetDetails.id] === 'loading'
+                    ? 'bg-blue-400 text-white cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 text-white'
+                }`}
               >
-                Add to Workspace
+                {addingStatus[selectedDatasetDetails.id] === 'loading' ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : addingStatus[selectedDatasetDetails.id] === 'success' ? (
+                  <Check size={16} />
+                ) : addingStatus[selectedDatasetDetails.id] === 'error' ? (
+                  <AlertTriangle size={16} />
+                ) : (
+                  <Bookmark size={16} />
+                )}
+                <span>
+                  {addingStatus[selectedDatasetDetails.id] === 'loading'
+                    ? 'Adding...'
+                    : addingStatus[selectedDatasetDetails.id] === 'success'
+                    ? 'Added'
+                    : addingStatus[selectedDatasetDetails.id] === 'error'
+                    ? 'Failed'
+                    : 'Add to Workspace'}
+                </span>
               </button>
             </div>
           </div>

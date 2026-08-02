@@ -5,6 +5,9 @@ from app.config import settings
 from app.routers import auth
 from app.routers import workspace
 from app.routers import auth, workspace, discovery
+from app.routers import auth, workspace, discovery, dataset
+
+
 
 
 app = FastAPI()
@@ -20,6 +23,6 @@ app.add_middleware(
 )
 
 app.include_router(auth.router)
-
 app.include_router(workspace.router)
 app.include_router(discovery.router)
+app.include_router(dataset.router)
