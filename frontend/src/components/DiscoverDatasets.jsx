@@ -32,7 +32,8 @@ import {
   Loader2,
   AlertTriangle
 } from 'lucide-react';
-import { searchDatasets, getDiscoveryErrorMessage } from '../api/discoveryApi';
+import { getDiscoveryErrorMessage } from '../api/discoveryApi';
+import { useDiscovery } from '../context/DiscoveryContext';
 import { addDatasetToWorkspace, getDatasetErrorMessage } from '../api/datasetApi';
 
 // Sample Dataset Repositories
@@ -261,16 +262,25 @@ export default function DiscoverDatasets({
   setActiveWorkspace, 
   setActiveTab 
 }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const {
+    searchQuery,
+    setSearchQuery,
+    datasets,
+    setDatasets,
+    selectedSources,
+    setSelectedSources,
+    isLoading,
+    setIsLoading,
+    searchError,
+    setSearchError,
+    search
+  } = useDiscovery();
+
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const [targetWorkspaceId, setTargetWorkspaceId] = useState(
     activeWorkspace || (workspaces[0]?.id || '')
   );
-
-  const [datasets, setDatasets] = useState(SAMPLE_DATASETS);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchError, setSearchError] = useState(null);
 
   const handleSearch = async (queryToSearch = searchQuery) => {
     if (!queryToSearch.trim()) return;
@@ -283,7 +293,7 @@ export default function DiscoverDatasets({
         .map(src => SOURCE_MAP[src])
         .filter(Boolean);
         
-      const response = await searchDatasets(queryToSearch, backendSources, 10);
+      const response = await search(queryToSearch, backendSources, 10);
       
       const mapped = (response.results || []).map((ds, index) => ({
         id: ds.external_id || `ds-${index}-${ds.source}`,
@@ -327,7 +337,6 @@ export default function DiscoverDatasets({
   };
 
   // Filters State
-  const [selectedSources, setSelectedSources] = useState([...REPOSITORIES]);
   const [selectedType, setSelectedType] = useState('All');
   const [selectedLicense, setSelectedLicense] = useState('All');
   const [minImages, setMinImages] = useState('');
@@ -375,7 +384,8 @@ export default function DiscoverDatasets({
 
   // Filter datasets in real time based on UI inputs
   const filteredDatasets = useMemo(() => {
-    return datasets.filter(ds => {
+    const displayDatasets = datasets === null ? SAMPLE_DATASETS : datasets;
+    return displayDatasets.filter(ds => {
       // Search Query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();

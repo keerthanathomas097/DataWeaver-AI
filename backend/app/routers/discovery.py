@@ -3,6 +3,7 @@ from app.services import discovery_service
 from app.schemas.discovery import DiscoverySearchResponse
 from app.routers.auth import get_current_user
 from app.models.user import User
+from app.services.discovery_service import extract_metadata_from_description
 
 router = APIRouter(prefix="/discovery", tags=["discovery"])
 
@@ -19,3 +20,11 @@ async def search_datasets(
         results=results,
         sources_searched=succeeded,
     )
+
+
+@router.post("/extract-metadata")
+def extract_metadata(
+    description: str,
+    current_user: User = Depends(get_current_user),
+):
+    return extract_metadata_from_description(description)

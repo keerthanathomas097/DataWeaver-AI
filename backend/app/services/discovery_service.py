@@ -1,12 +1,20 @@
 import httpx
+import json
+import numpy as np
+
+from sentence_transformers import SentenceTransformer
 from app.schemas.discovery import NormalizedDataset
 from app.config import settings
 import asyncio
 import os
-from app.config import settings
+from groq import Groq
+
 
 os.environ["KAGGLE_USERNAME"] = settings.kaggle_username
 os.environ["KAGGLE_KEY"] = settings.kaggle_key
+
+groq_client = Groq(api_key=settings.groq_api_key)
+embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 # ============ NO-KEY SOURCES ============
 
 def search_zenodo(query: str, limit: int = 10) -> list[NormalizedDataset]:
@@ -176,6 +184,46 @@ def search_roboflow(query: str, limit: int = 10) -> list[NormalizedDataset]:
         ))
     return results
 
+# ============ AI ENRICHMENT ============
+
+def extract_metadata_from_description(description: str) -> dict:
+    if not description or len(description.strip()) < 10:
+        return {"image_count": None, "classes": None}
+
+    prompt = f"""Extract structured information from this dataset description.
+Return ONLY valid JSON, no other text, in this exact format:
+{{"image_count": <number or null>, "classes": [<list of strings> or null]}}
+
+Description: "{description}"
+"""
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+        )
+        text = response.choices[0].message.content.strip().removeprefix("```json").removesuffix("```").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"Metadata extraction failed: {e}")
+        return {"image_count": None, "classes": None}
+
+def rank_by_semantic_similarity(query: str, results: list[NormalizedDataset]) -> list[NormalizedDataset]:
+    if not results:
+        return results
+
+    query_embedding = embedding_model.encode(query)
+    result_texts = [f"{r.name}. {r.description or ''}" for r in results]
+    result_embeddings = embedding_model.encode(result_texts)
+
+    scores = []
+    for emb in result_embeddings:
+        similarity = np.dot(query_embedding, emb) / (np.linalg.norm(query_embedding) * np.linalg.norm(emb))
+        scores.append(similarity)
+
+    ranked = sorted(zip(results, scores), key=lambda x: x[1], reverse=True)
+    return [r for r, score in ranked]
+
 
 # ============ AGGREGATOR ============
 
@@ -213,5 +261,7 @@ async def search_all_sources(query: str, sources: list[str] | None = None, limit
         if results:
             all_results.extend(results)
             succeeded.append(source_name)
+
+    all_results = await asyncio.to_thread(rank_by_semantic_similarity, query, all_results)
 
     return all_results, succeeded

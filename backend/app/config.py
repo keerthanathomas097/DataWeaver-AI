@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     roboflow_api_key: str
     kaggle_username: str
     kaggle_key: str
+    groq_api_key: str
 
     class Config:
         env_file = ".env"

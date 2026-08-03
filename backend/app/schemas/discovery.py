@@ -10,6 +10,7 @@ class NormalizedDataset(BaseModel):
     license: Optional[str] = None
     image_count: Optional[int] = None
     thumbnail_url: Optional[str] = None
+    classes: Optional[list[str]] = None
 
 class DiscoverySearchResponse(BaseModel):
     query: str
