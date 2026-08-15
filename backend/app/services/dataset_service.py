@@ -35,3 +35,14 @@ def get_dataset_by_id(session: Session, dataset_id: uuid.UUID, user_id: uuid.UUI
     if not workspace or workspace.user_id != user_id:
         return None
     return dataset
+def update_dataset_after_download(session: Session, dataset_id: uuid.UUID, storage_path: str, image_count: int) -> Dataset | None:
+    dataset = session.get(Dataset, dataset_id)
+    if not dataset:
+        return None
+    dataset.dataset_storage_path = storage_path
+    dataset.dataset_image_count = image_count
+    dataset.dataset_status = "downloaded"
+    session.add(dataset)
+    session.commit()
+    session.refresh(dataset)
+    return dataset

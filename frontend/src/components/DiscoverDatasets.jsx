@@ -32,7 +32,7 @@ import {
   Loader2,
   AlertTriangle
 } from 'lucide-react';
-import { getDiscoveryErrorMessage } from '../api/discoveryApi';
+import { getDiscoveryErrorMessage, extractMetadata, getKaggleDetails } from '../api/discoveryApi';
 import { useDiscovery } from '../context/DiscoveryContext';
 import { addDatasetToWorkspace, getDatasetErrorMessage } from '../api/datasetApi';
 
@@ -299,6 +299,8 @@ export default function DiscoverDatasets({
         id: ds.external_id || `ds-${index}-${ds.source}`,
         name: ds.name,
         source: SOURCE_DISPLAY_NAMES[ds.source] || ds.source,
+        rawSource: ds.source,
+        externalId: ds.external_id,
         sourceUrl: ds.url,
         badgeColor: SOURCE_BADGES[ds.source] || 'bg-slate-100 text-slate-800 border-slate-200/80',
         description: ds.description || 'No description provided.',
@@ -349,6 +351,7 @@ export default function DiscoverDatasets({
 
   // UI Detail Drawer / Toast state
   const [selectedDatasetDetails, setSelectedDatasetDetails] = useState(null);
+  const [metadataLoading, setMetadataLoading] = useState({});
   const [toastMessage, setToastMessage] = useState('');
   const [addingStatus, setAddingStatus] = useState({});
   const [addingError, setAddingError] = useState({});
@@ -489,6 +492,81 @@ export default function DiscoverDatasets({
       const errMsg = getDatasetErrorMessage(err);
       setAddingStatus(prev => ({ ...prev, [dsId]: 'error' }));
       setAddingError(prev => ({ ...prev, [dsId]: errMsg }));
+    }
+  };
+
+  const handleViewDetails = async (ds) => {
+    setSelectedDatasetDetails(ds);
+    if (ds.metadataExtracted || metadataLoading[ds.id]) {
+      return;
+    }
+
+    setMetadataLoading(prev => ({ ...prev, [ds.id]: true }));
+    try {
+      let data;
+      const isKaggle = ds.rawSource === 'kaggle' || ds.source === 'Kaggle' || ds.source === 'kaggle';
+      
+      if (isKaggle) {
+        const externalId = ds.externalId || ds.id;
+        data = await getKaggleDetails(externalId);
+      } else {
+        const extracted = await extractMetadata(ds.description || '');
+        data = {
+          image_count: extracted.image_count,
+          classes: extracted.classes,
+          full_description: ds.description
+        };
+      }
+
+      const hasImageCount = data.image_count !== null && data.image_count !== undefined;
+      const hasClasses = data.classes && data.classes.length > 0;
+
+      const updatedCount = hasImageCount
+        ? Number(data.image_count).toLocaleString()
+        : 'N/A';
+      
+      const updatedClasses = hasClasses
+        ? data.classes.join(', ')
+        : 'N/A';
+
+      const updatedDescription = data.full_description || ds.description || 'No description provided.';
+
+      // Update context's datasets list so it persists
+      if (datasets) {
+        const updatedList = datasets.map(item => {
+          if (item.id === ds.id) {
+            return {
+              ...item,
+              count: updatedCount,
+              imagesRaw: hasImageCount ? data.image_count : 0,
+              classes: updatedClasses,
+              description: updatedDescription,
+              metadataExtracted: true
+            };
+          }
+          return item;
+        });
+        setDatasets(updatedList);
+      }
+
+      // Update currently visible details model state
+      setSelectedDatasetDetails(prev => {
+        if (prev && prev.id === ds.id) {
+          return {
+            ...prev,
+            count: updatedCount,
+            imagesRaw: hasImageCount ? data.image_count : 0,
+            classes: updatedClasses,
+            description: updatedDescription,
+            metadataExtracted: true
+          };
+        }
+        return prev;
+      });
+    } catch (err) {
+      console.error('Failed to extract metadata dynamically:', err);
+    } finally {
+      setMetadataLoading(prev => ({ ...prev, [ds.id]: false }));
     }
   };
 
@@ -1030,7 +1108,7 @@ export default function DiscoverDatasets({
 
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => setSelectedDatasetDetails(ds)}
+                          onClick={() => handleViewDetails(ds)}
                           className="px-3 py-1.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-[12px] font-semibold transition-colors cursor-pointer flex items-center gap-1"
                         >
                           <Info size={13} />
@@ -1236,7 +1314,14 @@ export default function DiscoverDatasets({
                 </div>
                 <div className="p-3 bg-slate-50 rounded-xl">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Total Images</span>
-                  <span className="font-bold text-slate-800">{selectedDatasetDetails.count}</span>
+                  {metadataLoading[selectedDatasetDetails.id] ? (
+                    <span className="text-slate-400 flex items-center gap-1.5 font-bold">
+                      <Loader2 size={12} className="animate-spin text-blue-500" />
+                      <span>Extracting...</span>
+                    </span>
+                  ) : (
+                    <span className="font-bold text-slate-800">{selectedDatasetDetails.count}</span>
+                  )}
                 </div>
                 <div className="p-3 bg-slate-50 rounded-xl">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Resolution</span>
@@ -1245,6 +1330,17 @@ export default function DiscoverDatasets({
                 <div className="p-3 bg-slate-50 rounded-xl">
                   <span className="text-[10px] font-extrabold text-slate-400 uppercase block">License</span>
                   <span className="font-bold text-slate-800">{selectedDatasetDetails.license}</span>
+                </div>
+                <div className="p-3 bg-slate-50 rounded-xl col-span-2">
+                  <span className="text-[10px] font-extrabold text-slate-400 uppercase block">Classes</span>
+                  {metadataLoading[selectedDatasetDetails.id] ? (
+                    <span className="text-slate-400 flex items-center gap-1.5 font-bold mt-1">
+                      <Loader2 size={12} className="animate-spin text-blue-500" />
+                      <span>Extracting...</span>
+                    </span>
+                  ) : (
+                    <span className="font-bold text-slate-800 mt-1 block leading-relaxed">{selectedDatasetDetails.classes || 'N/A'}</span>
+                  )}
                 </div>
               </div>
             </div>

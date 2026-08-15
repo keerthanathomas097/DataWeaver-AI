@@ -6,9 +6,7 @@ from app.routers import auth
 from app.routers import workspace
 from app.routers import auth, workspace, discovery
 from app.routers import auth, workspace, discovery, dataset
-
-
-
+from app.services.storage_service import ensure_bucket_exists
 
 app = FastAPI()
 
@@ -22,6 +20,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_event():
+    ensure_bucket_exists()
 app.include_router(auth.router)
 app.include_router(workspace.router)
 app.include_router(discovery.router)

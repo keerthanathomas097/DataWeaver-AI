@@ -40,3 +40,24 @@ export function getDiscoveryErrorMessage(error) {
   }
   return 'Failed to retrieve datasets from backend. Please try again later.';
 }
+
+/**
+ * Extracts metadata dynamically from a dataset description.
+ * @param {string} description 
+ */
+export async function extractMetadata(description) {
+  const { data } = await client.post('/discovery/extract-metadata', null, {
+    params: { description }
+  });
+  return data;
+}
+
+/**
+ * Fetches Kaggle-specific dataset details.
+ * @param {string} externalId 
+ */
+export async function getKaggleDetails(externalId) {
+  const [owner, datasetSlug] = externalId.split('/');
+  const { data } = await client.get(`/discovery/kaggle-details/${owner}/${datasetSlug}`);
+  return data;
+}

@@ -163,6 +163,19 @@ def search_kaggle(query: str, limit: int = 10) -> list[NormalizedDataset]:
             license=getattr(item, "licenseName", None) or getattr(item, "license_name", None),
         ))
     return results
+def get_kaggle_dataset_details(external_id: str) -> str:
+    import kaggle
+    kaggle.api.authenticate()
+
+    kaggle.api.dataset_metadata(external_id, path="/tmp")
+
+    import json as json_module
+    with open(f"/tmp/dataset-metadata.json") as f:
+        meta_json = json_module.load(f)
+
+    description = meta_json.get("info", {}).get("description", "")
+    print("RAW METADATA JSON:", meta_json)
+    return description
 
 
 def search_roboflow(query: str, limit: int = 10) -> list[NormalizedDataset]:
@@ -208,6 +221,45 @@ Description: "{description}"
         print(f"Metadata extraction failed: {e}")
         return {"image_count": None, "classes": None}
 
+def expand_query(query: str) -> list[str]:
+    prompt = f"""Generate 2-3 alternative phrasings of this dataset search query, capturing the same intent with different wording (synonyms, related terminology). Return ONLY a JSON array of strings, no other text.
+
+Query: "{query}"
+"""
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+        )
+        text = response.choices[0].message.content.strip().removeprefix("```json").removesuffix("```").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"Query expansion failed: {e}")
+        return []
+
+def parse_search_query(query: str) -> dict:
+    prompt = f"""Parse this dataset search query into structured components.
+Return ONLY valid JSON in this exact format:
+{{"topic": "<the core subject/topic to search for, as a clean 2-4 word search phrase>", "min_images": <number or null>}}
+
+Strip out any mention of image counts, "more than", "at least", etc. from the topic - only put the clean subject there.
+Correct any obvious spelling mistakes in the topic (e.g. "overain" should become "ovarian").
+
+Query: "{query}"
+"""
+    try:
+        response = groq_client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0,
+        )
+        text = response.choices[0].message.content.strip().removeprefix("```json").removesuffix("```").strip()
+        return json.loads(text)
+    except Exception as e:
+        print(f"Query parsing failed: {e}")
+        return {"topic": query, "min_images": None}
+
 def rank_by_semantic_similarity(query: str, results: list[NormalizedDataset]) -> list[NormalizedDataset]:
     if not results:
         return results
@@ -239,6 +291,9 @@ SEARCH_FUNCTIONS = {
 }
 
 async def search_all_sources(query: str, sources: list[str] | None = None, limit: int = 10) -> tuple[list[NormalizedDataset], list[str]]:
+    parsed = await asyncio.to_thread(parse_search_query, query)
+    search_topic = parsed.get("topic") or query
+    print(f"ORIGINAL QUERY: {query} | EXTRACTED TOPIC: {search_topic}")
     sources_to_search = sources or list(SEARCH_FUNCTIONS.keys())
 
     async def run_source(source_name: str):
@@ -246,7 +301,7 @@ async def search_all_sources(query: str, sources: list[str] | None = None, limit
         if not search_fn:
             return source_name, []
         try:
-            results = await asyncio.to_thread(search_fn, query, limit)
+            results = await asyncio.to_thread(search_fn,search_topic, limit)
             return source_name, results
         except Exception as e:
             print(f"Search failed for {source_name}: {e}")
@@ -261,6 +316,26 @@ async def search_all_sources(query: str, sources: list[str] | None = None, limit
         if results:
             all_results.extend(results)
             succeeded.append(source_name)
+
+    if len(all_results) < 5:
+        expanded_queries = await asyncio.to_thread(expand_query, query)
+        existing_ids = {r.external_id for r in all_results}
+
+        for alt_query in expanded_queries:
+            for source_name in sources_to_search:
+                search_fn = SEARCH_FUNCTIONS.get(source_name)
+                if not search_fn:
+                    continue
+                try:
+                    alt_results = await asyncio.to_thread(search_fn, alt_query, limit)
+                    for r in alt_results:
+                        if r.external_id not in existing_ids:
+                            all_results.append(r)
+                            existing_ids.add(r.external_id)
+                            if source_name not in succeeded:
+                                succeeded.append(source_name)
+                except Exception as e:
+                    print(f"Expanded search failed for {source_name}: {e}")
 
     all_results = await asyncio.to_thread(rank_by_semantic_similarity, query, all_results)
 

@@ -17,6 +17,10 @@ class Settings(BaseSettings):
     kaggle_username: str
     kaggle_key: str
     groq_api_key: str
+    minio_endpoint: str
+    minio_access_key: str
+    minio_secret_key: str
+    minio_bucket_name: str
 
     class Config:
         env_file = ".env"

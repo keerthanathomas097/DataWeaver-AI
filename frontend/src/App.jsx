@@ -42,7 +42,7 @@ import { useAuth } from './context/AuthContext';
 import { getDashboardData } from './api/mockData';
 import * as workspaceApi from './api/workspaceApi';
 import * as authApi from './api/authApi';
-import { getWorkspaceDatasets } from './api/datasetApi';
+import { getWorkspaceDatasets, detectDuplicates, getDatasetErrorMessage } from './api/datasetApi';
 
 // Map icon string names to React Lucide components
 const iconMap = {
@@ -395,6 +395,7 @@ export default function App() {
   const [selectedDataset, setSelectedDataset] = useState(null);
   const [mergeMode, setMergeMode] = useState(false);
   const [secondMergeDataset, setSecondMergeDataset] = useState(null);
+  const [detectingDuplicates, setDetectingDuplicates] = useState(false);
 
   useEffect(() => {
     setSelectedDataset(null);
@@ -523,6 +524,21 @@ export default function App() {
     };
     loadData();
   }, []);
+
+  const handleDetectDuplicates = async (dataset) => {
+    if (!dataset || detectingDuplicates) return;
+    setDetectingDuplicates(true);
+    try {
+      const data = await detectDuplicates(dataset.dataset_id);
+      alert(data.message || 'Dataset ready. Duplicate detection not yet implemented.');
+    } catch (err) {
+      console.error('Failed to detect duplicates:', err);
+      const errMsg = getDatasetErrorMessage(err);
+      alert(errMsg);
+    } finally {
+      setDetectingDuplicates(false);
+    }
+  };
 
   const handleCreateWorkspace = async (formData) => {
     try {
@@ -1430,11 +1446,18 @@ export default function App() {
                               <span>Profile</span>
                             </button>
                             <button 
-                              onClick={() => alert(`Initiating Duplicate Detection for "${selectedDataset.dataset_name}". (Coming Soon)`)}
-                              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                              onClick={() => handleDetectDuplicates(selectedDataset)}
+                              disabled={detectingDuplicates}
+                              className={`px-4 py-2 bg-slate-800 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 ${
+                                detectingDuplicates ? 'opacity-75 cursor-not-allowed' : 'hover:bg-slate-700 cursor-pointer'
+                              }`}
                             >
-                              <AlertTriangle size={14} />
-                              <span>Detect Duplicates</span>
+                              {detectingDuplicates ? (
+                                <Loader2 size={14} className="animate-spin" />
+                              ) : (
+                                <AlertTriangle size={14} />
+                              )}
+                              <span>{detectingDuplicates ? 'Detecting...' : 'Detect Duplicates'}</span>
                             </button>
                             <button 
                               onClick={() => alert(`Opening AI Label Manager for "${selectedDataset.dataset_name}". (Coming Soon)`)}

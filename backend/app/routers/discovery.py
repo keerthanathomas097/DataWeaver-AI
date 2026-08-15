@@ -28,3 +28,14 @@ def extract_metadata(
     current_user: User = Depends(get_current_user),
 ):
     return extract_metadata_from_description(description)
+
+@router.get("/kaggle-details/{owner}/{dataset_slug}")
+def kaggle_details(
+    owner: str,
+    dataset_slug: str,
+    current_user: User = Depends(get_current_user),
+):
+    external_id = f"{owner}/{dataset_slug}"
+    description = discovery_service.get_kaggle_dataset_details(external_id)
+    extracted = discovery_service.extract_metadata_from_description(description)
+    return {"full_description": description, **extracted}

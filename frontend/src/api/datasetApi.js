@@ -24,6 +24,11 @@ export async function getDataset(datasetId) {
   return data;
 }
 
+export async function detectDuplicates(datasetId) {
+  const { data } = await client.post(`/datasets/${datasetId}/detect-duplicates`);
+  return data;
+}
+
 export function getDatasetErrorMessage(error) {
   if (!error.response) {
     return 'The backend server is currently unavailable. Please verify that the server is running.';
