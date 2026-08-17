@@ -46,3 +46,18 @@ def update_dataset_after_download(session: Session, dataset_id: uuid.UUID, stora
     session.commit()
     session.refresh(dataset)
     return dataset
+
+def remove_dataset_from_workspace(session: Session, workspace_id: uuid.UUID, dataset_id: uuid.UUID, user_id: uuid.UUID) -> bool:
+    workspace = session.get(Workspace, workspace_id)
+    if not workspace or workspace.user_id != user_id:
+        return False
+        
+    dataset = session.get(Dataset, dataset_id)
+    if not dataset or dataset.workspace_id != workspace_id:
+        return False
+        
+    dataset.workspace_id = None
+    session.add(dataset)
+    session.commit()
+    session.refresh(dataset)
+    return True

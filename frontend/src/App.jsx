@@ -32,7 +32,8 @@ import {
   Lock,
   X,
   Check,
-  Tag
+  Tag,
+  Trash2
 } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -404,6 +405,8 @@ export default function App() {
   const [showDuplicatesDashboard, setShowDuplicatesDashboard] = useState(false);
   const [loadingDuplicateGroups, setLoadingDuplicateGroups] = useState(false);
   const [cancellingJob, setCancellingJob] = useState(false);
+  const [removingDataset, setRemovingDataset] = useState(false);
+  const [isRemoveConfirmOpen, setIsRemoveConfirmOpen] = useState(false);
 
   // Poll for duplicate detection progress
   useEffect(() => {
@@ -659,6 +662,25 @@ export default function App() {
       alert("Failed to cancel job: " + (err.response?.data?.detail || err.message));
     } finally {
       setCancellingJob(false);
+    }
+  };
+
+  const handleRemoveDataset = async () => {
+    if (!selectedDataset || !activeWorkspace || removingDataset) return;
+    setRemovingDataset(true);
+    try {
+      await workspaceApi.removeDatasetFromWorkspace(activeWorkspace, selectedDataset.dataset_id);
+      
+      // Update local states
+      setWorkspaceDatasets(prev => prev.filter(d => d.dataset_id !== selectedDataset.dataset_id));
+      setSelectedDataset(null);
+      setIsRemoveConfirmOpen(false);
+      alert("Dataset removed from workspace successfully.");
+    } catch (err) {
+      console.error("Failed to remove dataset:", err);
+      alert(err.response?.data?.detail || "Failed to remove dataset from workspace.");
+    } finally {
+      setRemovingDataset(false);
     }
   };
 
@@ -1817,6 +1839,13 @@ export default function App() {
                                   <span>Merge</span>
                                 </button>
                                 <button 
+                                  onClick={() => setIsRemoveConfirmOpen(true)}
+                                  className="px-4 py-2 bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 border border-red-200/50 hover:border-red-300 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
+                                >
+                                  <Trash2 size={14} />
+                                  <span>Remove</span>
+                                </button>
+                                <button 
                                   onClick={() => setSelectedDataset(null)}
                                   className="px-3 py-2 text-slate-400 hover:text-slate-600 text-[13px] font-bold transition-all cursor-pointer"
                                 >
@@ -1893,6 +1922,63 @@ export default function App() {
                             className="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-blue-600/10 cursor-pointer"
                           >
                             Initialize Merge
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Remove Dataset Confirmation Modal Dialog */}
+                  {isRemoveConfirmOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-150">
+                      <div 
+                        className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs" 
+                        onClick={() => setIsRemoveConfirmOpen(false)}
+                      />
+
+                      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl relative z-10 p-6 space-y-6 animate-in zoom-in-95 duration-200">
+                        <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                          <h3 className="font-extrabold text-[18px] text-slate-900 flex items-center gap-2">
+                            <AlertTriangle className="text-red-500" size={20} />
+                            <span>Remove Dataset?</span>
+                          </h3>
+                          <button
+                            onClick={() => setIsRemoveConfirmOpen(false)}
+                            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+                          >
+                            <X size={20} />
+                          </button>
+                        </div>
+
+                        <div className="space-y-3">
+                          <p className="text-[13.5px] text-slate-600 font-medium leading-relaxed">
+                            Are you sure you want to remove <span className="font-bold text-slate-800">"{selectedDataset?.dataset_name}"</span> from this workspace?
+                          </p>
+                          <div className="p-3.5 bg-amber-50 border border-amber-100 rounded-xl text-[12px] text-amber-700 font-semibold leading-relaxed">
+                            This dataset will be removed from the current workspace. This action does not delete the original dataset from MinIO storage or external sources.
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t border-slate-100 flex items-center gap-3">
+                          <button
+                            onClick={() => setIsRemoveConfirmOpen(false)}
+                            className="flex-1 py-2.5 border border-slate-200 rounded-xl text-[13px] font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            onClick={handleRemoveDataset}
+                            disabled={removingDataset}
+                            className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white rounded-xl text-[13px] font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-md shadow-red-600/10"
+                          >
+                            {removingDataset ? (
+                              <>
+                                <Loader2 size={14} className="animate-spin" />
+                                <span>Removing...</span>
+                              </>
+                            ) : (
+                              <span>Remove Dataset</span>
+                            )}
                           </button>
                         </div>
                       </div>

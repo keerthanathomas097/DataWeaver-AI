@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 from app.database import get_session
 from app.schemas.workspace import WorkspaceCreate, WorkspaceRead
-from app.services import workspace_service
+from app.services import workspace_service, dataset_service
 from app.routers.auth import get_current_user
 from app.models.user import User
 import uuid
@@ -66,3 +66,20 @@ def get_workspace(
         created_at=workspace.workspace_created_at,
         updated_at=workspace.workspace_updated_at
     )
+
+@router.delete("/{workspace_id}/datasets/{dataset_id}")
+def remove_dataset_from_workspace(
+    workspace_id: uuid.UUID,
+    dataset_id: uuid.UUID,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    success = dataset_service.remove_dataset_from_workspace(
+        session, workspace_id, dataset_id, current_user.user_id
+    )
+    if not success:
+        raise HTTPException(
+            status_code=403,
+            detail="Unauthorized or invalid workspace/dataset combination"
+        )
+    return {"message": "Dataset successfully removed from workspace"}

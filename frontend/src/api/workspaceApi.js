@@ -18,3 +18,8 @@ export async function getWorkspace(workspaceId) {
   const { data } = await client.get(`/workspaces/${workspaceId}`);
   return data;
 }
+
+export async function removeDatasetFromWorkspace(workspaceId, datasetId) {
+  const { data } = await client.delete(`/workspaces/${workspaceId}/datasets/${datasetId}`);
+  return data;
+}
