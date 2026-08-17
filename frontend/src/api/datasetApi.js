@@ -29,6 +29,21 @@ export async function detectDuplicates(datasetId) {
   return data;
 }
 
+export async function getDuplicateStatus(datasetId) {
+  const { data } = await client.get(`/datasets/${datasetId}/duplicate-status`);
+  return data;
+}
+
+export async function getDuplicateGroups(datasetId) {
+  const { data } = await client.get(`/datasets/${datasetId}/duplicate-groups`);
+  return data;
+}
+
+export async function cancelJob(datasetId) {
+  const { data } = await client.post(`/datasets/${datasetId}/cancel-job`);
+  return data;
+}
+
 export function getDatasetErrorMessage(error) {
   if (!error.response) {
     return 'The backend server is currently unavailable. Please verify that the server is running.';
