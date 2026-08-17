@@ -399,6 +399,7 @@ export default function App() {
   const [detectingDuplicates, setDetectingDuplicates] = useState(false);
   const [pollingDatasetId, setPollingDatasetId] = useState(null);
   const [pollingStatus, setPollingStatus] = useState(null);
+  const [justCompletedScanDatasetId, setJustCompletedScanDatasetId] = useState(null);
   const [duplicateGroups, setDuplicateGroups] = useState([]);
   const [showDuplicatesDashboard, setShowDuplicatesDashboard] = useState(false);
   const [loadingDuplicateGroups, setLoadingDuplicateGroups] = useState(false);
@@ -428,6 +429,7 @@ export default function App() {
           clearInterval(intervalId);
           setPollingDatasetId(null);
           setPollingStatus(null);
+          setJustCompletedScanDatasetId(pollingDatasetId);
           // Automatically fetch duplicate groups and show dashboard
           setLoadingDuplicateGroups(true);
           try {
@@ -466,6 +468,7 @@ export default function App() {
       setPollingStatus(null);
       setShowDuplicatesDashboard(false);
     }
+    setJustCompletedScanDatasetId(null);
   }, [selectedDataset?.dataset_id]);
 
   useEffect(() => {
@@ -622,6 +625,20 @@ export default function App() {
     }
   };
 
+  const handleViewDuplicates = async (datasetId) => {
+    setLoadingDuplicateGroups(true);
+    try {
+      const groups = await getDuplicateGroups(datasetId);
+      setDuplicateGroups(groups);
+      setShowDuplicatesDashboard(true);
+    } catch (err) {
+      console.error("Failed to load duplicate groups", err);
+      alert("Failed to load duplicate groups");
+    } finally {
+      setLoadingDuplicateGroups(false);
+    }
+  };
+
   const handleCancelJob = async () => {
     if (!selectedDataset || cancellingJob) return;
     setCancellingJob(true);
@@ -655,12 +672,12 @@ export default function App() {
     const currentIdx = stages.findIndex(s => s.key === pollingStatus);
     
     return (
-      <div className="w-full bg-slate-950/40 border border-slate-800 rounded-xl p-4.5 space-y-3">
+      <div className="w-full bg-slate-50 border border-slate-200/60 rounded-xl p-4.5 space-y-3">
         <div className="flex justify-between items-center">
-          <span className="text-[11.5px] font-bold text-slate-400">
+          <span className="text-[11.5px] font-bold text-slate-500">
             Duplicate Detection Pipeline
           </span>
-          <span className="text-[11px] font-bold text-blue-400 animate-pulse flex items-center gap-1.5">
+          <span className="text-[11px] font-bold text-blue-600 animate-pulse flex items-center gap-1.5">
             <Loader2 size={12} className="animate-spin" />
             {pollingStatus === 'downloading' && 'Downloading dataset...'}
             {pollingStatus === 'downloaded' && 'Preparing analysis...'}
@@ -669,7 +686,7 @@ export default function App() {
         </div>
         
         {/* Progress Bar */}
-        <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
           <div 
             className="h-full bg-blue-500 transition-all duration-500 rounded-full"
             style={{
@@ -681,7 +698,7 @@ export default function App() {
         </div>
 
         {/* Steps list */}
-        <div className="grid grid-cols-3 gap-2 pt-1.5 border-b border-slate-800/60 pb-3.5">
+        <div className="grid grid-cols-3 gap-2 pt-1.5 border-b border-slate-200/60 pb-3.5">
           {stages.map((stage, idx) => {
             const isCompleted = idx < currentIdx;
             const isActive = idx === currentIdx;
@@ -689,15 +706,15 @@ export default function App() {
               <div key={stage.key} className="text-center space-y-1">
                 <div className="flex items-center justify-center">
                   <div className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-colors ${
-                    isCompleted ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
+                    isCompleted ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' :
                     isActive ? 'bg-blue-600 text-white border border-blue-500 shadow-sm animate-pulse' :
-                    'bg-slate-800 text-slate-500 border border-slate-700/50'
+                    'bg-slate-50 text-slate-400 border border-slate-200'
                   }`}>
                     {isCompleted ? '✓' : idx + 1}
                   </div>
                 </div>
                 <p className={`text-[10px] font-bold truncate transition-colors ${
-                  isActive ? 'text-white' : isCompleted ? 'text-slate-400' : 'text-slate-500'
+                  isActive ? 'text-slate-800' : isCompleted ? 'text-slate-500' : 'text-slate-400'
                 }`}>
                   {stage.label}
                 </p>
@@ -711,7 +728,7 @@ export default function App() {
           <button
             onClick={handleCancelJob}
             disabled={cancellingJob}
-            className="px-3 py-1.5 bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-900/40 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            className="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200/60 rounded-lg text-[11px] font-bold transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
           >
             {cancellingJob && <Loader2 size={11} className="animate-spin" />}
             <span>{cancellingJob ? 'Cancelling...' : 'Cancel Job'}</span>
@@ -723,14 +740,14 @@ export default function App() {
 
   const renderCancelledUI = () => {
     return (
-      <div className="w-full bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="w-full bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-slate-800 text-slate-400 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-500 flex items-center justify-center shrink-0 border border-slate-200/30">
             <X size={18} />
           </div>
           <div>
-            <h4 className="font-bold text-[13.5px] text-white">Job Cancelled</h4>
-            <p className="text-[11.5px] text-slate-400 mt-1 font-semibold leading-normal">
+            <h4 className="font-bold text-[13.5px] text-slate-800">Job Cancelled</h4>
+            <p className="text-[11.5px] text-slate-500 mt-1 font-semibold leading-normal">
               The job was cancelled. Database and vector indices have been cleaned up.
             </p>
           </div>
@@ -744,7 +761,7 @@ export default function App() {
           </button>
           <button 
             onClick={() => setSelectedDataset(null)}
-            className="px-3 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-all cursor-pointer shrink-0"
+            className="px-3 py-2 text-slate-400 hover:text-slate-600 text-[13px] font-bold transition-all cursor-pointer shrink-0"
           >
             Cancel
           </button>
@@ -755,14 +772,14 @@ export default function App() {
 
   const renderErrorUI = () => {
     return (
-      <div className="w-full bg-red-950/20 border border-red-900/30 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="w-full bg-rose-50/50 border border-rose-100/80 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
             <AlertTriangle size={18} />
           </div>
           <div>
-            <h4 className="font-bold text-[13.5px] text-white">Duplicate Detection Failed</h4>
-            <p className="text-[11.5px] text-red-400/80 mt-1 font-semibold">An unexpected exception occurred during execution.</p>
+            <h4 className="font-bold text-[13.5px] text-slate-800">Duplicate Detection Failed</h4>
+            <p className="text-[11.5px] text-rose-600/90 mt-1 font-semibold">An unexpected exception occurred during execution.</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -774,7 +791,7 @@ export default function App() {
           </button>
           <button 
             onClick={() => setSelectedDataset(null)}
-            className="px-3 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-all cursor-pointer shrink-0"
+            className="px-3 py-2 text-slate-400 hover:text-slate-600 text-[13px] font-bold transition-all cursor-pointer shrink-0"
           >
             Cancel
           </button>
@@ -785,30 +802,21 @@ export default function App() {
 
   const renderSuccessUI = () => {
     return (
-      <div className="w-full bg-emerald-950/20 border border-emerald-900/30 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="w-full bg-emerald-50/60 border border-emerald-100 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-start gap-3">
-          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
             <Sparkles size={18} />
           </div>
           <div>
-            <h4 className="font-bold text-[13.5px] text-white">Duplicates Checked</h4>
-            <p className="text-[11.5px] text-emerald-400/80 mt-1 font-semibold">Duplication scan is complete and groups are indexed.</p>
+            <h4 className="font-bold text-[13.5px] text-slate-800">Duplicates Checked</h4>
+            <p className="text-[11.5px] text-emerald-600 mt-1 font-semibold">Duplication scan is complete and groups are indexed.</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={async () => {
-              setLoadingDuplicateGroups(true);
-              try {
-                const groups = await getDuplicateGroups(selectedDataset.dataset_id);
-                setDuplicateGroups(groups);
-                setShowDuplicatesDashboard(true);
-              } catch (err) {
-                console.error("Failed to load duplicate groups", err);
-                alert("Failed to load duplicate groups");
-              } finally {
-                setLoadingDuplicateGroups(false);
-              }
+              await handleViewDuplicates(selectedDataset.dataset_id);
+              setJustCompletedScanDatasetId(null);
             }}
             disabled={loadingDuplicateGroups}
             className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[12.5px] rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-md shadow-emerald-600/10 shrink-0"
@@ -821,8 +829,8 @@ export default function App() {
             <span>View Duplicate Results</span>
           </button>
           <button 
-            onClick={() => setSelectedDataset(null)}
-            className="px-3 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-all cursor-pointer shrink-0"
+            onClick={() => setJustCompletedScanDatasetId(null)}
+            className="px-3 py-2 text-slate-400 hover:text-slate-600 text-[13px] font-bold transition-all cursor-pointer shrink-0"
           >
             Cancel
           </button>
@@ -1701,17 +1709,17 @@ export default function App() {
 
                   {/* Contextual Actions Panel */}
                   {selectedDataset && (
-                    <div className="bg-slate-900 text-white border border-slate-800 rounded-2xl p-5 shadow-lg animate-in slide-in-from-bottom-2 duration-200">
+                    <div className="bg-gradient-to-r from-white via-blue-50/15 to-white text-slate-800 border border-blue-100/40 rounded-2xl p-5 shadow-lg shadow-blue-900/5 animate-in slide-in-from-bottom-2 duration-200">
                       {mergeMode ? (
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 animate-pulse">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 border border-amber-100 flex items-center justify-center shrink-0 animate-pulse">
                               <Sparkles size={20} />
                             </div>
                             <div>
                               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">Merge Mode Active</p>
-                              <h4 className="font-extrabold text-[15px] text-white mt-1.5">
-                                Select a second dataset to merge with <span className="text-blue-400 font-black">"{selectedDataset.dataset_name}"</span>
+                              <h4 className="font-extrabold text-[15px] text-slate-800 mt-1.5">
+                                Select a second dataset to merge with <span className="text-blue-600 font-black">"{selectedDataset.dataset_name}"</span>
                               </h4>
                             </div>
                           </div>
@@ -1720,7 +1728,7 @@ export default function App() {
                             onClick={() => {
                               setMergeMode(false);
                             }}
-                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer"
+                            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[13px] font-bold transition-all shrink-0 cursor-pointer"
                           >
                             Cancel Merge
                           </button>
@@ -1739,47 +1747,64 @@ export default function App() {
                             <div className="flex-1 w-full">
                               {renderCancelledUI()}
                             </div>
-                          ) : selectedDataset.dataset_status === 'duplicates_detected' ? (
+                          ) : selectedDataset.dataset_id === justCompletedScanDatasetId ? (
                             <div className="flex-1 w-full">
                               {renderSuccessUI()}
                             </div>
                           ) : (
                             <>
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center shrink-0">
                                   <Database size={20} />
                                 </div>
                                 <div>
                                   <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest leading-none">Selected Dataset</p>
-                                  <h4 className="font-extrabold text-[15px] text-white mt-1.5">{selectedDataset.dataset_name}</h4>
+                                  <h4 className="font-extrabold text-[15px] text-slate-800 mt-1.5">{selectedDataset.dataset_name}</h4>
                                 </div>
                               </div>
 
                               <div className="flex items-center gap-2.5 flex-wrap">
                                 <button 
                                   onClick={() => alert(`Starting Dataset Profiling for "${selectedDataset.dataset_name}". (Coming Soon)`)}
-                                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                                  className="px-4 py-2 bg-slate-50 hover:bg-blue-50/50 text-slate-700 hover:text-blue-700 border border-slate-200/70 hover:border-blue-200 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                                 >
                                   <RefreshCw size={14} />
                                   <span>Profile</span>
                                 </button>
-                                <button 
-                                  onClick={() => handleDetectDuplicates(selectedDataset)}
-                                  disabled={detectingDuplicates}
-                                  className={`px-4 py-2 bg-slate-800 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 ${
-                                    detectingDuplicates ? 'opacity-75 cursor-not-allowed' : 'hover:bg-slate-700 cursor-pointer'
-                                  }`}
-                                >
-                                  {detectingDuplicates ? (
-                                    <Loader2 size={14} className="animate-spin" />
-                                  ) : (
-                                    <AlertTriangle size={14} />
-                                  )}
-                                  <span>{detectingDuplicates ? 'Detecting...' : 'Detect Duplicates'}</span>
-                                </button>
+                                {selectedDataset.dataset_status === 'duplicates_detected' ? (
+                                   <button 
+                                     onClick={() => handleViewDuplicates(selectedDataset.dataset_id)}
+                                     disabled={loadingDuplicateGroups}
+                                     className={`px-4 py-2 bg-slate-50 text-slate-700 border border-slate-200/70 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 shadow-xs ${
+                                       loadingDuplicateGroups ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-50/50 hover:text-blue-700 hover:border-blue-200 cursor-pointer'
+                                     }`}
+                                   >
+                                     {loadingDuplicateGroups ? (
+                                       <Loader2 size={14} className="animate-spin" />
+                                     ) : (
+                                       <Sparkles size={14} />
+                                     )}
+                                     <span>View Duplicates</span>
+                                   </button>
+                                 ) : (
+                                   <button 
+                                     onClick={() => handleDetectDuplicates(selectedDataset)}
+                                     disabled={detectingDuplicates}
+                                     className={`px-4 py-2 bg-slate-50 text-slate-700 border border-slate-200/70 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 shadow-xs ${
+                                       detectingDuplicates ? 'opacity-75 cursor-not-allowed' : 'hover:bg-blue-50/50 hover:text-blue-700 hover:border-blue-200 cursor-pointer'
+                                     }`}
+                                   >
+                                     {detectingDuplicates ? (
+                                       <Loader2 size={14} className="animate-spin" />
+                                     ) : (
+                                       <AlertTriangle size={14} />
+                                     )}
+                                     <span>{detectingDuplicates ? 'Detecting...' : 'Detect Duplicates'}</span>
+                                   </button>
+                                 )}
                                 <button 
                                   onClick={() => alert(`Opening AI Label Manager for "${selectedDataset.dataset_name}". (Coming Soon)`)}
-                                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                                  className="px-4 py-2 bg-slate-50 hover:bg-blue-50/50 text-slate-700 hover:text-blue-700 border border-slate-200/70 hover:border-blue-200 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                                 >
                                   <Tag size={14} />
                                   <span>Manage Labels</span>
@@ -1793,7 +1818,7 @@ export default function App() {
                                 </button>
                                 <button 
                                   onClick={() => setSelectedDataset(null)}
-                                  className="px-3 py-2 text-slate-400 hover:text-white text-[13px] font-bold transition-all cursor-pointer"
+                                  className="px-3 py-2 text-slate-400 hover:text-slate-600 text-[13px] font-bold transition-all cursor-pointer"
                                 >
                                   Cancel
                                 </button>

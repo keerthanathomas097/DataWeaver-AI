@@ -14,11 +14,45 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [googleNotice, setGoogleNotice] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [emailTouched, setEmailTouched] = useState(false);
+
+  const validateEmail = (value) => {
+    if (!value) {
+      setEmailError('Email is required');
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      setEmailError('Please enter a valid email address');
+      return false;
+    }
+    setEmailError('');
+    return true;
+  };
+
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmail(val);
+    if (emailTouched) {
+      validateEmail(val);
+    }
+  };
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true);
+    validateEmail(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setGoogleNotice('');
+
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
 
     try {
      await login({ email, password });
@@ -30,7 +64,7 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = () => {
     redirectToGoogle();
-};
+  };
 
   return (
     <AuthLayout
@@ -53,19 +87,35 @@ export default function LoginPage() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-[13px] font-semibold text-slate-700 mb-1.5">
-            Email address
+          <label htmlFor="email" className="block text-[13px] font-semibold text-slate-700 mb-1.5 flex justify-between items-center">
+            <span>Email address</span>
+            {emailTouched && !emailError && email && (
+              <span className="text-[11px] font-semibold text-emerald-600 transition-opacity duration-300">Valid email</span>
+            )}
           </label>
           <input
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
+            onBlur={handleEmailBlur}
             placeholder="you@research.edu"
             required
             autoComplete="email"
-            className="w-full px-4 py-2.5 text-[14px] bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all placeholder:text-slate-400"
+            className={`w-full px-4 py-2.5 text-[14px] bg-slate-50 border rounded-xl focus:outline-none transition-all placeholder:text-slate-400 ${
+              emailTouched && emailError
+                ? 'border-rose-300 focus:border-rose-400 focus:bg-white bg-rose-50/10'
+                : emailTouched && !emailError && email
+                ? 'border-emerald-300 focus:border-emerald-400 focus:bg-white bg-emerald-50/10'
+                : 'border-slate-200 focus:border-blue-400 focus:bg-white'
+            }`}
           />
+          {emailTouched && emailError && (
+            <p className="mt-1.5 text-[12px] text-rose-600 font-medium flex items-center gap-1">
+              <AlertCircle size={13} className="shrink-0" />
+              {emailError}
+            </p>
+          )}
         </div>
 
         <div>
