@@ -18,7 +18,7 @@ def get_models():
         clip_model = CLIPModel.from_pretrained(clip_model_name)
         
         # Load DINOv2 ViT-B/14
-        dino_model_name = "facebook/dinov2-vitb14"
+        dino_model_name = "facebook/dinov2-base"
         dino_processor = AutoImageProcessor.from_pretrained(dino_model_name)
         dino_model = Dinov2Model.from_pretrained(dino_model_name)
         
@@ -70,6 +70,8 @@ def generate_embeddings(images: list[Image.Image], batch_size: int = 16) -> np.n
             
         with torch.no_grad():
             clip_features = clip_model.get_image_features(**clip_inputs)
+            if hasattr(clip_features, "pooler_output"):
+                clip_features = clip_features.pooler_output
             # L2 Normalize the features
             clip_features = clip_features / clip_features.norm(dim=-1, keepdim=True)
             clip_features_np = clip_features.cpu().numpy().astype(np.float32)

@@ -266,7 +266,7 @@ def process_photographic_domain(dataset_id: uuid.UUID, image_paths: list[str], s
                     ids=[item_id],
                     include=["embeddings"]
                 )
-                if not result or not result.get("embeddings") or len(result["embeddings"]) == 0:
+                if result is None or result.get("embeddings") is None or len(result["embeddings"]) == 0:
                     continue
                     
                 emb_query = np.array(result["embeddings"][0])
@@ -278,7 +278,7 @@ def process_photographic_domain(dataset_id: uuid.UUID, image_paths: list[str], s
                     include=["embeddings", "metadatas"]
                 )
                 
-                if not query_res or not query_res.get("metadatas") or len(query_res["metadatas"]) == 0:
+                if query_res is None or query_res.get("metadatas") is None or len(query_res["metadatas"]) == 0:
                     continue
                     
                 candidates = query_res["metadatas"][0]
