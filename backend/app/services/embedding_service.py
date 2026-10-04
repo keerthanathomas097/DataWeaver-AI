@@ -97,3 +97,41 @@ def generate_embeddings(images: list[Image.Image], batch_size: int = 16) -> np.n
         return np.empty((0, 1280), dtype=np.float32)
         
     return np.concatenate(all_embeddings, axis=0)
+
+
+def generate_dinov2_embeddings(images: list[Image.Image], batch_size: int = 16) -> np.ndarray:
+    """
+    Generate DINOv2 embeddings for a list of PIL Images.
+    Returns:
+        np.ndarray of shape (len(images), 768), float32, L2-normalized.
+    """
+    models = get_models()
+    device = models["device"]
+    dino_proc = models["dino_processor"]
+    dino_model = models["dino_model"]
+    
+    all_embeddings = []
+    
+    for i in range(0, len(images), batch_size):
+        batch = images[i : i + batch_size]
+        rgb_batch = [img.convert("RGB") if img.mode != "RGB" else img for img in batch]
+        
+        dino_inputs = dino_proc(images=rgb_batch, return_tensors="pt").to(device)
+        if device == "cuda":
+            dino_inputs = {k: v.half() if v.dtype == torch.float32 else v for k, v in dino_inputs.items()}
+            
+        with torch.no_grad():
+            dino_outputs = dino_model(**dino_inputs)
+            # CLS token is at index 0 of last_hidden_state
+            dino_features = dino_outputs.last_hidden_state[:, 0, :]
+            # L2 Normalize the features
+            dino_features = dino_features / dino_features.norm(dim=-1, keepdim=True)
+            dino_features_np = dino_features.cpu().numpy().astype(np.float32)
+            
+        all_embeddings.append(dino_features_np)
+        
+    if not all_embeddings:
+        return np.empty((0, 768), dtype=np.float32)
+        
+    return np.concatenate(all_embeddings, axis=0)
+

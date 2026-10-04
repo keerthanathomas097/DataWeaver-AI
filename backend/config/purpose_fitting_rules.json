@@ -1,0 +1,1445 @@
+{
+  "version": "1.0",
+  "provenance": {
+    "type": "heuristic",
+    "description": "The rules and thresholds in this configuration are heuristic-derived from general machine-learning dataset-quality reasoning and task requirements. They have not been individually validated through dedicated literature benchmark experiments and provide a purpose-fit analysis rather than a guaranteed suitability verdict."
+  },
+  "purposes": {
+    "classification": {
+      "display_name": "Image Classification",
+      "short_description": "Categorize images into distinct target classes or labels."
+    },
+    "object_detection": {
+      "display_name": "Object Detection",
+      "short_description": "Locate and bound discrete objects or entities across visual scenes."
+    },
+    "segmentation": {
+      "display_name": "Semantic / Instance Segmentation",
+      "short_description": "Delineate pixel-level masks and boundaries for objects and surfaces."
+    },
+    "retrieval": {
+      "display_name": "Image Retrieval / Similarity Search",
+      "short_description": "Index and retrieve visually or semantically similar images by query."
+    },
+    "dedup_research": {
+      "display_name": "Duplicate Detection / Dedup Research",
+      "short_description": "Develop, evaluate, or benchmark near-duplicate and copy detection algorithms."
+    },
+    "generative": {
+      "display_name": "Generative Modeling",
+      "short_description": "Train diffusion, GAN, or generative models to synthesize visual content."
+    },
+    "self_supervised": {
+      "display_name": "Self-Supervised / Representation Learning",
+      "short_description": "Pre-train visual backbones and foundation encoders without human annotations."
+    },
+    "benchmarking": {
+      "display_name": "Benchmarking / Evaluation Dataset",
+      "short_description": "Rigorous model evaluation, standardized test suites, and performance leaderboards."
+    }
+  },
+  "metrics": {
+    "duplicate_ratio": {
+      "display_name": "Duplicate Image Ratio",
+      "profile_path": "duplicates.duplicate_ratio",
+      "operator": ">",
+      "threshold": 0.15,
+      "unit": "ratio",
+      "applicable": true
+    },
+    "visually_similar_ratio": {
+      "display_name": "Visually Similar Ratio",
+      "profile_path": null,
+      "operator": ">",
+      "threshold": 0.25,
+      "unit": "ratio",
+      "applicable": false,
+      "status": "unavailable",
+      "reason": "This metric is not present in the stored profiling result."
+    },
+    "duplicate_concentration": {
+      "display_name": "Duplicate Concentration",
+      "profile_path": null,
+      "operator": ">",
+      "threshold": 0.50,
+      "unit": "ratio",
+      "applicable": false,
+      "status": "unavailable",
+      "reason": "This metric is not present in the stored profiling result."
+    },
+    "suspiciously_uniform_class_balance": {
+      "display_name": "Suspiciously Uniform Class Balance",
+      "profile_path": null,
+      "operator": "<",
+      "threshold": 0.05,
+      "unit": "ratio",
+      "applicable": false,
+      "status": "unavailable",
+      "reason": "This metric is not present in the stored profiling result."
+    },
+    "long_tail_imbalance": {
+      "display_name": "Long-Tail Class Imbalance",
+      "profile_path": "labels.metrics.max_to_min_ratio",
+      "operator": ">",
+      "threshold": 10.0,
+      "unit": "ratio",
+      "applicable": true
+    },
+    "zero_resolution_variance": {
+      "display_name": "Uniform Image Resolution",
+      "profile_path": "basic_statistics.dimensions.resolution.std",
+      "operator": "==",
+      "threshold": 0.0,
+      "unit": "std",
+      "applicable": true
+    },
+    "single_aspect_ratio": {
+      "display_name": "Uniform Aspect Ratio",
+      "profile_path": "basic_statistics.aspect_ratios.stats.std",
+      "operator": "==",
+      "threshold": 0.0,
+      "unit": "std",
+      "applicable": true
+    },
+    "narrow_brightness_contrast": {
+      "display_name": "Narrow Illumination Range",
+      "profile_path": "quality.brightness.std",
+      "operator": "<",
+      "threshold": 15.0,
+      "unit": "std",
+      "applicable": true
+    },
+    "high_blur_ratio": {
+      "display_name": "High Blur Ratio",
+      "profile_path": "quality.percentages.blurred_pct",
+      "operator": ">",
+      "threshold": 15.0,
+      "unit": "percent",
+      "applicable": true
+    },
+    "low_visual_diversity": {
+      "display_name": "Low Visual Variety",
+      "profile_path": "diversity.cluster_count",
+      "operator": "<=",
+      "threshold": 2,
+      "unit": "clusters",
+      "applicable": true
+    },
+    "low_silhouette_score": {
+      "display_name": "Low Visual Separation",
+      "profile_path": "diversity.silhouette_score",
+      "operator": "<",
+      "threshold": 0.20,
+      "unit": "score",
+      "applicable": true
+    },
+    "high_visual_outlier_ratio": {
+      "display_name": "High Isolated Image Ratio",
+      "profile_path": "diversity.noise_ratio",
+      "operator": ">",
+      "threshold": 0.10,
+      "unit": "ratio",
+      "applicable": true
+    },
+    "single_source_domain": {
+      "display_name": "Single Acquisition Source",
+      "profile_path": null,
+      "operator": "==",
+      "threshold": 1,
+      "unit": "sources",
+      "applicable": false,
+      "status": "unavailable",
+      "reason": "This metric is not present in the stored profiling result."
+    },
+    "mixed_domain": {
+      "display_name": "Mixed Visual Domain Content",
+      "profile_path": "dataset.dataset_domain",
+      "operator": "==",
+      "threshold": "mixed",
+      "unit": "category",
+      "applicable": true
+    }
+  },
+  "rules": [
+    {
+      "id": "CLASS_DUP_001",
+      "purpose": "classification",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "A high portion of the dataset contains duplicate images.",
+        "explanation": "For image classification, repeated identical or near-duplicate images can lead to data leakage between training and validation splits and artificially inflate model confidence."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is within acceptable limits for classification.",
+        "explanation": "Low duplication levels ensure unique representative samples across target classes."
+      }
+    },
+    {
+      "id": "OBJ_DUP_001",
+      "purpose": "object_detection",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Duplicate images detected across scenes.",
+        "explanation": "For object detection, duplicate scenes cause detectors to overfit to specific bounding backgrounds rather than learning generalizable spatial object features."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is within acceptable limits for object detection.",
+        "explanation": "Sufficient scene variation aids in robust boundary localization."
+      }
+    },
+    {
+      "id": "SEG_DUP_001",
+      "purpose": "segmentation",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Duplicate images detected in segmentation set.",
+        "explanation": "Pixel-level segmentation models benefit from varied boundaries; repeated images degrade boundary generalization."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is within acceptable limits for segmentation.",
+        "explanation": "Unique imagery supports learning fine-grained pixel-level mask contours."
+      }
+    },
+    {
+      "id": "RETR_DUP_001",
+      "purpose": "retrieval",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Dataset contains duplicate image instances.",
+        "explanation": "For retrieval benchmarking, having duplicate or near-duplicate items is often natural or tested as target search matches."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is within normal range for retrieval.",
+        "explanation": "Retrieval indices can operate effectively with either unique or clustered matching pairs."
+      }
+    },
+    {
+      "id": "DEDUP_DUP_001",
+      "purpose": "dedup_research",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "favorable",
+        "message": "Rich duplicate content available for deduplication research.",
+        "explanation": "Datasets intended for evaluating deduplication algorithms benefit from containing positive duplicate and near-duplicate pairs."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low duplication observed in dataset.",
+        "explanation": "Deduplication research usually requires positive duplicate examples to evaluate recall."
+      }
+    },
+    {
+      "id": "GEN_DUP_001",
+      "purpose": "generative",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Frequent duplicates risk mode memorization in generative models.",
+        "explanation": "Generative architectures like diffusion models or GANs trained on duplicate images are susceptible to memorizing specific samples rather than learning the visual distribution."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is low, reducing risk of generative memorization.",
+        "explanation": "Diversity of unique training samples encourages high-fidelity distribution coverage."
+      }
+    },
+    {
+      "id": "SSL_DUP_001",
+      "purpose": "self_supervised",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "High duplication may collapse self-supervised contrastive learning.",
+        "explanation": "In contrastive self-supervised learning, untreated identical duplicates treated as negative pairs can cause false penalty signals and feature collapse."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Duplicate ratio is within healthy margins for representation learning.",
+        "explanation": "Varied unannotated images provide informative negative contrasts."
+      }
+    },
+    {
+      "id": "BENCH_DUP_001",
+      "purpose": "benchmarking",
+      "metric": "duplicate_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High duplication compromises benchmark integrity.",
+        "explanation": "For standardized evaluation benchmarks, duplicate or near-duplicate images create train/test leakage and compromise the validity of performance metrics."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low duplication preserves benchmark integrity.",
+        "explanation": "A clean, unique sample collection allows faithful performance scoring."
+      }
+    },
+    {
+      "id": "CLASS_IMB_001",
+      "purpose": "classification",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Severe class imbalance between dominant and minority classes.",
+        "explanation": "A ratio exceeding 10:1 between the most frequent and least frequent classes will bias classifiers toward majority labels unless balanced loss weighting is applied."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Class balance is well-proportioned across categories.",
+        "explanation": "Balanced class distributions prevent classification models from developing systematic majority class bias."
+      }
+    },
+    {
+      "id": "OBJ_IMB_001",
+      "purpose": "object_detection",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Substantial frequency imbalance between detected categories.",
+        "explanation": "Rare object categories will suffer from poor recall unless class-balanced sampling is utilized during training."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Category representation is relatively balanced.",
+        "explanation": "Sufficient positive instances exist for each target category."
+      }
+    },
+    {
+      "id": "SEG_IMB_001",
+      "purpose": "segmentation",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Significant class imbalance in annotated categories.",
+        "explanation": "Pixel segmentation networks will struggle to detect minority masks without focal or dice loss weighting."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Class representation is reasonably balanced.",
+        "explanation": "Consistent presence across categories supports balanced multi-class mask extraction."
+      }
+    },
+    {
+      "id": "RETR_IMB_001",
+      "purpose": "retrieval",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Imbalanced class distribution observed.",
+        "explanation": "Image retrieval systems frequently encounter real-world long-tail query distributions and can operate without equal class sizes."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Class sizes are relatively uniform.",
+        "explanation": "Balanced representation provides uniform coverage across retrieval queries."
+      }
+    },
+    {
+      "id": "DEDUP_IMB_001",
+      "purpose": "dedup_research",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Class imbalance detected.",
+        "explanation": "Class balance is usually irrelevant for deduplication research which focuses on pairwise image similarity."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Class balance has no adverse impact on deduplication.",
+        "explanation": "Deduplication algorithms evaluate image-level perceptual and feature matching rather than class semantics."
+      }
+    },
+    {
+      "id": "GEN_IMB_001",
+      "purpose": "generative",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Uneven class distribution detected.",
+        "explanation": "Generative modeling can tolerate uneven categories, though conditioning on rare classes may require oversampling."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Even category representation across generative classes.",
+        "explanation": "Equal coverage aids conditional generation across all prompt conditions."
+      }
+    },
+    {
+      "id": "SSL_IMB_001",
+      "purpose": "self_supervised",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Class representation is skewed.",
+        "explanation": "Self-supervised learning trains primarily on unannotated instances where class semantics are not directly supervised."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Consistent visual variety across semantic concepts.",
+        "explanation": "Broad representation helps establish generalized visual representations."
+      }
+    },
+    {
+      "id": "BENCH_IMB_001",
+      "purpose": "benchmarking",
+      "metric": "long_tail_imbalance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Imbalanced test distribution detected.",
+        "explanation": "Imbalanced benchmark sets require evaluation with macro-averaged or balanced metrics rather than raw accuracy."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Balanced distribution enables straightforward benchmark metrics.",
+        "explanation": "Equal sample counts per class permit clear unweighted accuracy interpretation."
+      }
+    },
+    {
+      "id": "CLASS_RES_001",
+      "purpose": "classification",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "All images share identical dimensions and resolution.",
+        "explanation": "Standardized image resolutions eliminate the need for resizing artifacts during classification training."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Images have varied spatial dimensions.",
+        "explanation": "Standard convolutional or transformer pipelines will resample images to uniform batch sizes."
+      }
+    },
+    {
+      "id": "OBJ_RES_001",
+      "purpose": "object_detection",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Completely uniform image resolution across all scenes.",
+        "explanation": "Object detectors trained solely on a single fixed resolution may fail to generalize to multiscale camera feeds or varying resolutions in production."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Resolution varies across images.",
+        "explanation": "Diverse image dimensions promote multiscale spatial invariance."
+      }
+    },
+    {
+      "id": "SEG_RES_001",
+      "purpose": "segmentation",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Completely fixed image resolution across all samples.",
+        "explanation": "Segmentation models trained on a single resolution can be sensitive to scale changes when deployed to varied imaging sensors."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Multiple image resolutions represented.",
+        "explanation": "Varying resolutions encourage scale-invariant mask boundaries."
+      }
+    },
+    {
+      "id": "RETR_RES_001",
+      "purpose": "retrieval",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Uniform resolution across collection.",
+        "explanation": "Uniform resolution simplifies vector embedding extraction for retrieval indices."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Resolution variance is present.",
+        "explanation": "Feature extraction backbones easily normalize variable input sizes."
+      }
+    },
+    {
+      "id": "DEDUP_RES_001",
+      "purpose": "dedup_research",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Uniform image dimensions across dataset.",
+        "explanation": "Zero resolution variance allows straightforward pixel and perceptual comparison."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Varied resolutions present in dataset.",
+        "explanation": "Deduplication algorithms should ideally be evaluated across scale transformations."
+      }
+    },
+    {
+      "id": "GEN_RES_001",
+      "purpose": "generative",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Dataset strictly confined to a single resolution.",
+        "explanation": "While convenient for fixed-size architectures, it prevents training arbitrary-resolution generative models."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Dataset exhibits varied resolutions.",
+        "explanation": "Supports multiscale training strategies in modern generative frameworks."
+      }
+    },
+    {
+      "id": "SSL_RES_001",
+      "purpose": "self_supervised",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "All images have identical native resolution.",
+        "explanation": "Pre-training on uniform resolutions can limit an encoder's ability to handle diverse scale contexts without extensive multi-crop augmentation."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Varied native resolutions present.",
+        "explanation": "Exposing models to varied resolutions enhances scale-equivariant representations."
+      }
+    },
+    {
+      "id": "BENCH_RES_001",
+      "purpose": "benchmarking",
+      "metric": "zero_resolution_variance",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Benchmark does not evaluate multi-resolution robustness.",
+        "explanation": "A benchmark dataset with zero resolution variance cannot measure how models perform when confronted with varying input dimensions."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Benchmark tests multiple image dimensions.",
+        "explanation": "Testing diverse resolutions ensures robust real-world benchmark evaluations."
+      }
+    },
+    {
+      "id": "CLASS_ASP_001",
+      "purpose": "classification",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Single aspect ratio across all dataset images.",
+        "explanation": "Uniform aspect ratio avoids geometric aspect-distortion when images are cropped or normalized."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Aspect ratios vary across the dataset.",
+        "explanation": "Standard square center-crop or padding is commonly used during classification batching."
+      }
+    },
+    {
+      "id": "OBJ_ASP_001",
+      "purpose": "object_detection",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "All scenes share an identical aspect ratio.",
+        "explanation": "Detectors evaluated or trained on single aspect ratios may develop anchor box priors that fail on wider panoramic or taller mobile captures."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Aspect ratios vary naturally across images.",
+        "explanation": "Promotes generalization across diverse camera orientations."
+      }
+    },
+    {
+      "id": "SEG_ASP_001",
+      "purpose": "segmentation",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "All images restricted to a single aspect ratio.",
+        "explanation": "Dense prediction architectures benefit from experiencing varied aspect ratios to prevent spatial positional overfitting."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Diverse aspect ratios present.",
+        "explanation": "Encourages flexible receptive field adaptation."
+      }
+    },
+    {
+      "id": "RETR_ASP_001",
+      "purpose": "retrieval",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Aspect ratio is uniform.",
+        "explanation": "Retrieval backbones typically embed images to fixed-size vectors regardless of aspect ratio."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Aspect ratios vary across images.",
+        "explanation": "Retrieval embedding models are well suited for mixed aspect ratio libraries."
+      }
+    },
+    {
+      "id": "DEDUP_ASP_001",
+      "purpose": "dedup_research",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Single aspect ratio across images.",
+        "explanation": "Deduplication algorithms can be evaluated on uniform aspect ratio sets without hindrance."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Diverse aspect ratios present.",
+        "explanation": "Tests resilience against crop and aspect ratio distortions."
+      }
+    },
+    {
+      "id": "GEN_ASP_001",
+      "purpose": "generative",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Generative training confined to single aspect ratio.",
+        "explanation": "Generative models trained on one aspect ratio cannot produce outputs in varied camera formats without aspect ratio fine-tuning."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Multiple aspect ratios represented.",
+        "explanation": "Enables training multi-aspect ratio diffusion models."
+      }
+    },
+    {
+      "id": "SSL_ASP_001",
+      "purpose": "self_supervised",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Single aspect ratio limits geometric representation learning.",
+        "explanation": "Self-supervised pre-training benefits from diverse camera geometries to learn aspect-invariant visual features."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Varied aspect ratios present in dataset.",
+        "explanation": "Supports generalizable visual feature learning."
+      }
+    },
+    {
+      "id": "BENCH_ASP_001",
+      "purpose": "benchmarking",
+      "metric": "single_aspect_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Benchmark does not test aspect ratio adaptability.",
+        "explanation": "A benchmark with only one aspect ratio does not reveal whether evaluated models degrade under non-standard image shapes."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Benchmark covers diverse aspect ratios.",
+        "explanation": "Provides a comprehensive test of real-world aspect ratio handling."
+      }
+    },
+    {
+      "id": "CLASS_LUM_001",
+      "purpose": "classification",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Narrow illumination and contrast distribution.",
+        "explanation": "Images collected under identical lighting may cause classifiers to fail when deployed in variable lighting or low-contrast environments."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Healthy dynamic range in illumination and contrast.",
+        "explanation": "Varied illumination promotes photometric invariance."
+      }
+    },
+    {
+      "id": "OBJ_LUM_001",
+      "purpose": "object_detection",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Limited contrast and lighting variety.",
+        "explanation": "Object detectors must recognize silhouettes and shadows; uniform lighting reduces edge detection robustness."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Wide illumination range across detection scenes.",
+        "explanation": "Diverse lighting conditions improve object edge discernment."
+      }
+    },
+    {
+      "id": "SEG_LUM_001",
+      "purpose": "segmentation",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Constrained illumination range.",
+        "explanation": "Mask delineations under low illumination variety may fail when exposed to over- or under-exposed scenarios."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Good contrast and illumination dynamic range.",
+        "explanation": "Supports robust boundary segmentation under varying lighting."
+      }
+    },
+    {
+      "id": "RETR_LUM_001",
+      "purpose": "retrieval",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Illumination range is relatively narrow.",
+        "explanation": "Normalized feature embeddings typically offer reasonable tolerance to uniform illumination."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Good lighting variance across images.",
+        "explanation": "Helps ensure retrieval invariance across camera settings."
+      }
+    },
+    {
+      "id": "DEDUP_LUM_001",
+      "purpose": "dedup_research",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Narrow lighting distribution.",
+        "explanation": "Deduplication algorithms can operate across uniform lighting datasets."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Broad lighting variance.",
+        "explanation": "Allows testing brightness-invariant hashing."
+      }
+    },
+    {
+      "id": "GEN_LUM_001",
+      "purpose": "generative",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Insufficient illumination diversity for generative training.",
+        "explanation": "Generative models trained on narrowly illuminated images will synthesize flat, washed out, or low-contrast outputs."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Broad illumination and contrast dynamic range.",
+        "explanation": "Essential for training generative models capable of rich color and shadow synthesis."
+      }
+    },
+    {
+      "id": "SSL_LUM_001",
+      "purpose": "self_supervised",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Narrow photometric variety.",
+        "explanation": "Self-supervised representations risk relying on color or illumination shortcuts if the underlying dataset lacks natural lighting variance."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Rich photometric variance.",
+        "explanation": "Aids learning color-invariant semantic representations."
+      }
+    },
+    {
+      "id": "BENCH_LUM_001",
+      "purpose": "benchmarking",
+      "metric": "narrow_brightness_contrast",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Benchmark lacks lighting and exposure challenge cases.",
+        "explanation": "A benchmark with uniform lighting fails to test model vulnerability to real-world illumination shifts and degradation."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Benchmark tests diverse illumination levels.",
+        "explanation": "Validates real-world performance across varied exposure levels."
+      }
+    },
+    {
+      "id": "CLASS_BLUR_001",
+      "purpose": "classification",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Noticeable portion of blurred or low-sharpness images.",
+        "explanation": "Blurred images obscure discriminating textural features, degrading classification accuracy."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Image sharpness is consistently high across samples.",
+        "explanation": "Clear details support reliable class feature recognition."
+      }
+    },
+    {
+      "id": "OBJ_BLUR_001",
+      "purpose": "object_detection",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "High ratio of blurred images degrades object edges.",
+        "explanation": "Object detectors rely on high-frequency edge gradients to resolve object boundaries from backgrounds."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low blur ratio maintains crisp object boundaries.",
+        "explanation": "Sharp edges facilitate precise bounding box localization."
+      }
+    },
+    {
+      "id": "SEG_BLUR_001",
+      "purpose": "segmentation",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High blur ratio severely impairs pixel boundary segmentation.",
+        "explanation": "Precise mask boundaries cannot be learned effectively when images suffer from significant motion or defocus blur."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "High image clarity across segmentation samples.",
+        "explanation": "Crisp transitions allow accurate delineation of object masks."
+      }
+    },
+    {
+      "id": "RETR_BLUR_001",
+      "purpose": "retrieval",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Frequent blurry images may impair feature extraction.",
+        "explanation": "Blurred images produce diffuse feature embeddings that degrade search recall in retrieval systems."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Sharp images produce distinct retrieval embeddings.",
+        "explanation": "Crisp imagery ensures clear separation in vector search space."
+      }
+    },
+    {
+      "id": "DEDUP_BLUR_001",
+      "purpose": "dedup_research",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Blurry images present in deduplication dataset.",
+        "explanation": "Deduplication research frequently tests how algorithms tolerate image quality degradations."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low blur ratio across deduplication samples.",
+        "explanation": "Provides clear ground-truth pairs for perceptual similarity evaluation."
+      }
+    },
+    {
+      "id": "GEN_BLUR_001",
+      "purpose": "generative",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High blur ratio degrades generative model output quality.",
+        "explanation": "Generative architectures learn the quality distribution of their inputs. Training on blurred images directly degrades synthesized image sharpness."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low blur ratio provides high-fidelity training signals.",
+        "explanation": "Sharp training inputs allow generative models to produce crisp, detailed outputs."
+      }
+    },
+    {
+      "id": "SSL_BLUR_001",
+      "purpose": "self_supervised",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "High blur ratio reduces high-frequency representation learning.",
+        "explanation": "Self-supervised backbones need high-frequency textural signals to learn informative visual tokens."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Sharp visual signals across self-supervised samples.",
+        "explanation": "Supports learning fine-grained visual representations."
+      }
+    },
+    {
+      "id": "BENCH_BLUR_001",
+      "purpose": "benchmarking",
+      "metric": "high_blur_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High blur ratio compromises benchmark quality standards.",
+        "explanation": "A high proportion of blurred images in a general benchmark introduces noise and ambiguity into ground-truth evaluations unless specifically designed as a blur stress test."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Clean, sharp benchmark imagery.",
+        "explanation": "Ensures that performance scoring reflects model capability rather than ambiguous test inputs."
+      }
+    },
+    {
+      "id": "CLASS_DIV_001",
+      "purpose": "classification",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Limited number of distinct visual groups in feature space.",
+        "explanation": "Low visual variety indicates that images share repetitive visual compositions, which restricts classifier generalization."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Rich visual variety identified across sample clusters.",
+        "explanation": "Diverse compositions prevent classification models from relying on narrow scene prototypes."
+      }
+    },
+    {
+      "id": "OBJ_DIV_001",
+      "purpose": "object_detection",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Constrained visual variety across detection scenes.",
+        "explanation": "Detectors trained on few distinct scene clusters will struggle in novel environments."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Diverse scene types and environmental contexts.",
+        "explanation": "Contextual variety enhances detector robustness against varied backgrounds."
+      }
+    },
+    {
+      "id": "SEG_DIV_001",
+      "purpose": "segmentation",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Restricted visual scene diversity.",
+        "explanation": "Segmentation models require diverse scene arrangements to avoid overfitting to specific object-surround relationships."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Healthy diversity of visual arrangements.",
+        "explanation": "Promotes invariant boundary segmentation across diverse scenes."
+      }
+    },
+    {
+      "id": "RETR_DIV_001",
+      "purpose": "retrieval",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Severe lack of visual diversity for retrieval database.",
+        "explanation": "A retrieval database with few visual groups cannot evaluate or serve general visual search queries."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "High visual variety across index images.",
+        "explanation": "Broad coverage enables effective nearest neighbor search across concepts."
+      }
+    },
+    {
+      "id": "DEDUP_DIV_001",
+      "purpose": "dedup_research",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Low overall visual diversity in dataset.",
+        "explanation": "Deduplication research can focus on concentrated visual domains (e.g. medical or document scans)."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Broad visual diversity represented.",
+        "explanation": "Tests deduplication performance across varied image modalities."
+      }
+    },
+    {
+      "id": "GEN_DIV_001",
+      "purpose": "generative",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Critically low visual diversity risks mode collapse in generative training.",
+        "explanation": "Generative models need broad distribution coverage to avoid collapsing onto a few repetitive generation patterns."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Diverse visual groups provide broad generative training coverage.",
+        "explanation": "Wide distribution breadth enables rich and varied synthetic generation."
+      }
+    },
+    {
+      "id": "SSL_DIV_001",
+      "purpose": "self_supervised",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Low visual variety severely limits representation learning.",
+        "explanation": "Self-supervised pre-training requires diverse visual concepts to learn rich, transferable visual features."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Rich visual variety across unannotated samples.",
+        "explanation": "Broad conceptual diversity supports training general-purpose visual backbones."
+      }
+    },
+    {
+      "id": "BENCH_DIV_001",
+      "purpose": "benchmarking",
+      "metric": "low_visual_diversity",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Benchmark dataset has narrow visual variety.",
+        "explanation": "Models evaluated on a dataset with low visual variety may appear competent while failing on more diverse real-world distributions."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Diverse visual groups represented in benchmark.",
+        "explanation": "Validates model performance across comprehensive visual domains."
+      }
+    },
+    {
+      "id": "CLASS_SILH_001",
+      "purpose": "classification",
+      "metric": "low_silhouette_score",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Poor visual cluster cohesion and separation.",
+        "explanation": "Low silhouette score in visual feature space indicates that visual groupings blend together without clear separation, suggesting high inter-class visual overlap."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Clear cohesion and separation among visual groups.",
+        "explanation": "Well-separated visual clusters support learning distinct classification boundaries."
+      }
+    },
+    {
+      "id": "OBJ_SILH_001",
+      "purpose": "object_detection",
+      "metric": "low_silhouette_score",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Low cluster separation in visual embedding space.",
+        "explanation": "Diffuse cluster boundaries may indicate ambiguous scene structures that complicate background separation."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Distinct visual cluster structure.",
+        "explanation": "Structured visual distributions assist in separating target entities from common contexts."
+      }
+    },
+    {
+      "id": "SEG_SILH_001",
+      "purpose": "segmentation",
+      "metric": "low_silhouette_score",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Visual clusters have low separation.",
+        "explanation": "Overlapping visual features may correspond to indistinct semantic scene transitions."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Distinct cluster cohesion.",
+        "explanation": "Clear visual groupings correlate with defined visual category separation."
+      }
+    },
+    {
+      "id": "RETR_SILH_001",
+      "purpose": "retrieval",
+      "metric": "low_silhouette_score",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Silhouette score not applicable to retrieval evaluation.",
+        "explanation": "Cluster cohesion is not a primary metric for continuous vector retrieval indices."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Metric not applicable.",
+        "explanation": "Cluster cohesion is not a primary metric for continuous vector retrieval indices."
+      }
+    },
+    {
+      "id": "DEDUP_SILH_001",
+      "purpose": "dedup_research",
+      "metric": "low_silhouette_score",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Silhouette score not applicable to deduplication research.",
+        "explanation": "Deduplication focuses on tight pairwise image similarity rather than global cluster cohesion."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Metric not applicable.",
+        "explanation": "Deduplication focuses on tight pairwise image similarity rather than global cluster cohesion."
+      }
+    },
+    {
+      "id": "GEN_SILH_001",
+      "purpose": "generative",
+      "metric": "low_silhouette_score",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Silhouette score not applicable to generative modeling.",
+        "explanation": "Generative modeling models continuous distributions rather than discrete visual clusters."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Metric not applicable.",
+        "explanation": "Generative modeling models continuous distributions rather than discrete visual clusters."
+      }
+    },
+    {
+      "id": "SSL_SILH_001",
+      "purpose": "self_supervised",
+      "metric": "low_silhouette_score",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Silhouette score not applicable to self-supervised learning.",
+        "explanation": "Self-supervised representations discover continuous feature manifolds without presupposing discrete clusters."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Metric not applicable.",
+        "explanation": "Self-supervised representations discover continuous feature manifolds without presupposing discrete clusters."
+      }
+    },
+    {
+      "id": "BENCH_SILH_001",
+      "purpose": "benchmarking",
+      "metric": "low_silhouette_score",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Poor visual cluster separation in benchmark dataset.",
+        "explanation": "In an evaluation benchmark, poorly separated visual distributions can indicate noisy, indistinct, or misgrouped test instances."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Distinct visual cluster structure in benchmark dataset.",
+        "explanation": "Well-separated clusters ensure clear evaluation of target concept discrimination."
+      }
+    },
+    {
+      "id": "CLASS_OUT_001",
+      "purpose": "classification",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Elevated ratio of visually isolated outlier images.",
+        "explanation": "A high proportion of visual outliers often indicates corrupt images, unrelated background samples, or severe data noise that hinders classification learning."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low proportion of isolated outlier images.",
+        "explanation": "Samples form coherent visual groupings with minimal unclustered noise."
+      }
+    },
+    {
+      "id": "OBJ_OUT_001",
+      "purpose": "object_detection",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Elevated ratio of isolated visual outliers in detection dataset.",
+        "explanation": "Visual outliers can correspond to atypical camera perspectives or corrupted frames that disrupt spatial feature hierarchies."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Most images cluster cleanly into recognized scene types.",
+        "explanation": "Provides consistent environmental foundations for object detection."
+      }
+    },
+    {
+      "id": "SEG_OUT_001",
+      "purpose": "segmentation",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High outlier ratio indicates potential data artifacts.",
+        "explanation": "Pixel-level models are sensitive to anomalous outlier samples containing visual artifacts or atypical sensor noise."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Outlier ratio is low across segmentation scenes.",
+        "explanation": "Consistent scene structures support robust pixel-level mask convergence."
+      }
+    },
+    {
+      "id": "RETR_OUT_001",
+      "purpose": "retrieval",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Many images do not cluster with other dataset samples.",
+        "explanation": "Outlier images may act as unreachable sink points in nearest neighbor retrieval indices."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Images form connected visual neighborhood clusters.",
+        "explanation": "Dense visual clusters enable high recall for similarity queries."
+      }
+    },
+    {
+      "id": "DEDUP_OUT_001",
+      "purpose": "dedup_research",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Outlier images present in deduplication evaluation.",
+        "explanation": "Isolated images serve as effective true-negative distractors during duplicate search tests."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low outlier ratio.",
+        "explanation": "Clean evaluation sets assist in calculating deduplication accuracy."
+      }
+    },
+    {
+      "id": "GEN_OUT_001",
+      "purpose": "generative",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Anomalous visual outliers may introduce training instability.",
+        "explanation": "Visual outliers with extreme color palettes or distortions can disrupt adversarial or score-matching training."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Clean visual manifold with few unclustered outliers.",
+        "explanation": "Supports stable loss convergence during generative training."
+      }
+    },
+    {
+      "id": "SSL_OUT_001",
+      "purpose": "self_supervised",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Frequent outliers may distort representation space.",
+        "explanation": "Isolated visual outliers can skew contrastive projection spaces toward anomalous edge cases."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low outlier count preserves manifold continuity.",
+        "explanation": "Helps encoders learn balanced, representative embeddings."
+      }
+    },
+    {
+      "id": "BENCH_OUT_001",
+      "purpose": "benchmarking",
+      "metric": "high_visual_outlier_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "Elevated outlier count suggests noisy benchmark instances.",
+        "explanation": "Evaluation datasets with high outlier ratios risk grading models on corrupted or out-of-domain test inputs."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Low outlier ratio ensures reliable benchmark grading.",
+        "explanation": "Guarantees that test instances are representative of the target task."
+      }
+    },
+    {
+      "id": "CLASS_DOM_001",
+      "purpose": "classification",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Dataset contains mixed photographic and synthetic/diagrammatic imagery.",
+        "explanation": "Classifiers can learn across mixed visual styles if annotations are consistent across styles."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Consistent visual domain across images.",
+        "explanation": "Uniform photographic or non-photographic domain prevents cross-style domain shift."
+      }
+    },
+    {
+      "id": "OBJ_DOM_001",
+      "purpose": "object_detection",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Mixed photographic and non-photographic domains in detection dataset.",
+        "explanation": "Detectors may struggle when training across photographs mixed with stylized diagrams or synthetic renderings due to domain divergence in edge features."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Homogeneous visual domain across detection scenes.",
+        "explanation": "Consistent domain characteristics support robust feature extraction."
+      }
+    },
+    {
+      "id": "SEG_DOM_001",
+      "purpose": "segmentation",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Mixed photographic and stylized content in segmentation set.",
+        "explanation": "Pixel segmentation masks behave differently on photographs versus illustrations; mixing them can confuse mask boundary estimators."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Uniform visual domain across segmentation targets.",
+        "explanation": "Facilitates consistent texture and edge segmentation learning."
+      }
+    },
+    {
+      "id": "RETR_DOM_001",
+      "purpose": "retrieval",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Mixed visual domains represented in database.",
+        "explanation": "Cross-domain retrieval systems can effectively query across mixed photograph and illustration styles."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Single coherent visual domain.",
+        "explanation": "Standardizes vector distance metrics within a single domain."
+      }
+    },
+    {
+      "id": "DEDUP_DOM_001",
+      "purpose": "dedup_research",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Mixed domain imagery present in deduplication set.",
+        "explanation": "Allows testing whether deduplication algorithms operate effectively across diverse photographic and graphic domains."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Consistent visual domain for deduplication tests.",
+        "explanation": "Allows focused evaluation within a designated visual domain."
+      }
+    },
+    {
+      "id": "GEN_DOM_001",
+      "purpose": "generative",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Mixed photographic and graphic styles in generative training set.",
+        "explanation": "Mixing real photos with illustrations or synthetic diagrams without conditioning prompts can cause generative models to produce hybrid, unrealistic textures."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Uniform visual style across generative dataset.",
+        "explanation": "Ensures coherent textural and lighting synthesis without style confusion."
+      }
+    },
+    {
+      "id": "SSL_DOM_001",
+      "purpose": "self_supervised",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Mixed photographic and non-photographic domains in pre-training data.",
+        "explanation": "Large domain shifts between photos and synthetic graphics can split representation spaces into style clusters rather than semantic concepts."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Cohesive visual domain for foundation representation learning.",
+        "explanation": "Encourages representations to focus on semantic content rather than style divergence."
+      }
+    },
+    {
+      "id": "BENCH_DOM_001",
+      "purpose": "benchmarking",
+      "metric": "mixed_domain",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Benchmark mixes photographic and non-photographic instances.",
+        "explanation": "Without explicit subcategory tracking, mixing photorealistic and synthetic test cases creates confusing aggregate evaluation scores."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Consistent visual domain across benchmark suite.",
+        "explanation": "Ensures controlled, interpretable benchmark performance measurement."
+      }
+    }
+  ]
+}

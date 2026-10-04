@@ -1,0 +1,6 @@
+{
+  "phash_threshold": 0.408,
+  "dhash_threshold": 0.367,
+  "whash_threshold": 0.377,
+  "voting_rule": "2_of_3"
+}

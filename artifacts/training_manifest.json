@@ -1,0 +1,152 @@
+{
+  "pipeline_name": "drilling_intelligence_training_pipeline",
+  "version": "1.0.0",
+  "timestamp": "2026-09-23T06:17:52.948767+00:00",
+  "total_elapsed_seconds": 1.05,
+  "dataset_metadata": {
+    "total_payloads_ingested": 35,
+    "warm_payloads_count": 35,
+    "train_role_payloads_count": 35,
+    "filtered_trainable_records": 35,
+    "feature_dimension": 370,
+    "class_distribution_y_warn": {
+      "0": 27,
+      "1": 8
+    },
+    "mechanism_distribution": {
+      "NONE": 27,
+      "MECHANICAL": 8
+    },
+    "phase_distribution": {},
+    "role_distribution": {
+      "TRAIN": 35
+    },
+    "data_limitations": {
+      "mechanism_labels_available": true,
+      "notes": "Empirical mechanism distributions recorded without manufacturing artificial class labels."
+    }
+  },
+  "models_trained": {
+    "early_warning": {
+      "random_forest": {
+        "model_name": "random_forest",
+        "model_family": "early_warning",
+        "feature_dimension": 370,
+        "target_definition": "y_warn (binary: impending stuck pipe warning)",
+        "training_samples": 23,
+        "validation_samples": 5,
+        "test_samples": 7,
+        "positive_train_samples": 5,
+        "metrics": {
+          "accuracy": 0.7142857142857143,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "roc_auc": 0.5
+        },
+        "checkpoint_path": "",
+        "schema_path": "",
+        "elapsed_seconds": 0.8,
+        "status": "completed"
+      }
+    },
+    "sequence": {
+      "gru": {
+        "model_name": "gru",
+        "model_family": "sequence",
+        "input_shape": [
+          30,
+          370
+        ],
+        "feature_dimension": 370,
+        "sequence_length": 30,
+        "sampling_interval_s": 10.0,
+        "horizon_seconds": 900.0,
+        "target_definition": "y_sequence (binary: event onset <= 900s)",
+        "training_samples": 3,
+        "validation_samples": 0,
+        "test_samples": 3,
+        "metrics": {
+          "model_type": "GRU",
+          "final_train_loss": 0.6251110434532166,
+          "val_accuracy": 0.0,
+          "test_accuracy": 0.6666666666666666,
+          "test_precision": 0.0,
+          "test_recall": 0.0,
+          "test_f1": 0.0,
+          "test_roc_auc": 0.5,
+          "confusion_matrix": {
+            "true_negatives": 2,
+            "false_positives": 0,
+            "false_negatives": 1,
+            "true_positives": 0
+          },
+          "single_payload_inference": {
+            "input_shape": [
+              30,
+              370
+            ],
+            "y_sequence_probability": 0.31568077206611633,
+            "y_sequence_prediction": 0
+          },
+          "checkpoint_path": ""
+        },
+        "checkpoint_path": "",
+        "checkpoint_verified": false,
+        "elapsed_seconds": 0.2,
+        "status": "completed"
+      }
+    },
+    "physics_informed": {
+      "bayesian": {
+        "model_name": "bayesian_network",
+        "model_family": "physics_informed",
+        "nodes": [
+          "String_Motion_State",
+          "Overbalance_State",
+          "Mechanism",
+          "e_mechanical",
+          "e_differential",
+          "e_packoff",
+          "Friction_Anomaly",
+          "Hydraulic_Anomaly",
+          "Circulation_State"
+        ],
+        "edges_count": 9,
+        "mechanism_classes": [
+          "MECHANICAL",
+          "DIFFERENTIAL",
+          "PACKOFF"
+        ],
+        "physical_verification_cases": {
+          "moving_pipe_normal": {
+            "MECHANICAL": 0.854784,
+            "DIFFERENTIAL": 0.001828,
+            "PACKOFF": 0.143388
+          },
+          "static_pipe_high_overbalance": {
+            "MECHANICAL": 0.000874,
+            "DIFFERENTIAL": 0.999083,
+            "PACKOFF": 4.3e-05
+          },
+          "packoff_surge_flow_restriction": {
+            "MECHANICAL": 0.000298,
+            "DIFFERENTIAL": 0.0,
+            "PACKOFF": 0.999702
+          }
+        },
+        "sample_posterior": {
+          "MECHANICAL": 0.977306,
+          "DIFFERENTIAL": 0.001771,
+          "PACKOFF": 0.020923
+        },
+        "checkpoint_path": "C:\\Users\\LOQ\\AppData\\Local\\Temp\\pytest-of-LOQ\\pytest-32\\test_p_training_pipeline_does_0\\checkpoints\\physics_informed\\bayesian_smoke.ckpt",
+        "elapsed_seconds": 0.0,
+        "training_type": "expert_cpt_calibration_exact_belief_updating",
+        "trained_with_backprop": false,
+        "notes": "Exact probabilistic graphical model calibrated with domain physical laws; sums strictly to 1.0.",
+        "status": "completed"
+      }
+    }
+  }
+}

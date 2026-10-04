@@ -15,6 +15,11 @@ from app.services.storage_service import minio_client
 from app.config import settings
 from app.services.embedding_service import generate_embeddings
 from app.services.vector_service import duplicate_detection_collection
+from app.services.non_photographic_dedup_service import (
+    compute_multi_hashes,
+    compute_multi_hash_match,
+)
+from app.config_dedup import load_dedup_thresholds
 
 # pHash thresholds config (Independent constants)
 PHASH_THRESHOLD_PHOTOGRAPHIC = 6      # Hamming distance <= 6 (similarity >= 90%)
@@ -110,52 +115,99 @@ def check_cancellation(dataset_id: uuid.UUID) -> bool:
 
 
 def process_non_photographic_domain(dataset_id: uuid.UUID, image_paths: list[str], session: Session, path_to_phash: dict):
-    print(f"Dispatch handler: process_non_photographic_domain with {len(image_paths)} images...")
+    print(f"Dispatch handler: process_non_photographic_domain with {len(image_paths)} images using multi-hash voting...")
+    if not image_paths:
+        return
+
+    if check_cancellation(dataset_id):
+        return
+
+    config = load_dedup_thresholds()
+
+    # 1. Compute/cache multi-hashes (pHash, dHash, wHash) for candidate non-photographic images
+    path_to_multi_hashes = {}
+    for path in image_paths:
+        if check_cancellation(dataset_id):
+            return
+
+        try:
+            response = minio_client.get_object(settings.minio_bucket_name, path)
+            data = response.read()
+            pil_img = Image.open(io.BytesIO(data))
+            m_hash = compute_multi_hashes(pil_img)
+            # Re-use precomputed pHash if already extracted during pre-filtering
+            if path in path_to_phash:
+                m_hash.phash = path_to_phash[path]
+            path_to_multi_hashes[path] = m_hash
+        except Exception as e:
+            print(f"Error computing multi-hash for {path}: {e}")
+        finally:
+            try:
+                response.close()
+                response.release_conn()
+            except Exception:
+                pass
+
+    if check_cancellation(dataset_id):
+        return
+
+    # 2. Pairwise comparison using 2-of-3 consensus voting
     grouped_paths = set()
-    
+
     for i, path1 in enumerate(image_paths):
         if check_cancellation(dataset_id):
             return
-            
-        if path1 in grouped_paths or path1 not in path_to_phash:
+
+        if path1 in grouped_paths or path1 not in path_to_multi_hashes:
             continue
-            
-        h1 = path_to_phash[path1]
+
         matches = [path1]
-        for path2 in image_paths[i+1:]:
-            if path2 in grouped_paths or path2 not in path_to_phash:
+        pair_confidence_scores = []
+
+        for path2 in image_paths[i + 1:]:
+            if path2 in grouped_paths or path2 not in path_to_multi_hashes:
                 continue
-            h2 = path_to_phash[path2]
-            # Stricter Hamming threshold for non-photographic domain
-            if h1 - h2 <= PHASH_THRESHOLD_NON_PHOTOGRAPHIC:
+
+            is_match, conf_score, _ = compute_multi_hash_match(
+                path_to_multi_hashes[path1],
+                path_to_multi_hashes[path2],
+                config=config,
+            )
+
+            if is_match:
                 matches.append(path2)
-                
+                pair_confidence_scores.append(conf_score)
+
         if len(matches) > 1:
             matches.sort()
             original_path = matches[0]
-            
-            sim_scores = [1.0 - (float(h1 - path_to_phash[p]) / 64.0) for p in matches if p != original_path]
-            avg_sim = sum(sim_scores) / len(sim_scores) if sim_scores else 0.98
-            
+
+            avg_conf = (
+                sum(pair_confidence_scores) / len(pair_confidence_scores)
+                if pair_confidence_scores
+                else 0.95
+            )
+
             group = DatasetDuplicateGroup(
                 dataset_id=dataset_id,
-                duplicate_group_detection_method="phash",
-                duplicate_group_confidence_score=avg_sim,
-                duplicate_group_domain_route="non_photographic"
+                duplicate_group_detection_method="multi_hash",
+                duplicate_group_confidence_score=round(avg_conf, 4),
+                duplicate_group_domain_route="non_photographic",
             )
             session.add(group)
             session.commit()
             session.refresh(group)
-            
+
             for p in matches:
                 is_original = (p == original_path)
                 img_row = DatasetDuplicateGroupImage(
                     duplicate_group_id=group.duplicate_group_id,
                     image_storage_path=p,
-                    is_original_flag=is_original
+                    is_original_flag=is_original,
                 )
                 session.add(img_row)
                 grouped_paths.add(p)
+
     session.commit()
 
 

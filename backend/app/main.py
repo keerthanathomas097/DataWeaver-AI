@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
-from app.routers import auth
-from app.routers import workspace
-from app.routers import auth, workspace, discovery
-from app.routers import auth, workspace, discovery, dataset
+from app.routers import auth, workspace, discovery, dataset, profiling, purpose_fitting
 from app.services.storage_service import ensure_bucket_exists
+import app.models  # Ensure all SQLModel tables are registered
+from app.database import engine
+from sqlmodel import SQLModel
 
 app = FastAPI()
 
@@ -23,7 +23,11 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     ensure_bucket_exists()
+    SQLModel.metadata.create_all(engine)
+
 app.include_router(auth.router)
 app.include_router(workspace.router)
 app.include_router(discovery.router)
 app.include_router(dataset.router)
+app.include_router(profiling.router)
+app.include_router(purpose_fitting.router)

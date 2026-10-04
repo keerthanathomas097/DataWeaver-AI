@@ -40,6 +40,7 @@ import Header from './components/Header';
 import CreateWorkspaceModal from './components/CreateWorkspaceModal';
 import DiscoverDatasets from './components/DiscoverDatasets';
 import DuplicatesDashboard from './components/DuplicatesDashboard';
+import DatasetProfilingView from './components/DatasetProfilingView';
 import { useAuth } from './context/AuthContext';
 import { getDashboardData } from './api/mockData';
 import * as workspaceApi from './api/workspaceApi';
@@ -1787,7 +1788,7 @@ export default function App() {
 
                               <div className="flex items-center gap-2.5 flex-wrap">
                                 <button 
-                                  onClick={() => alert(`Starting Dataset Profiling for "${selectedDataset.dataset_name}". (Coming Soon)`)}
+                                  onClick={() => setActiveTab('profiling')}
                                   className="px-4 py-2 bg-slate-50 hover:bg-blue-50/50 text-slate-700 hover:text-blue-700 border border-slate-200/70 hover:border-blue-200 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-xs"
                                 >
                                   <RefreshCw size={14} />
@@ -2078,6 +2079,18 @@ export default function App() {
               activeWorkspace={activeWorkspace}
               setActiveWorkspace={setActiveWorkspace}
               setActiveTab={setActiveTab}
+            />
+          ) : activeTab === 'profiling' ? (
+            <DatasetProfilingView 
+              dataset={selectedDataset}
+              workspaceDatasets={workspaceDatasets}
+              onSelectDataset={setSelectedDataset}
+              onBack={() => setActiveTab('workspace')}
+              onNavigateToDuplicates={() => {
+                if (selectedDataset) {
+                  handleViewDuplicates(selectedDataset.dataset_id);
+                }
+              }}
             />
           ) : (
             /* Sub-module View Placeholder */
