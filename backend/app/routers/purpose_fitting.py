@@ -7,11 +7,23 @@ from app.database import get_session
 from app.routers.auth import get_current_user
 from app.models.user import User
 from app.models.profiling import DatasetProfilingResult
-from app.schemas.purpose_fitting import PurposeFitRequest, PurposeFitResponse, PurposeDefinition
+from app.schemas.purpose_fitting import (
+    PurposeFitRequest,
+    PurposeFitResponse,
+    PurposeDefinition,
+    TextMatchRequest,
+    TextMatchResponse,
+    ClipAnalysisResponse,
+)
 from app.services import dataset_service
 from app.services.purpose_fitting_service import (
     evaluate_purpose_fit,
     load_purpose_fitting_rules,
+)
+from app.services.clip_concept_service import (
+    check_label_match,
+    get_cached_clip_analysis,
+    search_text_match,
 )
 
 router = APIRouter(prefix="/datasets", tags=["purpose-fitting"])
@@ -98,3 +110,104 @@ def run_purpose_fit_analysis(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to evaluate purpose fit analysis.",
         )
+
+
+@router.get("/{dataset_id}/purpose-fit/clip-analysis", response_model=ClipAnalysisResponse)
+def get_clip_analysis_status(
+    dataset_id: uuid.UUID,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Returns existing cached semantic label match findings if already computed.
+    If not yet computed, returns status 'not_computed'.
+    """
+    dataset = dataset_service.get_dataset_by_id(session, dataset_id, current_user.user_id)
+    if not dataset:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Dataset not found or unauthorized",
+        )
+
+    cached_data = get_cached_clip_analysis(dataset_id, session)
+    if cached_data:
+        return cached_data
+
+    return ClipAnalysisResponse(
+        has_labels=False,
+        status="not_computed",
+        reason="Semantic label analysis has not been executed yet.",
+        mismatch_ratio=None,
+        threshold=0.20,
+        total_evaluated=0,
+        mismatched_count=0,
+        worst_matches=[],
+    )
+
+
+@router.post("/{dataset_id}/purpose-fit/clip-analysis", response_model=ClipAnalysisResponse)
+def trigger_clip_analysis(
+    dataset_id: uuid.UUID,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Runs or retrieves semantic label match analysis for the dataset using CLIP.
+    Caches finding and mirrors summary into profiling_results so rules engine can evaluate it.
+    """
+    dataset = dataset_service.get_dataset_by_id(session, dataset_id, current_user.user_id)
+    if not dataset:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Dataset not found or unauthorized",
+        )
+
+    try:
+        result = check_label_match(dataset_id, session)
+        return result
+    except Exception as e:
+        print(f"Error executing CLIP label analysis for dataset {dataset_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to execute CLIP label analysis: {str(e)}",
+        )
+
+
+@router.post("/{dataset_id}/purpose-fit/text-match", response_model=TextMatchResponse)
+def run_text_purpose_match(
+    dataset_id: uuid.UUID,
+    request_data: TextMatchRequest,
+    session: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Ad-hoc free-text requirement match against dataset images using CLIP text-to-image similarity.
+    Returns score distribution, best matches, and worst matches.
+    """
+    dataset = dataset_service.get_dataset_by_id(session, dataset_id, current_user.user_id)
+    if not dataset:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Dataset not found or unauthorized",
+        )
+
+    try:
+        result = search_text_match(
+            dataset_id=dataset_id,
+            query_text=request_data.query_text,
+            session=session,
+            top_k=10,
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=str(e),
+        )
+    except Exception as e:
+        print(f"Error evaluating text match for dataset {dataset_id}: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to evaluate text match analysis.",
+        )
+

@@ -23,3 +23,40 @@ export async function getPurposeDefinitions() {
   const { data } = await client.get('/datasets/purpose-fit/purposes');
   return data;
 }
+
+/**
+ * Fetches existing cached CLIP semantic label match findings.
+ *
+ * @param {string} datasetId - UUID of the dataset
+ * @returns {Promise<Object>} The ClipAnalysisResponse
+ */
+export async function getClipAnalysis(datasetId) {
+  const { data } = await client.get(`/datasets/${datasetId}/purpose-fit/clip-analysis`);
+  return data;
+}
+
+/**
+ * Triggers or re-computes CLIP semantic label match analysis for a dataset.
+ *
+ * @param {string} datasetId - UUID of the dataset
+ * @returns {Promise<Object>} The ClipAnalysisResponse
+ */
+export async function triggerClipAnalysis(datasetId) {
+  const { data } = await client.post(`/datasets/${datasetId}/purpose-fit/clip-analysis`);
+  return data;
+}
+
+/**
+ * Runs free-text requirement query against dataset images using CLIP similarity.
+ *
+ * @param {string} datasetId - UUID of the dataset
+ * @param {string} queryText - User-provided natural language requirement
+ * @returns {Promise<Object>} The TextMatchResponse
+ */
+export async function checkTextMatch(datasetId, queryText) {
+  const { data } = await client.post(`/datasets/${datasetId}/purpose-fit/text-match`, {
+    query_text: queryText,
+  });
+  return data;
+}
+

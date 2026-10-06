@@ -76,3 +76,49 @@ class PurposeFitResponse(BaseModel):
     purpose_mismatch: Optional[PurposeMismatchNotice] = None
     config_version: str
     provenance: Dict[str, Any]
+
+
+class TextMatchRequest(BaseModel):
+    query_text: str = Field(..., min_length=1, max_length=500, description="Natural language prompt to evaluate against dataset images.")
+
+
+class TextMatchItem(BaseModel):
+    image_path: str
+    score: float
+    image_url: Optional[str] = ""
+
+
+class ScoreDistribution(BaseModel):
+    bins: List[str]
+    counts: List[int]
+    mean_score: float
+    min_score: float
+    max_score: float
+
+
+class TextMatchResponse(BaseModel):
+    query_text: str
+    total_images_scored: int
+    score_distribution: ScoreDistribution
+    best_matches: List[TextMatchItem]
+    worst_matches: List[TextMatchItem]
+
+
+class LabelMatchWorstItem(BaseModel):
+    image_path: str
+    label: str
+    score: float
+    image_url: Optional[str] = ""
+
+
+class ClipAnalysisResponse(BaseModel):
+    has_labels: bool
+    status: str
+    reason: Optional[str] = None
+    mismatch_ratio: Optional[float] = None
+    threshold: float = 0.20
+    total_evaluated: int = 0
+    mismatched_count: int = 0
+    class_breakdown: Optional[Dict[str, Any]] = None
+    worst_matches: List[LabelMatchWorstItem] = []
+

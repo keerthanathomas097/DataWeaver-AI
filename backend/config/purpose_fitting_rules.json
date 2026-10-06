@@ -158,9 +158,145 @@
       "threshold": "mixed",
       "unit": "category",
       "applicable": true
+    },
+    "label_match_mismatch_ratio": {
+      "display_name": "Label Semantic Mismatch Ratio",
+      "profile_path": "clip_findings.label_match.mismatch_ratio",
+      "operator": ">",
+      "threshold": 0.15,
+      "unit": "ratio",
+      "applicable": true
     }
   },
   "rules": [
+    {
+      "id": "CLASS_LABEL_MISMATCH_001",
+      "purpose": "classification",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "A noticeable portion of images show low semantic similarity to their assigned class label.",
+        "explanation": "Image classification relies heavily on clean ground-truth labels. Images with low semantic match to their class name often indicate mislabeled samples, non-representative images, or misleading folder names."
+      },
+      "not_triggered": {
+        "verdict": "favorable",
+        "message": "Images strongly align semantically with their assigned class labels.",
+        "explanation": "High semantic agreement between images and class labels provides a reliable foundation for supervised training."
+      }
+    },
+    {
+      "id": "BENCH_LABEL_MISMATCH_001",
+      "purpose": "benchmarking",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "critical",
+        "message": "High label mismatch detected in evaluation dataset.",
+        "explanation": "Evaluation and benchmarking datasets require pristine ground truth. Mismatched labels will invalidate model benchmark comparisons."
+      },
+      "not_triggered": {
+        "verdict": "favorable",
+        "message": "Class labels align cleanly with visual image content.",
+        "explanation": "Accurate labels ensure fair and reproducible benchmark metrics."
+      }
+    },
+    {
+      "id": "OBJ_LABEL_MISMATCH_001",
+      "purpose": "object_detection",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Images show low semantic match to the specified category labels.",
+        "explanation": "Object detection datasets benefit from clear visual depictions of the intended target classes."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Images align with the dataset category context.",
+        "explanation": "Visual depictions match category themes."
+      }
+    },
+    {
+      "id": "SEG_LABEL_MISMATCH_001",
+      "purpose": "segmentation",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Images show semantic divergence from the specified class labels.",
+        "explanation": "Segmentation models require clear correlation between visual semantics and target classes."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Images align with expected class categories.",
+        "explanation": "Visual scene content corresponds to target class definitions."
+      }
+    },
+    {
+      "id": "RETR_LABEL_MISMATCH_001",
+      "purpose": "retrieval",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Image semantics vary across category labels.",
+        "explanation": "Image retrieval systems rely on embedding similarity and can operate effectively even with loose category labeling."
+      },
+      "not_triggered": {
+        "verdict": "favorable",
+        "message": "Images match their assigned categories cleanly.",
+        "explanation": "Consistent labeling helps evaluate category-based retrieval metrics."
+      }
+    },
+    {
+      "id": "DEDUP_LABEL_MISMATCH_001",
+      "purpose": "dedup_research",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Label semantics do not affect duplicate detection research.",
+        "explanation": "Duplicate detection focuses purely on visual duplicate pairs rather than semantic category labels."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Label semantics are not evaluated for duplicate detection.",
+        "explanation": "Duplicate detection is label-agnostic."
+      }
+    },
+    {
+      "id": "GEN_LABEL_MISMATCH_001",
+      "purpose": "generative",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": true,
+      "triggered": {
+        "verdict": "warning",
+        "message": "Images show low alignment with category conditioning labels.",
+        "explanation": "For class-conditional generative modeling, mismatched images can cause mode collapse or incorrect class conditioning."
+      },
+      "not_triggered": {
+        "verdict": "favorable",
+        "message": "Images align cleanly with category descriptions.",
+        "explanation": "Accurate conditioning labels enable clean conditional synthesis."
+      }
+    },
+    {
+      "id": "SSL_LABEL_MISMATCH_001",
+      "purpose": "self_supervised",
+      "metric": "label_match_mismatch_ratio",
+      "applicable": false,
+      "triggered": {
+        "verdict": "neutral",
+        "message": "Class labels are not utilized during self-supervised pretraining.",
+        "explanation": "Self-supervised representations are learned purely from unlabeled visual imagery."
+      },
+      "not_triggered": {
+        "verdict": "neutral",
+        "message": "Class labels are not evaluated for self-supervised learning.",
+        "explanation": "Self-supervised pre-training is label-agnostic."
+      }
+    },
     {
       "id": "CLASS_DUP_001",
       "purpose": "classification",

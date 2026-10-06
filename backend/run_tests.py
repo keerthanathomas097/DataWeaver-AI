@@ -27,6 +27,8 @@ os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 os.environ["CHROMA_TELEMETRY"] = "False"
 os.environ["POSTHOG_DISABLED"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["OMP_NUM_THREADS"] = "1"
 
 print("1. Importing pytest...", flush=True)
 import pytest
