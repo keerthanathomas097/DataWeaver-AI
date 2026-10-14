@@ -4,7 +4,8 @@ from email.mime.multipart import MIMEMultipart
 from app.config import settings
 
 def send_verification_email(to_email: str, token: str):
-    verify_link = f"http://localhost:5173/verify-email?token={token}"
+    frontend_url = settings.frontend_url.rstrip("/")
+    verify_link = f"{frontend_url}/verify-email?token={token}"
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Verify your DataWeaver AI account"
@@ -24,7 +25,8 @@ def send_verification_email(to_email: str, token: str):
         server.login(settings.gmail_address, settings.gmail_app_password)
         server.sendmail(settings.gmail_address, to_email, message.as_string())
 def send_password_reset_email(to_email: str, token: str):
-    reset_link = f"http://localhost:5173/reset-password?token={token}"
+    frontend_url = settings.frontend_url.rstrip("/")
+    reset_link = f"{frontend_url}/reset-password?token={token}"
 
     message = MIMEMultipart("alternative")
     message["Subject"] = "Reset your DataWeaver AI password"

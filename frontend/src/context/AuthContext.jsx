@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import * as authApi from '../api/authApi';
+import { API_BASE_URL } from '../api/client';
 
 const AuthContext = createContext(null);
 
@@ -110,7 +111,7 @@ export function AuthProvider({ children }) {
   }, []);
 
  const redirectToGoogle = useCallback(() => {
-  window.location.href = 'http://localhost:8000/auth/google/login';
+  window.location.href = `${API_BASE_URL}/auth/google/login`;
 }, []);
 
 const applyGoogleToken = useCallback((access_token) => {

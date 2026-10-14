@@ -100,7 +100,7 @@ async def google_callback(request: Request, session: Session = Depends(get_sessi
     )
 
     access_token = auth_service.create_access_token(str(user.user_id))
-    return RedirectResponse(url=f"{settings.frontend_url}/oauth-success?token={access_token}")
+    return RedirectResponse(url=f"{settings.frontend_url.rstrip('/')}/oauth-success?token={access_token}")
 
 @router.get("/me", response_model=UserRead)
 def get_me(current_user: User = Depends(get_current_user)):

@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     google_client_id: str
     google_client_secret: str
     google_redirect_uri: str
-    frontend_url: str
+    frontend_url: str = "http://localhost:5173"
     huggingface_api_key: str
     github_api_key: str
     roboflow_api_key: str

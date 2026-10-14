@@ -2,8 +2,10 @@ import axios from 'axios';
 
 const TOKEN_KEY = 'dw_access_token';
 
+export const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').replace(/\/+$/, '');
+
 const client = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: API_BASE_URL,
 });
 
 client.interceptors.request.use((config) => {
