@@ -1,0 +1,438 @@
+{
+  "profiling_version": "1.0",
+  "computed_at": "2026-09-17T07:00:13.092699",
+  "dataset": {
+    "dataset_id": "c21b86b4-0cf4-4ca0-9d1e-e1b4763d7204",
+    "workspace_id": "26aa47fd-0725-45f5-b2f2-70c8c9a609fe",
+    "dataset_name": "Cats and Dogs",
+    "dataset_source_type": "Kaggle",
+    "dataset_source_url": "https://www.kaggle.com/datasets/marquis03/cats-and-dogs",
+    "dataset_license": "Apache 2.0",
+    "dataset_image_count": 349,
+    "dataset_storage_path": "datasets/marquis03_cats-and-dogs/",
+    "dataset_domain": "photographic",
+    "file_list_checksum": "489f1f7b2ca748dc95a42cbbee547de43b04014bfa9e47caa8ce8031d436337b"
+  },
+  "basic_statistics": {
+    "total_images": 345,
+    "readable_images": 345,
+    "corrupt_images": 0,
+    "dimensions": {
+      "width": {
+        "min": 200.0,
+        "max": 1725.0,
+        "mean": 442.27,
+        "std": 112.32
+      },
+      "height": {
+        "min": 150.0,
+        "max": 1600.0,
+        "mean": 379.38,
+        "std": 109.84
+      },
+      "resolution": {
+        "min": 30000.0,
+        "max": 2760000.0,
+        "mean": 172620.54,
+        "std": 147254.7
+      }
+    },
+    "aspect_ratios": {
+      "stats": {
+        "min": 0.56,
+        "max": 2.17,
+        "mean": 1.22,
+        "std": 0.32
+      },
+      "categories": {
+        "portrait": 76,
+        "square": 31,
+        "landscape": 238
+      }
+    },
+    "file_sizes_bytes": {
+      "total_bytes": 10207120,
+      "stats": {
+        "min": 4531.0,
+        "max": 198783.0,
+        "mean": 29585.86,
+        "std": 16310.78
+      }
+    },
+    "formats": {
+      "JPEG": 345
+    },
+    "color_modes": {
+      "RGB": 345
+    },
+    "channels": {
+      "3": 345
+    }
+  },
+  "quality": {
+    "evaluated_images": 345,
+    "counts": {
+      "blurred": 13,
+      "under_exposed": 14,
+      "over_exposed": 10,
+      "normal": 308
+    },
+    "percentages": {
+      "blurred_pct": 3.77,
+      "under_exposed_pct": 4.06,
+      "over_exposed_pct": 2.9,
+      "normal_pct": 89.28
+    },
+    "laplacian_variance": {
+      "min": 36.99,
+      "max": 21921.82,
+      "mean": 1536.59,
+      "std": 2683.73
+    },
+    "brightness": {
+      "min": 32.32,
+      "max": 229.91,
+      "mean": 115.17,
+      "std": 29.33
+    },
+    "contrast": {
+      "min": 21.28,
+      "max": 101.89,
+      "mean": 57.62,
+      "std": 14.09
+    },
+    "thresholds": {
+      "blur_laplacian_threshold": 100.0,
+      "under_exposure_pct_threshold": 25.0,
+      "over_exposure_pct_threshold": 25.0,
+      "type": "heuristic"
+    },
+    "flagged_samples": [
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Abyssinian_127_jpg.rf.b2553880d73a78e26e396fe7775f31be.jpg",
+        "issues": [
+          "overexposed (57.3% clipped)"
+        ],
+        "laplacian_var": 371.1,
+        "brightness": 229.91,
+        "contrast": 37.61
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Bengal_103_jpg.rf.bb684501a53abf381a6bf07f9cd2243c.jpg",
+        "issues": [
+          "overexposed (40.5% clipped)"
+        ],
+        "laplacian_var": 494.38,
+        "brightness": 157.3,
+        "contrast": 91.25
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Bengal_109_jpg.rf.aed42b8605ef92b579992d02e2e2cc4c.jpg",
+        "issues": [
+          "overexposed (50.4% clipped)"
+        ],
+        "laplacian_var": 1249.08,
+        "brightness": 187.9,
+        "contrast": 75.21
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Bombay_140_jpg.rf.15757f698af74453f34ee58604ea6afc.jpg",
+        "issues": [
+          "blur (var: 97.0)"
+        ],
+        "laplacian_var": 97.0,
+        "brightness": 117.74,
+        "contrast": 77.85
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Egyptian_Mau_153_jpg.rf.39039c0b52c2d731a37b0324f64f4623.jpg",
+        "issues": [
+          "blur (var: 81.7)"
+        ],
+        "laplacian_var": 81.69,
+        "brightness": 133.13,
+        "contrast": 63.03
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Maine_Coon_161_jpg.rf.87a3ddb34373cc3701441bf83e12ed2c.jpg",
+        "issues": [
+          "overexposed (51.3% clipped)"
+        ],
+        "laplacian_var": 2009.77,
+        "brightness": 188.06,
+        "contrast": 76.7
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Maine_Coon_174_jpg.rf.a13aabba3f9564144fbd928eb2c49513.jpg",
+        "issues": [
+          "blur (var: 54.8)"
+        ],
+        "laplacian_var": 54.79,
+        "brightness": 103.93,
+        "contrast": 31.2
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Persian_117_jpg.rf.30b82f0e3d2ae0115aaf62d09e792f1f.jpg",
+        "issues": [
+          "blur (var: 68.4)"
+        ],
+        "laplacian_var": 68.35,
+        "brightness": 69.83,
+        "contrast": 28.73
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Persian_143_jpg.rf.cef1519ca541c5e4f216aa793859a355.jpg",
+        "issues": [
+          "underexposed (28.9% dark)"
+        ],
+        "laplacian_var": 221.12,
+        "brightness": 79.6,
+        "contrast": 73.12
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Ragdoll_139_jpg.rf.c630dfd422505d4dc547d7d188f887b6.jpg",
+        "issues": [
+          "underexposed (29.5% dark)"
+        ],
+        "laplacian_var": 123.21,
+        "brightness": 81.49,
+        "contrast": 82.26
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Ragdoll_171_jpg.rf.325a9774a1007060ad0287feae2738d0.jpg",
+        "issues": [
+          "blur (var: 37.0)"
+        ],
+        "laplacian_var": 36.99,
+        "brightness": 95.68,
+        "contrast": 38.43
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Russian_Blue_151_jpg.rf.4f296123a0fd2cc682c178c5d2e1a4e3.jpg",
+        "issues": [
+          "underexposed (32.4% dark)"
+        ],
+        "laplacian_var": 833.9,
+        "brightness": 77.71,
+        "contrast": 67.38
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/cat/Sphynx_130_jpg.rf.948193b01d7d498e30837ca8b1655797.jpg",
+        "issues": [
+          "overexposed (32.3% clipped)"
+        ],
+        "laplacian_var": 2994.31,
+        "brightness": 168.88,
+        "contrast": 73.7
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/american_bulldog_176_jpg.rf.92f96e4ec1bccbdbc8243c6888ca10ff.jpg",
+        "issues": [
+          "underexposed (27.7% dark)"
+        ],
+        "laplacian_var": 255.01,
+        "brightness": 67.45,
+        "contrast": 71.64
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/basset_hound_183_jpg.rf.6b32a66310006c189629501949bfe731.jpg",
+        "issues": [
+          "underexposed (28.3% dark)"
+        ],
+        "laplacian_var": 1396.02,
+        "brightness": 95.06,
+        "contrast": 85.32
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/beagle_136_jpg.rf.20fec1b8aa809f98878cd56e42b5844e.jpg",
+        "issues": [
+          "underexposed (53.4% dark)"
+        ],
+        "laplacian_var": 1525.19,
+        "brightness": 38.82,
+        "contrast": 56.77
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/beagle_180_jpg.rf.af5a3db676f33ab588bd65fd586fadb6.jpg",
+        "issues": [
+          "underexposed (69.3% dark)"
+        ],
+        "laplacian_var": 708.6,
+        "brightness": 32.32,
+        "contrast": 60.58
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/boxer_134_jpg.rf.af60ed066a0636b90aad836b7de999ba.jpg",
+        "issues": [
+          "overexposed (35.6% clipped)"
+        ],
+        "laplacian_var": 3419.59,
+        "brightness": 153.86,
+        "contrast": 97.96
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/chihuahua_109_jpg.rf.9f5fa214b0cc3e1d18859902c64eeeda.jpg",
+        "issues": [
+          "blur (var: 98.7)"
+        ],
+        "laplacian_var": 98.69,
+        "brightness": 76.33,
+        "contrast": 52.17
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/chihuahua_14_jpg.rf.a81475719cea2cae1d958e7faf4e9dd9.jpg",
+        "issues": [
+          "overexposed (32.2% clipped)"
+        ],
+        "laplacian_var": 1130.67,
+        "brightness": 150.51,
+        "contrast": 97.77
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/havanese_15_jpg.rf.5eb7536263547c62d51849bac373c9a5.jpg",
+        "issues": [
+          "blur (var: 84.2)"
+        ],
+        "laplacian_var": 84.16,
+        "brightness": 127.7,
+        "contrast": 44.53
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/japanese_chin_103_jpg.rf.17bf9403278f76748ecb22aff5dbfedf.jpg",
+        "issues": [
+          "blur (var: 83.4)"
+        ],
+        "laplacian_var": 83.42,
+        "brightness": 102.54,
+        "contrast": 41.54
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/miniature_pinscher_131_jpg.rf.58adc39d9c18b88efaaae945e69cea37.jpg",
+        "issues": [
+          "overexposed (28.6% clipped)"
+        ],
+        "laplacian_var": 226.47,
+        "brightness": 129.66,
+        "contrast": 90.97
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/pomeranian_129_jpg.rf.602d88c257ba0bba7ffc2020617eec71.jpg",
+        "issues": [
+          "blur (var: 79.7)"
+        ],
+        "laplacian_var": 79.7,
+        "brightness": 93.92,
+        "contrast": 51.21
+      },
+      {
+        "image_path": "datasets/marquis03_cats-and-dogs/train/dog/pomeranian_183_jpg.rf.99ea2d18b1560ce9082579726ab211a9.jpg",
+        "issues": [
+          "blur (var: 39.2)"
+        ],
+        "laplacian_var": 39.23,
+        "brightness": 86.02,
+        "contrast": 40.67
+      }
+    ]
+  },
+  "duplicates": {
+    "status": "completed",
+    "duplicate_groups_count": 14,
+    "affected_images_count": 338,
+    "duplicate_ratio": 0.9685,
+    "exact_duplicate_groups": 0,
+    "near_duplicate_groups": 14
+  },
+  "labels": {
+    "status": "available",
+    "num_classes": 2,
+    "total_labeled_images": 345,
+    "class_counts": {
+      "train": 275,
+      "val": 70
+    },
+    "class_percentages": {
+      "train": 79.71,
+      "val": 20.29
+    },
+    "metrics": {
+      "count_std": 102.5,
+      "max_class_count": 275,
+      "min_class_count": 70,
+      "max_to_min_ratio": 3.93,
+      "balance_indicator": "moderately_imbalanced"
+    }
+  },
+  "diversity": {
+    "status": "completed",
+    "parameters": {
+      "eps": 0.35,
+      "min_samples": 2,
+      "metric": "cosine"
+    },
+    "total_samples": 345,
+    "cluster_count": 40,
+    "noise_count": 87,
+    "noise_ratio": 0.2522,
+    "cluster_size_distribution": [
+      57,
+      20,
+      13,
+      10,
+      10,
+      9,
+      9,
+      8,
+      7,
+      7,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      4,
+      4,
+      3,
+      3,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "silhouette_score": 0.4254,
+    "interpretation_note": "Clusters represent groups of visually similar images in DINOv2 feature space. Silhouette score reflects cluster cohesion and separation; it is not a direct ground-truth accuracy metric."
+  },
+  "metadata_insights": {
+    "status": "unavailable",
+    "message": "No README or documentation text was found for AI metadata extraction.",
+    "stated_purpose": null,
+    "collection_method": null,
+    "known_limitations": null
+  },
+  "clip_findings": {
+    "label_match": {
+      "has_labels": true,
+      "mismatch_ratio": 0.7594,
+      "threshold": 0.2,
+      "total_evaluated": 345,
+      "mismatched_count": 262
+    }
+  }
+}

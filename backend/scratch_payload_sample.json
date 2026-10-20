@@ -1,0 +1,95 @@
+{
+  "profiling_version": "1.0",
+  "computed_at": "2026-10-17T06:52:59.470748",
+  "dataset": {
+    "dataset_id": "2551b926-c0e1-4f0d-acb6-77cebb4aa7d9",
+    "workspace_id": "94dd0188-cb0c-4f11-a192-aab7de725f4a",
+    "dataset_name": "Titanic ",
+    "dataset_source_type": "Kaggle",
+    "dataset_source_url": "https://www.kaggle.com/datasets/rahulsah06/titanic",
+    "dataset_license": "Unknown",
+    "dataset_image_count": 3,
+    "dataset_storage_path": "datasets/rahulsah06_titanic/",
+    "dataset_domain": "photographic",
+    "file_list_checksum": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "basic_statistics": {
+    "total_images": 0,
+    "readable_images": 0,
+    "corrupt_images": 0,
+    "formats": {},
+    "color_modes": {},
+    "channels": {},
+    "dimensions": {},
+    "aspect_ratios": {},
+    "file_sizes_bytes": {}
+  },
+  "quality": {
+    "evaluated_images": 0,
+    "counts": {
+      "blurred": 0,
+      "under_exposed": 0,
+      "over_exposed": 0,
+      "normal": 0
+    },
+    "percentages": {
+      "blurred_pct": 0.0,
+      "under_exposed_pct": 0.0,
+      "over_exposed_pct": 0.0,
+      "normal_pct": 0.0
+    },
+    "laplacian_variance": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "brightness": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "contrast": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0
+    },
+    "thresholds": {
+      "blur_laplacian_threshold": 100.0,
+      "under_exposure_pct_threshold": 25.0,
+      "over_exposure_pct_threshold": 25.0,
+      "type": "heuristic"
+    },
+    "flagged_samples": []
+  },
+  "duplicates": {
+    "status": "completed",
+    "duplicate_groups_count": 0,
+    "affected_images_count": 0,
+    "duplicate_ratio": 0.0,
+    "near_duplicates_count": 0,
+    "exact_duplicates_count": 0
+  },
+  "labels": {
+    "status": "unavailable",
+    "reason": "No image paths provided"
+  },
+  "diversity": {
+    "status": "insufficient_data",
+    "cluster_count": 0,
+    "noise_count": 0,
+    "noise_ratio": 1.0,
+    "silhouette_score": null,
+    "cluster_size_distribution": [],
+    "note": "At least 3 embeddings are required for clustering."
+  },
+  "metadata_insights": {
+    "status": "unavailable",
+    "message": "No README or documentation text was found for AI metadata extraction.",
+    "stated_purpose": null,
+    "collection_method": null,
+    "known_limitations": null
+  }
+}
