@@ -1,0 +1,25 @@
+{
+  "max_samples": 30,
+  "min_samples_recommended": 10,
+  "max_file_mb": 10,
+  "allowed_types": [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ],
+  "baseline_max_images": 500,
+  "baseline_exclude_similarity_above": 0.97,
+  "covered_percentile": 10,
+  "verdict_bands": {
+    "low_gap_min_pct": 80,
+    "moderate_min_pct": 50
+  },
+  "plot_max_points": 1500,
+  "umap": {
+    "n_neighbors": 15,
+    "min_dist": 0.1,
+    "metric": "cosine",
+    "random_state": 42
+  },
+  "pca_fallback_below_images": 30
+}

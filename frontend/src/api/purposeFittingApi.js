@@ -60,3 +60,23 @@ export async function checkTextMatch(datasetId, queryText) {
   return data;
 }
 
+/**
+ * Fetches workspace-level purpose-fitting comparison across eligible datasets.
+ *
+ * @param {string} workspaceId - UUID of the workspace
+ * @param {string} purposeKey - e.g. 'classification', 'object_detection', etc.
+ * @param {string} [referenceDatasetId] - Optional reference dataset UUID
+ * @returns {Promise<Object>} WorkspacePurposeFitComparisonResponse
+ */
+export async function getWorkspacePurposeFitComparison(workspaceId, purposeKey, referenceDatasetId) {
+  const params = { purpose_key: purposeKey };
+  if (referenceDatasetId) {
+    params.reference_dataset_id = referenceDatasetId;
+  }
+  const { data } = await client.get(`/datasets/workspace/${workspaceId}/purpose-fit-comparison`, {
+    params,
+  });
+  return data;
+}
+
+

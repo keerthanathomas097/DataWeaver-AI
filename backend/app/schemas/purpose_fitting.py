@@ -122,3 +122,58 @@ class ClipAnalysisResponse(BaseModel):
     class_breakdown: Optional[Dict[str, Any]] = None
     worst_matches: List[LabelMatchWorstItem] = []
 
+
+class ComparisonCandidateResult(BaseModel):
+    dataset_id: uuid.UUID
+    dataset_name: str
+    dataset_image_count: int = 0
+    dataset_status: str
+    is_reference: bool = False
+
+    # Eligibility & Analysis state
+    eligibility_status: str  # "evaluated", "unprofiled", "profiling", "failed"
+    status_message: Optional[str] = None
+
+    # Purpose Fit Result (if evaluated)
+    fit_result: Optional[PurposeFitResponse] = None
+
+    # Ranking metrics (derived deterministically from existing summary counts)
+    overall_status: Optional[str] = None  # "Good Fit", "Review Recommended", "Significant Concerns", "Unavailable"
+    tier: int = 4  # 1: Good Fit, 2: Review Recommended, 3: Significant Concerns, 4: Unavailable
+    rank: Optional[int] = None
+    is_tied: bool = False
+    favorable_count: int = 0
+    neutral_count: int = 0
+    warning_count: int = 0
+    critical_count: int = 0
+    total_applicable_rules: int = 0
+
+
+class MatrixCriterionDef(BaseModel):
+    metric_key: str
+    metric_display_name: str
+    plain_label: str
+    operator: Optional[str] = None
+    threshold: Optional[Union[float, int, str]] = None
+    unit: Optional[str] = None
+    applicable: bool = True
+    rule_id: Optional[str] = None
+
+
+class WorkspacePurposeFitComparisonResponse(BaseModel):
+    workspace_id: uuid.UUID
+    workspace_name: str
+    purpose_key: str
+    purpose_display_name: str
+    reference_dataset_id: Optional[uuid.UUID] = None
+    reference_dataset_name: Optional[str] = None
+
+    total_datasets_in_workspace: int
+    eligible_candidate_count: int
+    unprofiled_candidate_count: int
+
+    candidates: List[ComparisonCandidateResult]
+    matrix_criteria: List[MatrixCriterionDef]
+    methodology_note: str
+
+

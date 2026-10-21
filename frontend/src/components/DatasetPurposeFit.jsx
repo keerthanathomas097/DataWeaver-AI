@@ -24,6 +24,8 @@ import {
   Image as ImageIcon,
   X,
   Eye,
+  SlidersHorizontal,
+  ChevronRight,
 } from 'lucide-react';
 import {
   evaluatePurposeFit,
@@ -31,6 +33,8 @@ import {
   triggerClipAnalysis,
   checkTextMatch,
 } from '../api/purposeFittingApi';
+import AiAssessmentCard from './AiAssessmentCard';
+import PurposeFitComparison from './PurposeFitComparison';
 
 // Plain-language, concise purpose definitions for compact selection cards
 const DEFAULT_PURPOSES = [
@@ -355,6 +359,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
   const [expandedExplanations, setExpandedExplanations] = useState({});
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
   const [showAboutAnalysis, setShowAboutAnalysis] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
 
   // CLIP semantic label analysis state
   const [clipAnalysis, setClipAnalysis] = useState(null);
@@ -561,10 +566,23 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
     return fitData?.dataset_characteristics?.filter((c) => c.verdict === 'neutral') || [];
   }, [fitData]);
 
+  // Render dedicated workspace comparison view if active
+  if (showComparison && dataset) {
+    return (
+      <PurposeFitComparison
+        referenceDataset={dataset}
+        activeWorkspaceId={dataset.workspace_id}
+        initialPurposeKey={selectedPurpose}
+        onPurposeChange={(newPurpose) => setSelectedPurpose(newPurpose)}
+        onBack={() => setShowComparison(false)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4 animate-in fade-in-50 duration-200">
       {/* -------------------------------------------------------------
-       * Compact Header Card with Back Navigation
+       * Compact Header Card with Back Navigation & Compare Datasets CTA
        * ------------------------------------------------------------- */}
       <div className="bg-white border border-slate-200/80 rounded-2xl p-4.5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -593,8 +611,19 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
           </div>
         </div>
 
-        <div className="text-[11px] text-slate-400 font-medium px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200/60 self-end sm:self-auto">
-          Heuristic Rules Engine v1.0
+        <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
+          <button
+            onClick={() => setShowComparison(true)}
+            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[12.5px] font-bold shadow-xs hover:shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+            title={`Compare ${dataset?.dataset_name || 'this dataset'} against other workspace datasets for ${currentPurposeMeta.display_name}`}
+          >
+            <SlidersHorizontal size={15} />
+            <span>Compare Datasets</span>
+          </button>
+
+          <div className="text-[11px] text-slate-400 font-medium px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+            Heuristic Rules Engine v1.0
+          </div>
         </div>
       </div>
 
@@ -831,6 +860,9 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
             </div>
           )}
 
+          {/* Executive AI Assessment Card */}
+          <AiAssessmentCard datasetId={datasetId} purposeKey={selectedPurpose} />
+
           {/* Grid: Radar Chart + What this means panel */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left Col: Radar Chart */}
@@ -1015,6 +1047,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                   return (
                     <div
                       key={item.rule_id}
+                      id={`finding-${item.metric_key}`}
                       className={`border rounded-xl p-3.5 transition-all ${
                         isCritical
                           ? 'border-rose-200 bg-rose-50/40'

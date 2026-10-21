@@ -4,6 +4,8 @@ from app.models.dataset import Dataset, DatasetDuplicateGroup, DatasetDuplicateG
 from app.models.password_reset_token import PasswordResetToken
 from app.models.profiling import DatasetProfilingResult
 from app.models.clip_finding import DatasetClipFinding
+from app.models.ai_assessment import DatasetAiAssessment
+from app.models.domain_gap import DomainSampleSet, DatasetDomainGapResult, WorkspaceDomainGapComparison
 
 __all__ = [
     "User",
@@ -14,4 +16,8 @@ __all__ = [
     "PasswordResetToken",
     "DatasetProfilingResult",
     "DatasetClipFinding",
+    "DatasetAiAssessment",
+    "DomainSampleSet",
+    "DatasetDomainGapResult",
+    "WorkspaceDomainGapComparison",
 ]

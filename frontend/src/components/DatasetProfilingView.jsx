@@ -29,8 +29,12 @@ import {
   Camera,
   Maximize2,
   Target,
+  Compass,
+  FileText,
 } from 'lucide-react';
 import DatasetPurposeFit from './DatasetPurposeFit';
+import DatasetDomainGap from './DatasetDomainGap';
+import DatasetCardView from './DatasetCardView';
 import {
   startProfiling,
   getProfilingStatus,
@@ -408,6 +412,8 @@ export default function DatasetProfilingView({
   const [showTechnicalDetails, setShowTechnicalDetails] = useState(false);
   const [activeSection, setActiveSection] = useState('all'); // 'all', 'overview', 'quality', 'variety', 'categories', 'duplicates', 'insights'
   const [showPurposeFit, setShowPurposeFit] = useState(false);
+  const [showDomainGap, setShowDomainGap] = useState(false);
+  const [showDatasetCard, setShowDatasetCard] = useState(false);
 
   // Sync active dataset if prop changes
   useEffect(() => {
@@ -532,6 +538,26 @@ export default function DatasetProfilingView({
         dataset={activeDataset}
         profileData={profileData}
         onBack={() => setShowPurposeFit(false)}
+      />
+    );
+  }
+
+  // Render: Domain Gap Check View
+  if (showDomainGap && activeDataset) {
+    return (
+      <DatasetDomainGap
+        dataset={activeDataset}
+        onBack={() => setShowDomainGap(false)}
+      />
+    );
+  }
+
+  // Render: Dataset Card View
+  if (showDatasetCard && activeDataset) {
+    return (
+      <DatasetCardView
+        dataset={activeDataset}
+        onBack={() => setShowDatasetCard(false)}
       />
     );
   }
@@ -674,6 +700,24 @@ export default function DatasetProfilingView({
           >
             <Target size={15} />
             <span>Purpose Fitting</span>
+          </button>
+
+          {/* Domain Gap Check CTA */}
+          <button
+            onClick={() => setShowDomainGap(true)}
+            className="px-4 py-2 bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-teal-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <Compass size={15} />
+            <span>Domain Gap Check</span>
+          </button>
+
+          {/* Dataset Card CTA */}
+          <button
+            onClick={() => setShowDatasetCard(true)}
+            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-violet-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <FileText size={15} />
+            <span>Generate Dataset Card</span>
           </button>
 
           {status === 'completed' ? (

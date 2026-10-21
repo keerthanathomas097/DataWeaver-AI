@@ -1,0 +1,7 @@
+{
+  "require_duplicate_detection": true,
+  "max_datasets": 12,
+  "near_miss_margin": 0.10,
+  "size_ratio_warning": 5,
+  "default_reference": "median_of_dataset_cutoffs"
+}
