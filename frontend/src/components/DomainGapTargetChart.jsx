@@ -182,30 +182,30 @@ export default function DomainGapTargetChart({
   }, [hoveredMarker, width]);
 
   return (
-    <div className="bg-white border border-slate-200/80 rounded-2xl shadow-xs overflow-hidden">
+    <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl shadow-2xs overflow-hidden">
       {/* -------------------------------------------------------------
        * CARD HEADER: Title, Purpose, and Legend
        * ------------------------------------------------------------- */}
-      <div className="p-5 pb-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-5 pb-4 border-b border-[#D5DCD1] flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
+            <div className="p-1.5 bg-[#24543D]/10 text-[#24543D] rounded-lg">
               <Target size={18} />
             </div>
-            <h3 className="font-extrabold text-[16px] text-slate-900 tracking-tight">
+            <h3 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
               Coverage Target Map
             </h3>
-            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+            <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
               Similarity Proximity
             </span>
           </div>
-          <p className="text-[12.5px] text-slate-500 mt-1">
+          <p className="text-[12.5px] text-[#69746A] mt-1">
             Center represents your dataset (100% match). Distance shows how far each deployment photo is from its nearest dataset image.
           </p>
         </div>
 
         {/* Dedicated Chart Legend */}
-        <div className="flex items-center gap-3.5 flex-wrap text-[11.5px] text-slate-600 bg-slate-50/80 px-3.5 py-2 rounded-xl border border-slate-200/60 self-start md:self-auto">
+        <div className="flex items-center gap-3.5 flex-wrap text-[11.5px] text-[#69746A] bg-[#F7F5EE] px-3.5 py-2 rounded-xl border border-[#D5DCD1] self-start md:self-auto">
           <div className="flex items-center gap-1.5" title="Dataset image in baseline distribution">
             <span className="w-2.5 h-2.5 rounded-full bg-slate-400 opacity-60 inline-block" />
             <span className="font-medium">Dataset image</span>
@@ -238,7 +238,7 @@ export default function DomainGapTargetChart({
             <button
               onClick={onRecompute}
               disabled={isComputing}
-              className="px-2.5 py-1 bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-[11px] font-bold flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
+              className="px-2.5 py-1 bg-[#FCFAF6] hover:bg-amber-100 text-amber-900 border border-amber-300 rounded-lg text-[11px] font-bold flex items-center gap-1.5 cursor-pointer shrink-0 transition-colors"
             >
               <RotateCcw size={12} className={isComputing ? 'animate-spin' : ''} />
               <span>Refresh check</span>
@@ -252,7 +252,7 @@ export default function DomainGapTargetChart({
        * ------------------------------------------------------------- */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
         {/* Left Column: Target Bullseye Chart (lg:col-span-8) */}
-        <div className="lg:col-span-8 p-4 lg:p-6 flex flex-col items-center justify-center relative select-none bg-gradient-to-b from-slate-50/60 via-white to-slate-50/40">
+        <div className="lg:col-span-8 p-4 lg:p-6 flex flex-col items-center justify-center relative select-none bg-gradient-to-b from-[#F7F5EE]/40 via-white to-[#F7F5EE]/30">
           <div ref={containerRef} className="relative w-full max-w-[640px] aspect-[640/540]">
             <svg
               viewBox={`0 0 ${width} ${height}`}
@@ -961,29 +961,29 @@ export default function DomainGapTargetChart({
         </div>
 
         {/* Right Column: Evidence Inspection Side Panel (lg:col-span-4) */}
-        <div className="lg:col-span-4 bg-[#faf9f6] border-t lg:border-t-0 lg:border-l border-[#e5e2dc] p-5 flex flex-col justify-between space-y-4">
+        <div className="lg:col-span-4 bg-[#F7F5EE] border-t lg:border-t-0 lg:border-l border-[#D5DCD1] p-5 flex flex-col justify-between space-y-4">
           {activeSample ? (
             <div className="space-y-4">
               {/* Header */}
-              <div className="flex items-center justify-between pb-2.5 border-b border-[#e5e2dc]">
+              <div className="flex items-center justify-between pb-2.5 border-b border-[#D5DCD1]">
                 <div className="flex items-center gap-2">
                   <span
                     className={`w-3 h-3 rounded-full ${
-                      activeSample.covered ? 'bg-[#059669]' : 'bg-[#e11d48]'
+                      activeSample.covered ? 'bg-[#24543D]' : 'bg-[#be123c]'
                     }`}
                   />
                   <div>
-                    <h5 className="font-extrabold text-[14px] text-slate-900 leading-none">
+                    <h5 className="font-serif font-bold text-[14px] text-[#202923] leading-none">
                       Target Photo #{activeSample.index + 1}
                     </h5>
-                    <span className="text-[11px] text-slate-500 font-medium">
+                    <span className="text-[11px] text-[#69746A] font-medium">
                       Evidence & Nearest Dataset Match
                     </span>
                   </div>
                 </div>
                 <button
                   onClick={() => onSelectSample(null)}
-                  className="text-[11.5px] font-semibold text-slate-500 hover:text-slate-900 cursor-pointer px-2 py-0.5 rounded-md hover:bg-[#ece8e1] transition-colors"
+                  className="text-[11.5px] font-semibold text-[#69746A] hover:text-[#202923] cursor-pointer px-2 py-0.5 rounded-md hover:bg-[#E7EAE4] transition-colors"
                 >
                   Clear
                 </button>
@@ -993,15 +993,15 @@ export default function DomainGapTargetChart({
               <div
                 className={`p-3 rounded-xl border flex items-center justify-between ${
                   activeSample.covered
-                    ? 'bg-emerald-50/90 border-emerald-200 text-emerald-950'
-                    : 'bg-rose-50/90 border-rose-200 text-rose-950'
+                    ? 'bg-emerald-50/90 border-emerald-300 text-emerald-950'
+                    : 'bg-rose-50/90 border-rose-300 text-rose-950'
                 }`}
               >
                 <div className="flex items-center gap-2.5">
                   {activeSample.covered ? (
-                    <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
+                    <CheckCircle2 size={18} className="text-emerald-700 shrink-0" />
                   ) : (
-                    <AlertTriangle size={18} className="text-rose-600 shrink-0" />
+                    <AlertTriangle size={18} className="text-rose-700 shrink-0" />
                   )}
                   <div>
                     <span className="font-bold text-[12.5px] block leading-snug">
@@ -1016,15 +1016,15 @@ export default function DomainGapTargetChart({
               </div>
 
               {/* Score Margin Card */}
-              <div className="bg-white p-3.5 rounded-xl border border-[#e5e2dc] space-y-2">
+              <div className="bg-[#FCFAF6] p-3.5 rounded-xl border border-[#D5DCD1] space-y-2">
                 <div className="flex items-center justify-between text-[11px]">
-                  <span className="text-slate-600 font-semibold">Empirical Score Margin</span>
+                  <span className="text-[#69746A] font-semibold">Empirical Score Margin</span>
                   {activeSample.nearest_similarity !== null && threshold !== null && (
                     <span
                       className={`px-2 py-0.5 rounded-md text-[10.5px] font-extrabold ${
                         activeSample.covered
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                          : 'bg-rose-100 text-rose-800 border border-rose-200'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                          : 'bg-rose-100 text-rose-800 border border-rose-300'
                       }`}
                     >
                       {activeSample.nearest_similarity >= threshold
@@ -1036,7 +1036,7 @@ export default function DomainGapTargetChart({
 
                 {threshold !== null && (
                   <div className="space-y-1">
-                    <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden relative border border-slate-200/70">
+                    <div className="h-2 w-full bg-[#E7EAE4] rounded-full overflow-hidden relative border border-[#D5DCD1]">
                       <div
                         className={`h-full transition-all duration-300 ${
                           activeSample.covered ? 'bg-emerald-600' : 'bg-rose-500'
@@ -1046,14 +1046,14 @@ export default function DomainGapTargetChart({
                         }}
                       />
                       <div
-                        className="absolute top-0 bottom-0 w-0.5 bg-slate-900 z-10"
+                        className="absolute top-0 bottom-0 w-0.5 bg-[#202923] z-10"
                         style={{ left: `${threshold * 100}%` }}
                         title={`Baseline Cutoff: ${formatPct(threshold)}%`}
                       />
                     </div>
-                    <div className="flex justify-between text-[10px] text-slate-500 font-medium">
+                    <div className="flex justify-between text-[10px] text-[#69746A] font-medium">
                       <span>0%</span>
-                      <span className="text-slate-800 font-bold">
+                      <span className="text-[#202923] font-bold">
                         Cutoff: {formatPct(threshold)}%
                       </span>
                       <span>100%</span>
@@ -1064,19 +1064,19 @@ export default function DomainGapTargetChart({
 
               {/* Visual Side-by-Side Comparison */}
               <div className="space-y-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                   Visual Evidence Comparison
                 </span>
                 <div className="grid grid-cols-2 gap-2.5">
                   {/* Left: Target Photo */}
                   <div className="space-y-1">
                     <span
-                      className="text-[10.5px] font-semibold text-slate-600 block truncate"
+                      className="text-[10.5px] font-semibold text-[#69746A] block truncate"
                       title={activeSample.image_path}
                     >
                       Target Photo
                     </span>
-                    <div className="aspect-square rounded-xl bg-white border border-[#e2dfd7] overflow-hidden flex items-center justify-center p-1 shadow-2xs">
+                    <div className="aspect-square rounded-xl bg-[#FCFAF6] border border-[#D5DCD1] overflow-hidden flex items-center justify-center p-1 shadow-2xs">
                       {activeSample.thumbnail_url ? (
                         <img
                           src={activeSample.thumbnail_url}
@@ -1084,12 +1084,12 @@ export default function DomainGapTargetChart({
                           className="w-full h-full object-contain rounded-lg"
                         />
                       ) : (
-                        <Eye size={20} className="text-slate-300" />
+                        <Eye size={20} className="text-[#69746A]/40" />
                       )}
                     </div>
                     {activeSample.image_path && (
                       <span
-                        className="text-[9.5px] text-slate-400 truncate block text-center"
+                        className="text-[9.5px] text-[#69746A] truncate block text-center"
                         title={activeSample.image_path}
                       >
                         {activeSample.image_path.split('/').pop()}
@@ -1100,12 +1100,12 @@ export default function DomainGapTargetChart({
                   {/* Right: Closest Dataset Match */}
                   <div className="space-y-1">
                     <span
-                      className="text-[10.5px] font-semibold text-slate-600 block truncate"
+                      className="text-[10.5px] font-semibold text-[#69746A] block truncate"
                       title={activeSample.nearest?.[0]?.image_path}
                     >
                       Nearest Dataset Match
                     </span>
-                    <div className="aspect-square rounded-xl bg-white border border-[#e2dfd7] overflow-hidden flex items-center justify-center p-1 shadow-2xs">
+                    <div className="aspect-square rounded-xl bg-[#FCFAF6] border border-[#D5DCD1] overflow-hidden flex items-center justify-center p-1 shadow-2xs">
                       {activeSample.nearest &&
                       activeSample.nearest.length > 0 &&
                       activeSample.nearest[0].image_url ? (
@@ -1115,12 +1115,12 @@ export default function DomainGapTargetChart({
                           className="w-full h-full object-contain rounded-lg"
                         />
                       ) : (
-                        <Eye size={20} className="text-slate-300" />
+                        <Eye size={20} className="text-[#69746A]/40" />
                       )}
                     </div>
                     {activeSample.nearest?.[0]?.image_path && (
                       <span
-                        className="text-[9.5px] text-slate-400 truncate block text-center"
+                        className="text-[9.5px] text-[#69746A] truncate block text-center"
                         title={activeSample.nearest[0].image_path}
                       >
                         {activeSample.nearest[0].image_path.split('/').pop()}
@@ -1133,28 +1133,28 @@ export default function DomainGapTargetChart({
               {/* Top 3 Nearest Matches */}
               {activeSample.nearest && activeSample.nearest.length > 1 && (
                 <div className="space-y-1.5 pt-1">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                     Top Closest Dataset Matches
                   </span>
                   <div className="space-y-1.5 max-h-[140px] overflow-y-auto pr-1">
                     {activeSample.nearest.map((near, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-2 p-1.5 bg-white rounded-lg border border-[#e5e2dc] shadow-2xs text-[11px]"
+                        className="flex items-center gap-2 p-1.5 bg-[#FCFAF6] rounded-lg border border-[#D5DCD1] shadow-2xs text-[11px]"
                       >
-                        <div className="w-10 h-10 rounded bg-[#fcfbf9] border border-[#ece8e1] overflow-hidden shrink-0 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded bg-[#F7F5EE] border border-[#D5DCD1] overflow-hidden shrink-0 flex items-center justify-center">
                           {near.image_url ? (
                             <img src={near.image_url} alt="Match" className="w-full h-full object-contain" />
                           ) : (
-                            <Eye size={14} className="text-slate-300" />
+                            <Eye size={14} className="text-[#69746A]/40" />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between">
-                            <span className="font-semibold text-slate-700">Rank #{idx + 1}</span>
-                            <span className="font-bold text-indigo-600">{formatPct(near.similarity)}%</span>
+                            <span className="font-semibold text-[#202923]">Rank #{idx + 1}</span>
+                            <span className="font-bold text-[#24543D]">{formatPct(near.similarity)}%</span>
                           </div>
-                          <p className="text-[10px] text-slate-400 truncate mt-0.5" title={near.image_path}>
+                          <p className="text-[10px] text-[#69746A] truncate mt-0.5" title={near.image_path}>
                             {near.image_path}
                           </p>
                         </div>
@@ -1166,22 +1166,22 @@ export default function DomainGapTargetChart({
             </div>
           ) : (
             /* Empty selection state */
-            <div className="flex flex-col items-center justify-center text-center p-6 space-y-2.5 text-slate-400 my-auto">
-              <div className="w-11 h-11 rounded-2xl bg-[#f0f4ff] text-[#2563eb] flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center text-center p-6 space-y-2.5 text-[#69746A] my-auto">
+              <div className="w-11 h-11 rounded-2xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center">
                 <Compass size={22} />
               </div>
-              <h5 className="font-extrabold text-[13.5px] text-slate-800">
+              <h5 className="font-serif font-bold text-[14px] text-[#202923]">
                 Select a Target Photo on the Chart
               </h5>
-              <p className="text-[11.5px] text-slate-500 leading-relaxed max-w-[260px]">
+              <p className="text-[11.5px] text-[#69746A] leading-relaxed max-w-[260px]">
                 Click any numbered photo marker on the bullseye target or choose one from the list below to inspect its closest dataset match and empirical similarity score.
               </p>
             </div>
           )}
 
           {/* Quick Photo Jumper Strip */}
-          <div className="pt-2 border-t border-[#ece8e1]">
-            <div className="flex items-center justify-between text-[10.5px] text-slate-500 mb-1.5 font-bold uppercase tracking-wider">
+          <div className="pt-2 border-t border-[#D5DCD1]">
+            <div className="flex items-center justify-between text-[10.5px] text-[#69746A] mb-1.5 font-bold uppercase tracking-wider">
               <span>Quick Select Target</span>
               <span>{samples.length} items</span>
             </div>
@@ -1194,10 +1194,10 @@ export default function DomainGapTargetChart({
                     onClick={() => onSelectSample(isSelected ? null : s.index)}
                     className={`px-2 py-1 rounded-lg text-[10.5px] font-bold shrink-0 transition-all cursor-pointer ${
                       isSelected
-                        ? 'bg-slate-900 text-white shadow-xs'
+                        ? 'bg-[#24543D] text-white shadow-2xs'
                         : s.covered
-                        ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200/60'
-                        : 'bg-rose-50 text-rose-700 hover:bg-rose-100 ring-1 ring-rose-300'
+                        ? 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-300'
+                        : 'bg-rose-50 text-rose-800 hover:bg-rose-100 border border-rose-300'
                     }`}
                   >
                     #{s.index + 1}
@@ -1212,14 +1212,14 @@ export default function DomainGapTargetChart({
       {/* -------------------------------------------------------------
        * CARD FOOTER: Clear Caption & Collapsible Explainer
        * ------------------------------------------------------------- */}
-      <div className="p-4 border-t border-slate-100 bg-slate-50/50 space-y-2.5 text-[12px] text-slate-600">
+      <div className="p-4 border-t border-[#D5DCD1] bg-[#F7F5EE] space-y-2.5 text-[12px] text-[#69746A]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <p className="leading-relaxed">
             <strong>Chart meaning:</strong> Distance from the centre shows how far each photo is from its closest dataset image. Rings show what is normal for this dataset's own images.
           </p>
           <button
             onClick={() => setShowHowToRead(!showHowToRead)}
-            className="flex items-center gap-1 text-[11.5px] font-bold text-blue-600 hover:text-blue-800 cursor-pointer self-start sm:self-auto shrink-0 transition-colors"
+            className="flex items-center gap-1 text-[11.5px] font-bold text-[#24543D] hover:underline cursor-pointer self-start sm:self-auto shrink-0 transition-colors"
           >
             <span>How to read this chart</span>
             {showHowToRead ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -1228,16 +1228,16 @@ export default function DomainGapTargetChart({
 
         {/* Collapsible Explainer */}
         {showHowToRead && (
-          <div className="bg-white rounded-xl p-3.5 border border-slate-200/80 space-y-2 text-[11.5px] leading-relaxed animate-in fade-in-50 duration-150">
-            <ul className="space-y-1.5 list-disc list-inside text-slate-600">
+          <div className="bg-[#FCFAF6] rounded-xl p-3.5 border border-[#D5DCD1] space-y-2 text-[11.5px] leading-relaxed animate-in fade-in-50 duration-150">
+            <ul className="space-y-1.5 list-disc list-inside text-[#69746A]">
               <li>
-                <strong className="text-slate-800">Centre = dataset:</strong> The center dot represents 100% identical similarity to a dataset image. Markers closer to the center have closer visual matches.
+                <strong className="text-[#202923]">Centre = dataset:</strong> The center dot represents 100% identical similarity to a dataset image. Markers closer to the center have closer visual matches.
               </li>
               <li>
-                <strong className="text-slate-800">Rings = how close counts as covered:</strong> The green dashed ring marks the dataset baseline cutoff. Photos inside this ring are covered; photos in the amber ring are near misses; photos beyond are far outside.
+                <strong className="text-[#202923]">Rings = how close counts as covered:</strong> The green dashed ring marks the dataset baseline cutoff. Photos inside this ring are covered; photos in the amber ring are near misses; photos beyond are far outside.
               </li>
               <li>
-                <strong className="text-slate-800">Side = nearest class:</strong> The angle around the center indicates which dataset category or class was the closest match to each photo.
+                <strong className="text-[#202923]">Side = nearest class:</strong> The angle around the center indicates which dataset category or class was the closest match to each photo.
               </li>
             </ul>
           </div>

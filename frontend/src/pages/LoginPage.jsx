@@ -87,10 +87,10 @@ export default function LoginPage() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-[13px] font-semibold text-slate-700 mb-1.5 flex justify-between items-center">
+          <label htmlFor="email" className="block text-[13px] font-semibold text-[#202923] mb-1.5 flex justify-between items-center">
             <span>Email address</span>
             {emailTouched && !emailError && email && (
-              <span className="text-[11px] font-semibold text-emerald-600 transition-opacity duration-300">Valid email</span>
+              <span className="text-[11px] font-semibold text-emerald-700 transition-opacity duration-300">Valid email</span>
             )}
           </label>
           <input
@@ -102,12 +102,12 @@ export default function LoginPage() {
             placeholder="you@research.edu"
             required
             autoComplete="email"
-            className={`w-full px-4 py-2.5 text-[14px] bg-slate-50 border rounded-xl focus:outline-none transition-all placeholder:text-slate-400 ${
+            className={`w-full px-4 py-2.5 text-[14px] bg-[#F7F5EE] border rounded-xl focus:outline-none transition-all placeholder:text-[#69746A] text-[#202923] ${
               emailTouched && emailError
                 ? 'border-rose-300 focus:border-rose-400 focus:bg-white bg-rose-50/10'
                 : emailTouched && !emailError && email
-                ? 'border-emerald-300 focus:border-emerald-400 focus:bg-white bg-emerald-50/10'
-                : 'border-slate-200 focus:border-blue-400 focus:bg-white'
+                ? 'border-emerald-300 focus:border-emerald-500 focus:bg-white bg-emerald-50/10'
+                : 'border-[#D5DCD1] focus:border-[#24543D] focus:bg-white'
             }`}
           />
           {emailTouched && emailError && (
@@ -120,13 +120,13 @@ export default function LoginPage() {
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label htmlFor="password" className="block text-[13px] font-semibold text-slate-700">
+            <label htmlFor="password" className="block text-[13px] font-semibold text-[#202923]">
               Password
             </label>
             <button
               type="button"
               onClick={() => navigate('/forgot-password')}
-              className="text-[12px] font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+              className="text-[12px] font-semibold text-[#24543D] hover:text-[#1C4430] transition-colors cursor-pointer"
             >
               Forgot password?
             </button>
@@ -140,12 +140,12 @@ export default function LoginPage() {
               placeholder="Enter your password"
               required
               autoComplete="current-password"
-              className="w-full px-4 py-2.5 pr-11 text-[14px] bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all placeholder:text-slate-400"
+              className="w-full px-4 py-2.5 pr-11 text-[14px] bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl focus:outline-none focus:border-[#24543D] focus:bg-white transition-all placeholder:text-[#69746A] text-[#202923]"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#69746A] hover:text-[#202923] transition-colors cursor-pointer"
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -156,7 +156,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-blue-600/20"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-[#F7F5EE] rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-[#24543D]/20 cursor-pointer"
         >
           {loading ? (
             <>
@@ -169,20 +169,20 @@ export default function LoginPage() {
         </button>
 
         <div className="relative flex items-center py-1">
-          <div className="flex-1 border-t border-slate-100" />
-          <span className="px-3 text-[12px] font-medium text-slate-400 uppercase tracking-wider">
+          <div className="flex-1 border-t border-[#D5DCD1]" />
+          <span className="px-3 text-[12px] font-medium text-[#69746A] uppercase tracking-wider">
             or
           </span>
-          <div className="flex-1 border-t border-slate-100" />
+          <div className="flex-1 border-t border-[#D5DCD1]" />
         </div>
 
         <GoogleSignInButton onClick={handleGoogleSignIn} disabled={loading} />
 
-        <p className="text-center text-[14px] text-slate-500 pt-1">
+        <p className="text-center text-[14px] text-[#69746A] pt-1">
           Don&apos;t have an account?{' '}
           <Link
             to="/signup"
-            className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+            className="font-semibold text-[#24543D] hover:text-[#1C4430] transition-colors"
           >
             Create account
           </Link>

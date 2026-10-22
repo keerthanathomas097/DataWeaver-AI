@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from app.config import settings
-from app.routers import auth, workspace, discovery, dataset, profiling, purpose_fitting, ai_assessment, domain_samples, domain_gap, dataset_card
+from app.routers import auth, workspace, discovery, dataset, profiling, purpose_fitting, ai_assessment, domain_samples, domain_gap, dataset_card, learning_curve
 from app.services.storage_service import ensure_bucket_exists
 import app.models  # Ensure all SQLModel tables are registered
 from app.database import engine
@@ -42,3 +42,4 @@ app.include_router(ai_assessment.router)
 app.include_router(domain_samples.router)
 app.include_router(domain_gap.router)
 app.include_router(dataset_card.router)
+app.include_router(learning_curve.router)

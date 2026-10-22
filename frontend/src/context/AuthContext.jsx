@@ -111,7 +111,8 @@ export function AuthProvider({ children }) {
   }, []);
 
  const redirectToGoogle = useCallback(() => {
-  window.location.href = `${API_BASE_URL}/auth/google/login`;
+  const returnTo = encodeURIComponent(window.location.origin);
+  window.location.href = `${API_BASE_URL}/auth/google/login?return_to=${returnTo}`;
 }, []);
 
 const applyGoogleToken = useCallback((access_token) => {

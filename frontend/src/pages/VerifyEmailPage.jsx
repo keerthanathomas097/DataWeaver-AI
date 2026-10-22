@@ -51,23 +51,23 @@ export default function VerifyEmailPage() {
       {status === 'onboarding' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center">
-              <Mail size={28} className="text-blue-600" />
+            <div className="w-16 h-16 rounded-2xl bg-[#24543D]/10 border border-[#D5DCD1] flex items-center justify-center">
+              <Mail size={28} className="text-[#24543D]" />
             </div>
           </div>
 
           <div className="text-center space-y-2">
-            <p className="text-[14px] text-slate-600 leading-relaxed">
+            <p className="text-[14px] text-[#69746A] leading-relaxed">
               We&apos;ve sent a verification link to
             </p>
-            <p className="text-[15px] font-bold text-slate-800">{email}</p>
-            <p className="text-[13px] text-slate-500 leading-relaxed">
+            <p className="text-[15px] font-bold text-[#202923]">{email}</p>
+            <p className="text-[13px] text-[#69746A] leading-relaxed">
               Please check your inbox and click the link to verify your account.
             </p>
           </div>
 
-          <div className="flex items-start gap-2.5 p-3.5 bg-blue-50/50 border border-blue-100/60 rounded-xl text-blue-800 text-[13px]">
-            <Info size={16} className="shrink-0 mt-0.5" />
+          <div className="flex items-start gap-2.5 p-3.5 bg-[#24543D]/5 border border-[#D5DCD1] rounded-xl text-[#202923] text-[13px]">
+            <Info size={16} className="shrink-0 mt-0.5 text-[#24543D]" />
             <span>
               Once verified, you will be able to log in to the DataWeaver platform. Check your server console to copy the link if email delivery is blocked.
             </span>
@@ -76,7 +76,7 @@ export default function VerifyEmailPage() {
           <button
             type="button"
             onClick={() => navigate('/login', { replace: true })}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-sm shadow-blue-600/20"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-white rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 shadow-sm shadow-[#24543D]/15"
           >
             Go to Login
             <ArrowRight size={16} />
@@ -88,11 +88,11 @@ export default function VerifyEmailPage() {
       {status === 'verifying' && (
         <div className="space-y-6 text-center py-6 animate-in fade-in duration-200">
           <div className="flex justify-center">
-            <Loader2 size={36} className="text-blue-600 animate-spin" />
+            <Loader2 size={36} className="text-[#24543D] animate-spin" />
           </div>
           <div className="space-y-1">
-            <p className="text-[15px] font-bold text-slate-800">Verifying your email...</p>
-            <p className="text-[13px] text-slate-400">Connecting with DataWeaver backend service</p>
+            <p className="text-[15px] font-bold text-[#202923]">Verifying your email...</p>
+            <p className="text-[13px] text-[#69746A]">Connecting with DataWeaver backend service</p>
           </div>
         </div>
       )}
@@ -101,14 +101,14 @@ export default function VerifyEmailPage() {
       {status === 'success' && (
         <div className="space-y-6 animate-in zoom-in-95 duration-200">
           <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
               <CheckCircle2 size={32} className="text-emerald-600" />
             </div>
           </div>
 
           <div className="text-center space-y-2">
-            <p className="text-[16px] font-extrabold text-slate-800">Verification Successful!</p>
-            <p className="text-[13px] text-slate-500 leading-relaxed">
+            <p className="text-[16px] font-extrabold text-[#202923]">Verification Successful!</p>
+            <p className="text-[13px] text-[#69746A] leading-relaxed">
               {message}
             </p>
           </div>
@@ -116,7 +116,7 @@ export default function VerifyEmailPage() {
           <button
             type="button"
             onClick={() => navigate('/login', { replace: true })}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-sm shadow-blue-600/20"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-white rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 shadow-sm shadow-[#24543D]/15"
           >
             Go to Login
             <ArrowRight size={16} />
@@ -128,14 +128,14 @@ export default function VerifyEmailPage() {
       {status === 'error' && (
         <div className="space-y-6 animate-in zoom-in-95 duration-200">
           <div className="flex justify-center">
-            <div className="w-16 h-16 rounded-2xl bg-rose-50 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center">
               <XCircle size={32} className="text-rose-600" />
             </div>
           </div>
 
           <div className="text-center space-y-2">
             <p className="text-[16px] font-extrabold text-rose-700">Verification Failed</p>
-            <p className="text-[13px] text-slate-500 leading-relaxed">
+            <p className="text-[13px] text-[#69746A] leading-relaxed">
               {message}
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function VerifyEmailPage() {
           <button
             type="button"
             onClick={() => navigate('/signup', { replace: true })}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-white rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 shadow-sm shadow-[#24543D]/15"
           >
             Go to Signup
             <ArrowRight size={16} />

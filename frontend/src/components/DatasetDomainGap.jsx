@@ -348,29 +348,29 @@ function DatasetDomainGapContent({ dataset, onBack }) {
       {/* -------------------------------------------------------------
        * SECTION 4A: Page Heading & Context
        * ------------------------------------------------------------- */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-xs">
         <div className="flex items-center gap-3.5">
           <button
             onClick={onBack}
-            className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer shrink-0"
+            className="w-9 h-9 rounded-xl border border-[#D5DCD1] flex items-center justify-center text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer shrink-0"
             title="Back to Dataset Profiling"
           >
             <ArrowLeft size={17} />
           </button>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full border border-slate-200/60">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#24543D] bg-[#E7EAE4] px-2.5 py-0.5 rounded-full border border-[#D5DCD1]">
                 Scientific Assessment
               </span>
-              <span className="text-slate-300">•</span>
-              <span className="text-[12px] font-semibold text-slate-600">
+              <span className="text-[#D5DCD1]">•</span>
+              <span className="text-[12px] font-semibold text-[#69746A]">
                 {dataset?.dataset_name}
               </span>
             </div>
-            <h2 className="font-extrabold text-[20px] text-slate-900 tracking-tight mt-0.5">
+            <h2 className="font-serif font-bold text-[22px] text-[#202923] tracking-tight mt-0.5">
               Dataset Coverage Assessment
             </h2>
-            <p className="text-[12px] text-slate-500 mt-0.5">
+            <p className="text-[12px] text-[#69746A] mt-0.5">
               Compare your real-world images with the dataset to understand how well it represents the conditions your model may encounter.
             </p>
           </div>
@@ -381,15 +381,15 @@ function DatasetDomainGapContent({ dataset, onBack }) {
             <button
               onClick={() => setShowComparison(true)}
               disabled={!selectedSampleSetId && !existingSampleSets.length}
-              className="px-3.5 py-1.5 rounded-xl text-[12px] font-bold text-indigo-700 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs disabled:opacity-50"
+              className="px-3.5 py-1.5 rounded-xl text-[12px] font-bold text-[#24543D] hover:text-[#1C4430] bg-[#24543D]/10 hover:bg-[#24543D]/20 border border-[#D5DCD1] transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs disabled:opacity-50"
               title="Compare this deployment photo set across all eligible datasets in the workspace"
             >
-              <Layers size={13} className="text-indigo-600" />
+              <Layers size={13} className="text-[#24543D]" />
               <span>Compare Datasets</span>
             </button>
             <button
               onClick={() => setShowUploadZone(!showUploadZone)}
-              className="px-3 py-1.5 rounded-xl text-[12px] font-semibold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl text-[12px] font-semibold text-[#202923] hover:text-[#24543D] bg-[#F7F5EE] hover:bg-[#E7EAE4] border border-[#D5DCD1] transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Sliders size={13} />
               <span>{showUploadZone ? 'Hide Photo Set' : 'Change Photo Set'}</span>
@@ -397,7 +397,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
             <button
               onClick={handleRunCheck}
               disabled={isComputing}
-              className="px-3.5 py-1.5 rounded-xl text-[12px] font-bold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="px-3.5 py-1.5 rounded-xl text-[12px] font-bold text-white bg-[#24543D] hover:bg-[#1C4430] transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs disabled:opacity-50"
             >
               <RefreshCw size={13} className={isComputing ? 'animate-spin' : ''} />
               <span>{isComputing ? 'Evaluating...' : 'Re-run Assessment'}</span>
@@ -410,13 +410,13 @@ function DatasetDomainGapContent({ dataset, onBack }) {
        * Photo Set Selection & Upload Zone
        * ------------------------------------------------------------- */}
       {showUploadZone && (
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-slate-100">
+        <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-[#D5DCD1]/60">
             <div>
-              <h3 className="font-extrabold text-[14.5px] text-slate-900 tracking-tight">
+              <h3 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
                 Target Real-World Sample Photos
               </h3>
-              <p className="text-[12px] text-slate-500 mt-0.5">
+              <p className="text-[12px] text-[#69746A] mt-0.5">
                 Upload 10 to 30 photos representing the deployment environment where your model will operate.
               </p>
             </div>
@@ -424,14 +424,14 @@ function DatasetDomainGapContent({ dataset, onBack }) {
             {/* Re-use Previous Sample Sets Dropdown */}
             {existingSampleSets.length > 0 && (
               <div className="flex items-center gap-2">
-                <span className="text-[11.5px] font-semibold text-slate-500">Saved set:</span>
+                <span className="text-[11.5px] font-semibold text-[#69746A]">Saved set:</span>
                 <select
                   value={selectedSampleSetId}
                   onChange={(e) => {
                     setSelectedSampleSetId(e.target.value);
                     clearAllFiles();
                   }}
-                  className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[12px] font-semibold text-slate-700 outline-none focus:border-indigo-400 cursor-pointer"
+                  className="px-2.5 py-1.5 bg-[#FCFAF6] border border-[#D5DCD1] rounded-xl text-[12px] font-semibold text-[#202923] outline-none focus:border-[#24543D] cursor-pointer"
                 >
                   <option value="">Upload new photos</option>
                   {existingSampleSets.map((s) => (
@@ -454,7 +454,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                   e.preventDefault();
                   if (e.dataTransfer.files) handleFilesChosen(e.dataTransfer.files);
                 }}
-                className="border-2 border-dashed border-slate-300 hover:border-indigo-500 bg-slate-50/50 hover:bg-indigo-50/20 rounded-2xl p-6 text-center transition-all cursor-pointer space-y-2"
+                className="border-2 border-dashed border-[#D5DCD1] hover:border-[#24543D] bg-[#F7F5EE] hover:bg-[#24543D]/5 rounded-2xl p-6 text-center transition-all cursor-pointer space-y-2"
               >
                 <input
                   ref={fileInputRef}
@@ -466,14 +466,14 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                     if (e.target.files) handleFilesChosen(e.target.files);
                   }}
                 />
-                <div className="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <div className="w-11 h-11 rounded-2xl bg-[#24543D]/10 text-[#24543D] border border-[#D5DCD1] flex items-center justify-center mx-auto">
                   <UploadCloud size={22} />
                 </div>
                 <div>
-                  <p className="text-[13px] font-bold text-slate-800">
+                  <p className="text-[13px] font-bold text-[#202923]">
                     Click to select real-world photos or drag and drop here
                   </p>
-                  <p className="text-[11.5px] text-slate-500 mt-0.5">
+                  <p className="text-[11.5px] text-[#69746A] mt-0.5">
                     10 to 30 photos recommended • JPEG, PNG, WebP up to 10MB each
                   </p>
                 </div>
@@ -483,7 +483,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
               {selectedFiles.length > 0 && (
                 <div className="mt-4 space-y-2">
                   <div className="flex items-center justify-between text-[12px]">
-                    <span className="font-bold text-slate-700">
+                    <span className="font-bold text-[#202923]">
                       Selected Photos ({selectedFiles.length} of 30)
                     </span>
                     <button
@@ -498,7 +498,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                     {filePreviews.map((previewUrl, idx) => (
                       <div
                         key={idx}
-                        className="relative w-16 h-16 rounded-xl border border-slate-200 overflow-hidden shrink-0 group bg-slate-100 shadow-2xs"
+                        className="relative w-16 h-16 rounded-xl border border-[#D5DCD1] overflow-hidden shrink-0 group bg-[#FCFAF6] shadow-2xs"
                       >
                         <img
                           src={previewUrl}
@@ -510,7 +510,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                             e.stopPropagation();
                             removeFile(idx);
                           }}
-                          className="absolute top-1 right-1 w-5 h-5 bg-slate-900/80 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                          className="absolute top-1 right-1 w-5 h-5 bg-[#202923]/80 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
                           title="Remove photo"
                         >
                           <X size={11} />
@@ -552,10 +552,10 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                 <button
                   type="button"
                   onClick={() => setShowComparison(true)}
-                  className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-[12px] font-bold shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 bg-[#24543D]/10 hover:bg-[#24543D]/20 text-[#24543D] border border-[#D5DCD1] rounded-xl text-[12px] font-bold shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
                   title="Compare active deployment photo set across all workspace datasets"
                 >
-                  <Layers size={14} className="text-indigo-600" />
+                  <Layers size={14} className="text-[#24543D]" />
                   <span>Compare Workspace Datasets</span>
                 </button>
               )}
@@ -563,7 +563,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
             <button
               onClick={handleRunCheck}
               disabled={isUploading || isComputing || (!selectedSampleSetId && selectedFiles.length === 0)}
-              className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[12.5px] font-bold shadow-xs hover:shadow-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2.5 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12.5px] font-bold shadow-xs hover:shadow-sm transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isUploading ? (
                 <>
@@ -594,27 +594,27 @@ function DatasetDomainGapContent({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * SECTION 4B: Primary Result & Plain-Language Summary
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-[#24543D]">
                 Primary Assessment
               </span>
-              <h3 className="font-extrabold text-[18px] text-slate-900 tracking-tight mt-0.5">
+              <h3 className="font-serif font-bold text-[20px] text-[#202923] tracking-tight mt-0.5">
                 How well does this dataset cover your real-world images?
               </h3>
-              <p className="text-[12.5px] text-slate-600 mt-1">
+              <p className="text-[12.5px] text-[#69746A] mt-1">
                 Coverage estimates how many uploaded images have sufficiently similar examples in the dataset, based on the existing similarity criteria.
               </p>
             </div>
 
             {/* Prominent Coverage Display with Progress Bar */}
-            <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-5 space-y-3.5">
+            <div className="bg-[#F7F5EE] border border-[#D5DCD1] rounded-2xl p-5 space-y-3.5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="space-y-0.5">
-                  <div className="text-[26px] font-black text-slate-900 tracking-tight">
+                  <div className="text-[26px] font-serif font-bold text-[#202923] tracking-tight">
                     {counts.covered_samples} of your {counts.total_samples} images are covered ({coveragePct}%)
                   </div>
-                  <p className="text-[12px] text-slate-500 font-medium">
+                  <p className="text-[12px] text-[#69746A] font-medium">
                     {counts.uncovered_samples > 0
                       ? `${counts.uncovered_samples} images fall below the reference similarity threshold.`
                       : 'All evaluated photos have representative matches in the dataset.'}
@@ -631,14 +631,14 @@ function DatasetDomainGapContent({ dataset, onBack }) {
               </div>
 
               {/* Horizontal Progress Bar */}
-              <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden flex">
+              <div className="h-2 w-full bg-[#E7EAE4] rounded-full overflow-hidden flex">
                 <div
-                  className="bg-emerald-600 h-full transition-all duration-500"
+                  className="bg-[#24543D] h-full transition-all duration-500"
                   style={{ width: `${coveragePct}%` }}
                   title={`Covered images: ${counts.covered_samples}`}
                 />
                 <div
-                  className="bg-rose-500 h-full transition-all duration-500"
+                  className="bg-rose-600 h-full transition-all duration-500"
                   style={{ width: `${Math.max(0, 100 - coveragePct)}%` }}
                   title={`Potential domain gaps: ${counts.uncovered_samples}`}
                 />
@@ -650,21 +650,21 @@ function DatasetDomainGapContent({ dataset, onBack }) {
              * ------------------------------------------------------------- */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
               {/* Metric 1: Coverage */}
-              <div className="p-4 rounded-xl border border-slate-200/80 bg-white space-y-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <div className="p-4 rounded-xl border border-[#D5DCD1] bg-[#FCFAF6] space-y-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                   Visual Coverage
                 </span>
-                <div className="text-[20px] font-extrabold text-slate-900 tracking-tight">
+                <div className="text-[20px] font-extrabold text-[#202923] tracking-tight">
                   {counts.covered_samples} / {counts.total_samples} ({coveragePct}%)
                 </div>
-                <p className="text-[12px] text-slate-600 leading-snug">
+                <p className="text-[12px] text-[#69746A] leading-snug">
                   Target images meeting the nearest-neighbor similarity criterion in the dataset.
                 </p>
               </div>
 
               {/* Metric 2: Potential Domain Gap */}
-              <div className="p-4 rounded-xl border border-slate-200/80 bg-white space-y-2">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+              <div className="p-4 rounded-xl border border-[#D5DCD1] bg-[#FCFAF6] space-y-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                   Potential Domain Gap
                 </span>
                 <div className={`text-[20px] font-extrabold tracking-tight ${
@@ -672,53 +672,53 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                 }`}>
                   {counts.uncovered_samples} photos
                 </div>
-                <p className="text-[12px] text-slate-600 leading-snug">
+                <p className="text-[12px] text-[#69746A] leading-snug">
                   Target images with nearest match below the reference similarity cutoff ({formatPct(baseline.threshold)}%).
                 </p>
               </div>
 
               {/* Metric 3: Distribution Distance (MMD) */}
-              <div className="p-4 rounded-xl border border-slate-200/80 bg-white space-y-2">
+              <div className="p-4 rounded-xl border border-[#D5DCD1] bg-[#FCFAF6] space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                     Distribution Divergence
                   </span>
                   <span
-                    className="text-slate-400 hover:text-slate-600 cursor-help"
+                    className="text-[#69746A] hover:text-[#202923] cursor-help"
                     title="Maximum Mean Discrepancy (MMD) with RBF kernel and median bandwidth heuristic, calculated directly from original 768-D DINOv2 embeddings (not 2D coordinates). Measures overall feature-space distribution separation."
                   >
                     <HelpCircle size={13} />
                   </span>
                 </div>
-                <div className="text-[20px] font-extrabold text-slate-900 tracking-tight">
+                <div className="text-[20px] font-extrabold text-[#202923] tracking-tight">
                   {typeof gapResult.distribution_distance?.value === 'number'
                     ? gapResult.distribution_distance.value.toFixed(4)
                     : 'N/A'}
-                  <span className="text-[11px] font-semibold text-slate-400 ml-1.5 font-mono">MMD</span>
+                  <span className="text-[11px] font-semibold text-[#69746A] ml-1.5 font-mono">MMD</span>
                 </div>
-                <p className="text-[12px] text-slate-600 leading-snug">
+                <p className="text-[12px] text-[#69746A] leading-snug">
                   Overall statistical divergence between source and target sets in 768-D feature space.
                 </p>
               </div>
 
               {/* Metric 4: Similarity Baseline */}
-              <div className="p-4 rounded-xl border border-slate-200/80 bg-white space-y-2">
+              <div className="p-4 rounded-xl border border-[#D5DCD1] bg-[#FCFAF6] space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                     Similarity Baseline
                   </span>
                   <button
                     onClick={() => setShowBaselineExplainer(!showBaselineExplainer)}
-                    className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer"
+                    className="text-[11px] font-semibold text-[#24543D] hover:text-[#1C4430] flex items-center gap-0.5 cursor-pointer"
                   >
                     <span>Details</span>
                     {showBaselineExplainer ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                   </button>
                 </div>
-                <div className="text-[20px] font-extrabold text-slate-900 tracking-tight">
+                <div className="text-[20px] font-extrabold text-[#202923] tracking-tight">
                   {formatPct(baseline.threshold)}% cutoff
                 </div>
-                <p className="text-[12px] text-slate-600 leading-snug">
+                <p className="text-[12px] text-[#69746A] leading-snug">
                   10th-percentile nearest-neighbor similarity within the dataset, used as a reference threshold.
                 </p>
               </div>
@@ -726,30 +726,30 @@ function DatasetDomainGapContent({ dataset, onBack }) {
 
             {/* Expandable Technical Baseline Drawer */}
             {showBaselineExplainer && (
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-[12px] text-slate-700 space-y-2 animate-in fade-in duration-150">
-                <div className="flex items-center gap-1.5 font-bold text-slate-900">
-                  <Info size={14} className="text-indigo-600" />
+              <div className="bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl p-4 text-[12px] text-[#202923] space-y-2 animate-in fade-in duration-150">
+                <div className="flex items-center gap-1.5 font-bold text-[#202923]">
+                  <Info size={14} className="text-[#24543D]" />
                   <span>How the reference baseline is calculated</span>
                 </div>
-                <p className="leading-relaxed text-slate-600">
+                <p className="leading-relaxed text-[#69746A]">
                   The reference level is established by sampling distinct images from the dataset and measuring their closest internal matches (excluding near-identical duplicates above 97% similarity). The 10th percentile of this internal distribution ({formatPct(baseline.threshold)}%) serves as the threshold. Images at or above this score are represented as well as typical in-dataset instances.
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px]">
-                  <div className="p-2 bg-white rounded-lg border border-slate-200">
-                    <span className="text-slate-400 block font-medium">Dataset Median</span>
-                    <span className="font-bold text-slate-800">{formatPct(baseline.median)}%</span>
+                  <div className="p-2 bg-[#FCFAF6] rounded-lg border border-[#D5DCD1]">
+                    <span className="text-[#69746A] block font-medium">Dataset Median</span>
+                    <span className="font-bold text-[#202923]">{formatPct(baseline.median)}%</span>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-200">
-                    <span className="text-slate-400 block font-medium">Target Sample Median</span>
-                    <span className="font-bold text-slate-800">{formatPct(gapResult.median_nearest_similarity)}%</span>
+                  <div className="p-2 bg-[#FCFAF6] rounded-lg border border-[#D5DCD1]">
+                    <span className="text-[#69746A] block font-medium">Target Sample Median</span>
+                    <span className="font-bold text-[#202923]">{formatPct(gapResult.median_nearest_similarity)}%</span>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-200">
-                    <span className="text-slate-400 block font-medium">Centroid Proximity</span>
-                    <span className="font-bold text-slate-800">{formatPct(gapResult.centroid_similarity)}%</span>
+                  <div className="p-2 bg-[#FCFAF6] rounded-lg border border-[#D5DCD1]">
+                    <span className="text-[#69746A] block font-medium">Centroid Proximity</span>
+                    <span className="font-bold text-[#202923]">{formatPct(gapResult.centroid_similarity)}%</span>
                   </div>
-                  <div className="p-2 bg-white rounded-lg border border-slate-200">
-                    <span className="text-slate-400 block font-medium">Evaluated Images</span>
-                    <span className="font-bold text-slate-800">{counts.dataset_images_evaluated ?? 0}</span>
+                  <div className="p-2 bg-[#FCFAF6] rounded-lg border border-[#D5DCD1]">
+                    <span className="text-[#69746A] block font-medium">Evaluated Images</span>
+                    <span className="font-bold text-[#202923]">{counts.dataset_images_evaluated ?? 0}</span>
                   </div>
                 </div>
               </div>
@@ -758,8 +758,8 @@ function DatasetDomainGapContent({ dataset, onBack }) {
             {/* -------------------------------------------------------------
              * SECTION 4D: Clear Limitations Callout Note
              * ------------------------------------------------------------- */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 px-3.5 flex items-start gap-2.5 text-[11.5px] text-slate-600">
-              <Info size={15} className="text-slate-400 shrink-0 mt-0.5" />
+            <div className="bg-[#24543D]/5 border border-[#D5DCD1] rounded-xl p-3 px-3.5 flex items-start gap-2.5 text-[11.5px] text-[#202923]">
+              <Info size={15} className="text-[#24543D] shrink-0 mt-0.5" />
               <span>
                 <strong>Methodological note:</strong> This assessment measures visual representation, not model accuracy. A strong visual match does not guarantee a correct prediction, and a weak match does not prove that a model will fail.
               </span>
@@ -810,25 +810,25 @@ function DatasetDomainGapContent({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * SECTION 6: Photo-by-Photo Evidence Section
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#D5DCD1]/60">
               <div>
-                <h4 className="font-extrabold text-[15px] text-slate-900 tracking-tight">
+                <h4 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
                   Which of your images may be missing from the dataset's coverage?
                 </h4>
-                <p className="text-[12px] text-slate-500 mt-0.5">
+                <p className="text-[12px] text-[#69746A] mt-0.5">
                   Review each uploaded image against the dataset's similarity baseline. Images falling below the threshold represent potential domain gaps and are shown first.
                 </p>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl self-start sm:self-auto">
+              <div className="flex items-center gap-1.5 p-1 bg-[#E7EAE4] rounded-xl border border-[#D5DCD1] self-start sm:self-auto">
                 <button
                   onClick={() => setPairFilter('all')}
                   className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
                     pairFilter === 'all'
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#FCFAF6] text-[#202923] shadow-xs border border-[#D5DCD1]'
+                      : 'text-[#69746A] hover:text-[#202923]'
                   }`}
                 >
                   All ({counts.total_samples})
@@ -837,8 +837,8 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                   onClick={() => setPairFilter('uncovered')}
                   className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
                     pairFilter === 'uncovered'
-                      ? 'bg-white text-rose-800 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#FCFAF6] text-rose-800 shadow-xs border border-[#D5DCD1]'
+                      : 'text-[#69746A] hover:text-[#202923]'
                   }`}
                 >
                   Potential Gaps ({counts.uncovered_samples})
@@ -847,8 +847,8 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                   onClick={() => setPairFilter('covered')}
                   className={`px-3 py-1 rounded-lg text-[11.5px] font-bold transition-all cursor-pointer ${
                     pairFilter === 'covered'
-                      ? 'bg-white text-emerald-800 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-[#FCFAF6] text-emerald-800 shadow-xs border border-[#D5DCD1]'
+                      : 'text-[#69746A] hover:text-[#202923]'
                   }`}
                 >
                   Covered ({counts.covered_samples})
@@ -868,18 +868,18 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                 return (
                   <div
                     key={sample.index}
-                    className={`border rounded-2xl p-4 transition-all bg-white ${
+                    className={`border rounded-2xl p-4 transition-all bg-[#FCFAF6] ${
                       isSelected
-                        ? 'border-indigo-500 ring-2 ring-indigo-500/20'
+                        ? 'border-[#24543D] ring-2 ring-[#24543D]/20'
                         : sample.covered
-                        ? 'border-slate-200/80 hover:border-slate-300'
+                        ? 'border-[#D5DCD1] hover:border-[#24543D]/60'
                         : 'border-rose-200/90 hover:border-rose-300 bg-rose-50/10'
                     }`}
                   >
                     {/* Item Top Bar */}
-                    <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-slate-100">
+                    <div className="flex items-center justify-between pb-2.5 mb-2.5 border-b border-[#D5DCD1]/60">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-[13px] text-slate-800">
+                        <span className="font-bold text-[13px] text-[#202923]">
                           Photo #{sample.index + 1}
                         </span>
                         <span
@@ -895,7 +895,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
 
                       <button
                         onClick={() => handleSelectAndScrollToMap(sample.index)}
-                        className="text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 cursor-pointer"
+                        className="text-[11px] font-bold text-[#24543D] hover:text-[#1C4430] flex items-center gap-1 cursor-pointer"
                         title="Focus on scatter map"
                       >
                         <span>View on Map</span>
@@ -907,10 +907,10 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                     <div className="grid grid-cols-2 gap-3">
                       {/* Left: Uploaded Photo */}
                       <div className="space-y-1">
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block truncate">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-[#69746A] block truncate">
                           Your Real-World Photo
                         </span>
-                        <div className="aspect-square rounded-xl bg-slate-50 border border-slate-200/80 overflow-hidden flex items-center justify-center p-1.5 shadow-2xs">
+                        <div className="aspect-square rounded-xl bg-[#F7F5EE] border border-[#D5DCD1] overflow-hidden flex items-center justify-center p-1.5 shadow-2xs">
                           {sample.thumbnail_url ? (
                             <img
                               src={sample.thumbnail_url}
@@ -918,17 +918,17 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                               className="w-full h-full object-contain rounded-lg"
                             />
                           ) : (
-                            <Eye size={20} className="text-slate-300" />
+                            <Eye size={20} className="text-[#69746A]" />
                           )}
                         </div>
                       </div>
 
                       {/* Right: Closest Dataset Match */}
                       <div className="space-y-1">
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400 block truncate">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-[#69746A] block truncate">
                           Closest Dataset Match
                         </span>
-                        <div className="aspect-square rounded-xl bg-slate-50 border border-slate-200/80 overflow-hidden flex items-center justify-center p-1.5 shadow-2xs">
+                        <div className="aspect-square rounded-xl bg-[#F7F5EE] border border-[#D5DCD1] overflow-hidden flex items-center justify-center p-1.5 shadow-2xs">
                           {nearestMatch?.image_url ? (
                             <img
                               src={nearestMatch.image_url}
@@ -936,17 +936,17 @@ function DatasetDomainGapContent({ dataset, onBack }) {
                               className="w-full h-full object-contain rounded-lg"
                             />
                           ) : (
-                            <Eye size={20} className="text-slate-300" />
+                            <Eye size={20} className="text-[#69746A]" />
                           )}
                         </div>
                       </div>
                     </div>
 
                     {/* Proximity Stat Strip */}
-                    <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                      <div className="text-slate-600">
-                        Top similarity: <span className="font-bold text-slate-900">{formatPct(sample.nearest_similarity)}%</span>
-                        <span className="text-slate-400 ml-1.5 font-normal">
+                    <div className="mt-3 pt-2.5 border-t border-[#D5DCD1]/60 flex items-center justify-between text-[11px]">
+                      <div className="text-[#69746A]">
+                        Top similarity: <span className="font-bold text-[#202923]">{formatPct(sample.nearest_similarity)}%</span>
+                        <span className="text-[#69746A] ml-1.5 font-normal">
                           (cutoff: {formatPct(threshold)}%)
                         </span>
                       </div>
@@ -963,47 +963,47 @@ function DatasetDomainGapContent({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * SECTION 8: Actionable Next Steps
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-3">
-            <div className="flex items-center gap-2 text-slate-900 font-bold text-[14px]">
-              <Sparkles size={16} className="text-indigo-600" />
-              <span>Recommended Next Steps for Model Preparation</span>
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-xs space-y-3">
+            <div className="flex items-center gap-2 text-[#202923] font-bold text-[14px]">
+              <Sparkles size={16} className="text-[#24543D]" />
+              <span className="font-serif font-bold text-[15px]">Recommended Next Steps for Model Preparation</span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-[12px] text-slate-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 text-[12px] text-[#202923]">
               {counts.uncovered_samples > 0 ? (
                 <>
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
-                    <strong className="text-slate-900 block font-bold">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1">
+                    <strong className="text-[#202923] block font-bold">
                       1. Inspect Specific Feature Discrepancies
                     </strong>
-                    <p className="leading-relaxed text-slate-600">
+                    <p className="leading-relaxed text-[#69746A]">
                       Review the {counts.uncovered_samples} flagged images above to observe differences in lighting, camera angles, backgrounds, or subject variations compared to the closest training examples.
                     </p>
                   </div>
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
-                    <strong className="text-slate-900 block font-bold">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1">
+                    <strong className="text-[#202923] block font-bold">
                       2. Target Data Augmentation or Collection
                     </strong>
-                    <p className="leading-relaxed text-slate-600">
+                    <p className="leading-relaxed text-[#69746A]">
                       Consider augmenting the training dataset with targeted instances representing these specific real-world conditions prior to model deployment.
                     </p>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
-                    <strong className="text-slate-900 block font-bold">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1">
+                    <strong className="text-[#202923] block font-bold">
                       1. Confirm Split Balance & Label Quality
                     </strong>
-                    <p className="leading-relaxed text-slate-600">
+                    <p className="leading-relaxed text-[#69746A]">
                       While visual feature coverage is strong, ensure label balance, image resolution, and category distributions are verified using the Purpose Fitting tools.
                     </p>
                   </div>
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1">
-                    <strong className="text-slate-900 block font-bold">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1">
+                    <strong className="text-[#202923] block font-bold">
                       2. Proceed with Held-Out Test Evaluation
                     </strong>
-                    <p className="leading-relaxed text-slate-600">
+                    <p className="leading-relaxed text-[#69746A]">
                       Train a baseline model and evaluate predictions against an independent test split representative of your deployment setting.
                     </p>
                   </div>
@@ -1011,7 +1011,7 @@ function DatasetDomainGapContent({ dataset, onBack }) {
               )}
             </div>
 
-            <p className="text-[11px] text-slate-500 italic pt-1">
+            <p className="text-[11px] text-[#69746A] italic pt-1">
               Recommendations are evidence-based guidance derived from DINOv2 visual feature proximity. They do not guarantee downstream model performance.
             </p>
           </div>

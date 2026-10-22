@@ -31,10 +31,12 @@ import {
   Target,
   Compass,
   FileText,
+  TrendingUp,
 } from 'lucide-react';
 import DatasetPurposeFit from './DatasetPurposeFit';
 import DatasetDomainGap from './DatasetDomainGap';
 import DatasetCardView from './DatasetCardView';
+import DatasetLearningCurve from './DatasetLearningCurve';
 import {
   startProfiling,
   getProfilingStatus,
@@ -212,47 +214,47 @@ function HorizontalDistributionBar({ label, value, total, countLabel, color = 'b
 function KpiCard({ title, value, subtext, icon: Icon, tone = 'blue', onClick }) {
   const toneClasses = {
     blue: {
-      bg: 'bg-blue-50/70',
-      text: 'text-blue-600',
-      border: 'border-blue-100',
-      valColor: 'text-slate-800',
+      bg: 'bg-[#24543D]/10',
+      text: 'text-[#24543D]',
+      border: 'border-[#D5DCD1]',
+      valColor: 'text-[#202923]',
     },
     green: {
       bg: 'bg-emerald-50/70',
-      text: 'text-emerald-600',
-      border: 'border-emerald-100',
-      valColor: 'text-emerald-700',
+      text: 'text-emerald-700',
+      border: 'border-emerald-200',
+      valColor: 'text-emerald-800',
     },
     amber: {
       bg: 'bg-amber-50/70',
-      text: 'text-amber-600',
-      border: 'border-amber-100',
-      valColor: 'text-amber-700',
+      text: 'text-amber-700',
+      border: 'border-amber-200',
+      valColor: 'text-amber-800',
     },
     red: {
       bg: 'bg-rose-50/70',
-      text: 'text-rose-600',
-      border: 'border-rose-100',
-      valColor: 'text-rose-700',
+      text: 'text-rose-700',
+      border: 'border-rose-200',
+      valColor: 'text-rose-800',
     },
     purple: {
-      bg: 'bg-purple-50/70',
-      text: 'text-purple-600',
-      border: 'border-purple-100',
-      valColor: 'text-purple-700',
+      bg: 'bg-[#52725D]/10',
+      text: 'text-[#52725D]',
+      border: 'border-[#D5DCD1]',
+      valColor: 'text-[#202923]',
     },
   }[tone] || {
-    bg: 'bg-slate-50',
-    text: 'text-slate-600',
-    border: 'border-slate-100',
-    valColor: 'text-slate-800',
+    bg: 'bg-[#F7F5EE]',
+    text: 'text-[#69746A]',
+    border: 'border-[#D5DCD1]',
+    valColor: 'text-[#202923]',
   };
 
   return (
     <div
       onClick={onClick}
-      className={`bg-white border border-slate-200/80 rounded-2xl p-4.5 shadow-xs transition-all ${
-        onClick ? 'cursor-pointer hover:border-blue-300 hover:shadow-sm' : ''
+      className={`bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-4.5 shadow-xs transition-all ${
+        onClick ? 'cursor-pointer hover:border-[#24543D] hover:shadow-sm' : ''
       }`}
     >
       <div className="flex items-center justify-between gap-2">
@@ -414,6 +416,7 @@ export default function DatasetProfilingView({
   const [showPurposeFit, setShowPurposeFit] = useState(false);
   const [showDomainGap, setShowDomainGap] = useState(false);
   const [showDatasetCard, setShowDatasetCard] = useState(false);
+  const [showLearningCurve, setShowLearningCurve] = useState(false);
 
   // Sync active dataset if prop changes
   useEffect(() => {
@@ -552,6 +555,16 @@ export default function DatasetProfilingView({
     );
   }
 
+  // Render: Learning Curve View
+  if (showLearningCurve && activeDataset) {
+    return (
+      <DatasetLearningCurve
+        dataset={activeDataset}
+        onBack={() => setShowLearningCurve(false)}
+      />
+    );
+  }
+
   // Render: Dataset Card View
   if (showDatasetCard && activeDataset) {
     return (
@@ -565,12 +578,12 @@ export default function DatasetProfilingView({
   // Render: No dataset selected at all
   if (!activeDataset) {
     return (
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center max-w-xl mx-auto space-y-4 shadow-sm my-8">
-        <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-12 text-center max-w-xl mx-auto space-y-4 shadow-xs my-8">
+        <div className="w-14 h-14 rounded-2xl bg-[#24543D]/10 text-[#24543D] border border-[#D5DCD1] flex items-center justify-center mx-auto">
           <Database size={28} />
         </div>
-        <h3 className="font-extrabold text-[20px] text-slate-800">Select a Dataset to Profile</h3>
-        <p className="text-[13.5px] text-slate-500 max-w-md mx-auto">
+        <h3 className="font-serif font-bold text-[22px] text-[#202923]">Select a Dataset to Profile</h3>
+        <p className="text-[13.5px] text-[#69746A] max-w-md mx-auto">
           Choose an acquired dataset from your workspace to view complete image quality audits, format distributions, and visual variety.
         </p>
         {workspaceDatasets.length > 0 && (
@@ -582,7 +595,7 @@ export default function DatasetProfilingView({
                   setActiveDataset(ds);
                   if (onSelectDataset) onSelectDataset(ds);
                 }}
-                className="px-4 py-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 text-slate-700 hover:text-blue-600 rounded-xl text-[13px] font-semibold transition-all cursor-pointer"
+                className="px-4 py-2 bg-[#F7F5EE] hover:bg-[#E7EAE4] border border-[#D5DCD1] text-[#202923] hover:text-[#24543D] rounded-xl text-[13px] font-semibold transition-all cursor-pointer"
               >
                 {ds.dataset_name}
               </button>
@@ -630,42 +643,42 @@ export default function DatasetProfilingView({
       {/* -------------------------------------------------------------
        * Top Header Card
        * ------------------------------------------------------------- */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="p-2 rounded-xl text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer"
               title="Return to Workspace"
             >
               <ArrowLeft size={20} />
             </button>
           )}
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-md shadow-blue-500/15 shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-[#24543D] text-[#C7D86B] flex items-center justify-center shadow-md shadow-[#24543D]/15 shrink-0">
             <BarChart3 size={24} />
           </div>
           <div>
             <div className="flex items-center gap-2.5 flex-wrap">
-              <h2 className="font-extrabold text-[20px] text-slate-800 tracking-tight">
+              <h2 className="font-serif font-bold text-[22px] text-[#202923] tracking-tight">
                 {activeDataset.dataset_name}
               </h2>
-              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200/60">
+              <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                 {activeDataset.dataset_source_type || 'Custom'}
               </span>
               {status === 'completed' && (
-                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center gap-1">
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                   <CheckCircle2 size={12} />
                   <span>Profile Ready</span>
                 </span>
               )}
               {status === 'profiling' && (
-                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200 flex items-center gap-1 animate-pulse">
+                <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#24543D]/10 text-[#24543D] border border-[#24543D]/30 flex items-center gap-1 animate-pulse">
                   <Loader2 size={12} className="animate-spin" />
                   <span>Profiling in Progress</span>
                 </span>
               )}
             </div>
-            <p className="text-[12.5px] text-slate-500 font-medium mt-1">
+            <p className="text-[12.5px] text-[#69746A] font-medium mt-1">
               A comprehensive visual summary of contents, image health, and variety.
             </p>
           </div>
@@ -683,7 +696,7 @@ export default function DatasetProfilingView({
                   if (onSelectDataset) onSelectDataset(found);
                 }
               }}
-              className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-semibold text-slate-700 outline-none focus:border-blue-400"
+              className="px-3 py-2 bg-[#FCFAF6] border border-[#D5DCD1] rounded-xl text-[13px] font-semibold text-[#202923] outline-none focus:border-[#24543D]"
             >
               {workspaceDatasets.map((d) => (
                 <option key={d.dataset_id} value={d.dataset_id}>
@@ -696,7 +709,7 @@ export default function DatasetProfilingView({
           {/* Purpose Fitting CTA */}
           <button
             onClick={() => setShowPurposeFit(true)}
-            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-blue-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[13px] font-bold shadow-md shadow-[#24543D]/15 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Target size={15} />
             <span>Purpose Fitting</span>
@@ -705,16 +718,25 @@ export default function DatasetProfilingView({
           {/* Domain Gap Check CTA */}
           <button
             onClick={() => setShowDomainGap(true)}
-            className="px-4 py-2 bg-gradient-to-r from-teal-600 to-indigo-600 hover:from-teal-700 hover:to-indigo-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-teal-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[#52725D] hover:bg-[#435e4d] text-white rounded-xl text-[13px] font-bold shadow-md shadow-[#52725D]/15 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <Compass size={15} />
             <span>Domain Gap Check</span>
           </button>
 
+          {/* Learning Curve CTA */}
+          <button
+            onClick={() => setShowLearningCurve(true)}
+            className="px-4 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[13px] font-bold shadow-md shadow-[#24543D]/15 transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <TrendingUp size={15} />
+            <span>Learning Curve</span>
+          </button>
+
           {/* Dataset Card CTA */}
           <button
             onClick={() => setShowDatasetCard(true)}
-            className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-violet-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2 bg-[#FCFAF6] hover:bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1] rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <FileText size={15} />
             <span>Generate Dataset Card</span>
@@ -724,7 +746,7 @@ export default function DatasetProfilingView({
             <button
               onClick={() => handleStartProfiling(true)}
               disabled={isRefreshing}
-              className="px-4 py-2 bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-600 border border-slate-200 rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+              className="px-4 py-2 bg-[#FCFAF6] hover:bg-[#E7EAE4] text-[#202923] hover:text-[#24543D] border border-[#D5DCD1] rounded-xl text-[13px] font-bold transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
             >
               <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
               <span>Re-run Profile</span>
@@ -740,7 +762,7 @@ export default function DatasetProfilingView({
             <button
               onClick={() => handleStartProfiling(false)}
               disabled={isRefreshing}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-blue-600/15 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="px-4 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[13px] font-bold shadow-md shadow-[#24543D]/15 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               {isRefreshing ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}
               <span>Generate Profile</span>
@@ -753,23 +775,23 @@ export default function DatasetProfilingView({
        * In-Progress Pipeline UI
        * ------------------------------------------------------------- */}
       {status === 'profiling' && (
-        <div className="bg-white border border-blue-100 rounded-2xl p-6 shadow-sm space-y-4">
+        <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Loader2 size={18} className="animate-spin text-blue-600" />
-              <h3 className="font-extrabold text-[15px] text-slate-800">
+              <Loader2 size={18} className="animate-spin text-[#24543D]" />
+              <h3 className="font-serif font-bold text-[16px] text-[#202923]">
                 Profiling Dataset in Progress...
               </h3>
             </div>
-            <span className="text-[12px] font-bold text-blue-600 uppercase tracking-wider">
+            <span className="text-[12px] font-bold text-[#24543D] uppercase tracking-wider">
               {stage ? stage.replace(/_/g, ' ') : 'Processing'}
             </span>
           </div>
 
           {/* Progress Bar */}
-          <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
+          <div className="h-2.5 w-full bg-[#E7EAE4] rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-500 rounded-full"
+              className="h-full bg-gradient-to-r from-[#24543D] to-[#52725D] transition-all duration-500 rounded-full"
               style={{
                 width: `${Math.max(12, Math.min(95, ((currentStageIdx + 1) / PIPELINE_STAGES.length) * 100))}%`,
               }}
@@ -788,8 +810,8 @@ export default function DatasetProfilingView({
                     isDone
                       ? 'bg-emerald-50/60 border-emerald-200 text-emerald-700'
                       : isCurrent
-                      ? 'bg-blue-50 border-blue-300 text-blue-700 shadow-xs animate-pulse'
-                      : 'bg-slate-50/50 border-slate-200/60 text-slate-400'
+                      ? 'bg-[#24543D]/10 border-[#24543D]/30 text-[#24543D] shadow-xs animate-pulse'
+                      : 'bg-[#F7F5EE] border-[#D5DCD1] text-[#69746A]'
                   }`}
                 >
                   <p className="text-[10px] font-bold uppercase tracking-wider">Step {idx + 1}</p>
@@ -848,19 +870,19 @@ export default function DatasetProfilingView({
        * Not Yet Profiled Banner
        * ------------------------------------------------------------- */}
       {status === 'not_profiled' && (
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center max-w-2xl mx-auto space-y-4 shadow-sm my-6">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+        <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-12 text-center max-w-2xl mx-auto space-y-4 shadow-xs my-6">
+          <div className="w-14 h-14 rounded-2xl bg-[#24543D]/10 text-[#24543D] border border-[#D5DCD1] flex items-center justify-center mx-auto">
             <Sparkles size={28} />
           </div>
-          <h3 className="font-extrabold text-[20px] text-slate-800">
+          <h3 className="font-serif font-bold text-[22px] text-[#202923]">
             No Profile Generated Yet
           </h3>
-          <p className="text-[13.5px] text-slate-500 max-w-md mx-auto leading-relaxed">
+          <p className="text-[13.5px] text-[#69746A] max-w-md mx-auto leading-relaxed">
             Generate an analytics profile to evaluate image quality, check duplicate groups, discover visual variety, and inspect aspect ratios.
           </p>
           <button
             onClick={() => handleStartProfiling(false)}
-            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[13px] font-bold shadow-md shadow-blue-600/15 transition-all inline-flex items-center gap-2 cursor-pointer"
+            className="px-5 py-2.5 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[13px] font-bold shadow-md shadow-[#24543D]/15 transition-all inline-flex items-center gap-2 cursor-pointer"
           >
             <Sparkles size={16} />
             <span>Generate Dataset Profile</span>
@@ -877,16 +899,16 @@ export default function DatasetProfilingView({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-[18px] font-extrabold text-slate-900 tracking-tight">
+                <h3 className="text-[18px] font-serif font-bold text-[#202923] tracking-tight">
                   Dataset Overview
                 </h3>
-                <p className="text-[13px] text-slate-500">
+                <p className="text-[13px] text-[#69746A]">
                   A quick look at the contents and quality of your dataset.
                 </p>
               </div>
 
               {/* Quick Filter / Jump Pills */}
-              <div className="hidden lg:flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-[12px] font-bold">
+              <div className="hidden lg:flex items-center gap-1.5 bg-[#E7EAE4] p-1 rounded-xl text-[12px] font-bold border border-[#D5DCD1]">
                 {[
                   { id: 'all', label: 'All Sections' },
                   { id: 'overview', label: 'Images' },
@@ -900,8 +922,8 @@ export default function DatasetProfilingView({
                     onClick={() => setActiveSection(s.id)}
                     className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                       activeSection === s.id
-                        ? 'bg-white text-blue-600 shadow-2xs font-extrabold'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-[#FCFAF6] text-[#24543D] shadow-2xs font-extrabold border border-[#D5DCD1]'
+                        : 'text-[#69746A] hover:text-[#202923]'
                     }`}
                   >
                     {s.label}
@@ -975,14 +997,14 @@ export default function DatasetProfilingView({
 
           {/* SECTION 2: IMAGE OVERVIEW */}
           {(activeSection === 'all' || activeSection === 'overview') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex items-center justify-between border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <Layers size={18} className="text-blue-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <Layers size={18} className="text-[#24543D]" />
                     <span>Image Overview</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     Dimensions, framing aspect ratios, and format encodings across your dataset.
                   </p>
                 </div>
@@ -990,12 +1012,12 @@ export default function DatasetProfilingView({
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* 2A: Aspect Ratio Distribution */}
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-4">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Aspect Ratio Distribution
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Framing</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Framing</span>
                   </div>
                   <DonutChart
                     data={aspectData}
@@ -1007,12 +1029,12 @@ export default function DatasetProfilingView({
                 </div>
 
                 {/* 2B: File Format Distribution */}
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-3.5">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Image Formats
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Encoding</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Encoding</span>
                   </div>
                   <div className="space-y-2.5 pt-1">
                     {formatData.map((item) => (
@@ -1021,23 +1043,23 @@ export default function DatasetProfilingView({
                         label={item.label}
                         value={item.value}
                         total={basicStats?.total_images || 1}
-                        color="bg-indigo-500"
+                        color="bg-[#52725D]"
                       />
                     ))}
                   </div>
 
                   {/* Color Modes */}
-                  <div className="pt-3 border-t border-slate-200/60">
-                    <span className="text-[12px] font-bold text-slate-600 block mb-2">Color Modes</span>
+                  <div className="pt-3 border-t border-[#D5DCD1]/60">
+                    <span className="text-[12px] font-bold text-[#202923] block mb-2">Color Modes</span>
                     <div className="flex flex-wrap gap-2">
                       {Object.entries(basicStats?.color_modes || {}).map(([mode, count]) => (
                         <div
                           key={mode}
-                          className="px-2.5 py-1 bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-700 flex items-center gap-1.5 shadow-2xs"
+                          className="px-2.5 py-1 bg-[#FCFAF6] border border-[#D5DCD1] rounded-lg text-[12px] font-bold text-[#202923] flex items-center gap-1.5 shadow-2xs"
                         >
-                          <span className="w-2 h-2 rounded-full bg-purple-500" />
+                          <span className="w-2 h-2 rounded-full bg-[#24543D]" />
                           <span>{mode}</span>
-                          <span className="text-slate-400 font-normal">({count})</span>
+                          <span className="text-[#69746A] font-normal">({count})</span>
                         </div>
                       ))}
                     </div>
@@ -1045,42 +1067,42 @@ export default function DatasetProfilingView({
                 </div>
 
                 {/* 2C: Image Size & Dimensions Summary */}
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-3.5">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Image Dimensions
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Resolution</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Resolution</span>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2.5 pt-1">
-                    <div className="p-3 bg-white border border-slate-200/80 rounded-xl text-center shadow-2xs">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Average Width</p>
-                      <p className="text-[18px] font-extrabold text-slate-800 mt-0.5">
+                    <div className="p-3 bg-[#FCFAF6] border border-[#D5DCD1] rounded-xl text-center shadow-2xs">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Average Width</p>
+                      <p className="text-[18px] font-extrabold text-[#202923] mt-0.5">
                         {Math.round(basicStats?.dimensions?.width?.mean || 0)} px
                       </p>
-                      <p className="text-[10.5px] text-slate-400 mt-0.5">
+                      <p className="text-[10.5px] text-[#69746A] mt-0.5">
                         Range: {basicStats?.dimensions?.width?.min} – {basicStats?.dimensions?.width?.max}
                       </p>
                     </div>
 
-                    <div className="p-3 bg-white border border-slate-200/80 rounded-xl text-center shadow-2xs">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Average Height</p>
-                      <p className="text-[18px] font-extrabold text-slate-800 mt-0.5">
+                    <div className="p-3 bg-[#FCFAF6] border border-[#D5DCD1] rounded-xl text-center shadow-2xs">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Average Height</p>
+                      <p className="text-[18px] font-extrabold text-[#202923] mt-0.5">
                         {Math.round(basicStats?.dimensions?.height?.mean || 0)} px
                       </p>
-                      <p className="text-[10.5px] text-slate-400 mt-0.5">
+                      <p className="text-[10.5px] text-[#69746A] mt-0.5">
                         Range: {basicStats?.dimensions?.height?.min} – {basicStats?.dimensions?.height?.max}
                       </p>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-white border border-slate-200/80 rounded-xl flex items-center justify-between shadow-2xs text-[12px]">
+                  <div className="p-3 bg-[#FCFAF6] border border-[#D5DCD1] rounded-xl flex items-center justify-between shadow-2xs text-[12px]">
                     <div>
-                      <span className="font-bold text-slate-700 block">Average Resolution</span>
-                      <span className="text-slate-400 text-[11px]">Megapixels per sample</span>
+                      <span className="font-bold text-[#202923] block">Average Resolution</span>
+                      <span className="text-[#69746A] text-[11px]">Megapixels per sample</span>
                     </div>
-                    <span className="text-[15px] font-extrabold text-blue-600">
+                    <span className="text-[15px] font-extrabold text-[#24543D]">
                       {basicStats?.dimensions?.megapixels?.mean ? `${basicStats.dimensions.megapixels.mean} MP` : 'N/A'}
                     </span>
                   </div>
@@ -1091,14 +1113,14 @@ export default function DatasetProfilingView({
 
           {/* SECTION 3: IMAGE QUALITY */}
           {(activeSection === 'all' || activeSection === 'quality') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <ShieldCheck size={18} className="text-emerald-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <ShieldCheck size={18} className="text-emerald-700" />
                     <span>Image Quality</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     Evaluates clarity, sharpness, under-exposure, and over-exposure.
                   </p>
                 </div>
@@ -1106,8 +1128,8 @@ export default function DatasetProfilingView({
                 {/* Prominent Summary Banner */}
                 <div className={`px-3.5 py-1.5 rounded-xl border flex items-center gap-2 text-[12.5px] font-bold ${
                   qualityScorePct >= 90
-                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                    : 'bg-amber-50 text-amber-700 border-amber-200'
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                    : 'bg-amber-50 text-amber-800 border-amber-200'
                 }`}>
                   <CheckCircle2 size={15} />
                   <span>
@@ -1118,12 +1140,12 @@ export default function DatasetProfilingView({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* 3A: Quality Distribution Donut */}
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-4">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Quality Distribution
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Health Breakdown</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Health Breakdown</span>
                   </div>
                   <DonutChart
                     data={qualityDistributionData}
@@ -1135,12 +1157,12 @@ export default function DatasetProfilingView({
                 </div>
 
                 {/* 3B: Specific Quality Issues */}
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-3.5">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Detected Issues
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Attention Areas</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Attention Areas</span>
                   </div>
 
                   <div className="space-y-2.5 pt-1">
@@ -1171,20 +1193,20 @@ export default function DatasetProfilingView({
 
               {/* 3C: Inspect Flagged Quality Samples */}
               {quality?.flagged_samples && quality.flagged_samples.length > 0 && (
-                <div className="pt-2 border-t border-slate-100 space-y-3">
+                <div className="pt-2 border-t border-[#D5DCD1]/60 space-y-3">
                   <button
                     onClick={() => setShowFlaggedImages(!showFlaggedImages)}
-                    className="text-[13px] font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 cursor-pointer"
+                    className="text-[13px] font-bold text-[#24543D] hover:text-[#1C4430] flex items-center gap-1.5 cursor-pointer"
                   >
                     <span>{showFlaggedImages ? 'Hide' : 'Inspect'} Flagged Quality Samples ({quality.flagged_samples.length})</span>
                     {showFlaggedImages ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                   </button>
 
                   {showFlaggedImages && (
-                    <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100 text-[12px]">
+                    <div className="border border-[#D5DCD1] rounded-xl overflow-hidden divide-y divide-[#D5DCD1]/60 text-[12px]">
                       {quality.flagged_samples.map((item, idx) => (
-                        <div key={idx} className="p-3 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-2">
-                          <span className="font-mono text-slate-700 truncate max-w-md">{item.image_path}</span>
+                        <div key={idx} className="p-3 bg-[#FCFAF6] flex flex-col md:flex-row md:items-center justify-between gap-2">
+                          <span className="font-mono text-[#202923] truncate max-w-md">{item.image_path}</span>
                           <div className="flex items-center gap-2 flex-wrap">
                             {item.issues.map((iss, i) => (
                               <span key={i} className="px-2 py-0.5 bg-rose-50 text-rose-700 border border-rose-200 rounded-md font-bold text-[10px]">
@@ -1203,19 +1225,19 @@ export default function DatasetProfilingView({
 
           {/* SECTION 4: VISUAL VARIETY */}
           {(activeSection === 'all' || activeSection === 'variety') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <Activity size={18} className="text-purple-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <Activity size={18} className="text-[#52725D]" />
                     <span>Visual Variety</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     How visually varied is this dataset? Discovers natural visual groupings and standalone images.
                   </p>
                 </div>
 
-                <div className="p-2 bg-purple-50 border border-purple-100 rounded-xl text-[11.5px] font-bold text-purple-700 flex items-center gap-1.5">
+                <div className="p-2 bg-[#52725D]/10 border border-[#D5DCD1] rounded-xl text-[11.5px] font-bold text-[#24543D] flex items-center gap-1.5">
                   <Info size={14} />
                   <span>
                     Separation:{' '}
@@ -1232,53 +1254,53 @@ export default function DatasetProfilingView({
 
               {/* Visual Variety Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                  <p className="text-[10.5px] font-bold text-slate-400 uppercase">Visual Groups</p>
-                  <p className="text-[24px] font-extrabold text-purple-600 mt-1">
+                <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                  <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Visual Groups</p>
+                  <p className="text-[24px] font-extrabold text-[#24543D] mt-1">
                     {diversity?.cluster_count ?? 0}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Clusters of similar images</p>
+                  <p className="text-[11px] text-[#69746A] mt-0.5">Clusters of similar images</p>
                 </div>
 
-                <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                  <p className="text-[10.5px] font-bold text-slate-400 uppercase">Individual Images</p>
-                  <p className="text-[24px] font-extrabold text-slate-800 mt-1">
+                <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                  <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Individual Images</p>
+                  <p className="text-[24px] font-extrabold text-[#202923] mt-1">
                     {diversity?.noise_count ?? 0}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-[#69746A] mt-0.5">
                     {diversity?.noise_ratio ? `${(diversity.noise_ratio * 100).toFixed(1)}% isolated images` : '0%'}
                   </p>
                 </div>
 
-                <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                  <p className="text-[10.5px] font-bold text-slate-400 uppercase">Separation Score</p>
-                  <p className="text-[24px] font-extrabold text-slate-800 mt-1">
+                <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                  <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Separation Score</p>
+                  <p className="text-[24px] font-extrabold text-[#202923] mt-1">
                     {diversity?.silhouette_score !== null && diversity?.silhouette_score !== undefined
                       ? diversity.silhouette_score
                       : 'N/A'}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">
+                  <p className="text-[11px] text-[#69746A] mt-0.5">
                     {diversity?.silhouette_score ? 'Cluster separation metric' : 'Insufficient clusters'}
                   </p>
                 </div>
 
-                <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                  <p className="text-[10.5px] font-bold text-slate-400 uppercase">Images Analyzed</p>
-                  <p className="text-[24px] font-extrabold text-slate-800 mt-1">
+                <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                  <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Images Analyzed</p>
+                  <p className="text-[24px] font-extrabold text-[#202923] mt-1">
                     {diversity?.total_samples ?? 0}
                   </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Processed for visual grouping</p>
+                  <p className="text-[11px] text-[#69746A] mt-0.5">Processed for visual grouping</p>
                 </div>
               </div>
 
               {/* Visual Group Size Chart */}
               {diversity?.cluster_size_distribution && diversity.cluster_size_distribution.length > 0 && (
-                <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-3">
+                <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[13px] font-extrabold text-slate-800">
+                    <span className="text-[13px] font-extrabold text-[#202923]">
                       Visual Group Sizes
                     </span>
-                    <span className="text-[11px] font-bold text-slate-400">Images per Group</span>
+                    <span className="text-[11px] font-bold text-[#69746A]">Images per Group</span>
                   </div>
 
                   <div className="space-y-2 pt-1">
@@ -1288,12 +1310,12 @@ export default function DatasetProfilingView({
                       return (
                         <div key={idx} className="space-y-1">
                           <div className="flex justify-between items-center text-[12px]">
-                            <span className="font-bold text-slate-700">Group {idx + 1}</span>
-                            <span className="font-extrabold text-purple-700">{size} images</span>
+                            <span className="font-bold text-[#202923]">Group {idx + 1}</span>
+                            <span className="font-extrabold text-[#24543D]">{size} images</span>
                           </div>
-                          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-2 w-full bg-[#E7EAE4] rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-purple-500 rounded-full transition-all duration-500"
+                              className="h-full bg-[#24543D] rounded-full transition-all duration-500"
                               style={{ width: `${pct}%` }}
                             />
                           </div>
@@ -1305,8 +1327,8 @@ export default function DatasetProfilingView({
               )}
 
               {/* Explainer Note */}
-              <div className="p-3.5 bg-blue-50/50 border border-blue-100 rounded-xl text-[12px] text-blue-800 flex items-start gap-2">
-                <Info size={16} className="shrink-0 mt-0.5 text-blue-600" />
+              <div className="p-3.5 bg-[#24543D]/5 border border-[#D5DCD1] rounded-xl text-[12px] text-[#202923] flex items-start gap-2">
+                <Info size={16} className="shrink-0 mt-0.5 text-[#24543D]" />
                 <span>
                   Images are grouped according to visual similarity. Images that do not closely resemble other images appear as individual images.
                 </span>
@@ -1316,14 +1338,14 @@ export default function DatasetProfilingView({
 
           {/* SECTION 5: DATASET CATEGORIES */}
           {(activeSection === 'all' || activeSection === 'categories') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex items-center justify-between border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <Tag size={18} className="text-emerald-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <Tag size={18} className="text-[#24543D]" />
                     <span>Dataset Categories</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     Does the dataset contain a balanced representation of its categories?
                   </p>
                 </div>
@@ -1331,8 +1353,8 @@ export default function DatasetProfilingView({
                   <span
                     className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
                       labels.metrics?.balance_indicator === 'well_balanced'
-                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-amber-50 text-amber-800 border border-amber-200'
                     }`}
                   >
                     {labels.metrics?.balance_indicator?.replace(/_/g, ' ') || 'Assessed'}
@@ -1343,24 +1365,24 @@ export default function DatasetProfilingView({
               {labels?.status === 'available' ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Number of Classes</p>
-                      <p className="text-[20px] font-extrabold text-slate-800 mt-1">{labels.num_classes}</p>
+                    <div className="p-3 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl text-center">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Number of Classes</p>
+                      <p className="text-[20px] font-extrabold text-[#202923] mt-1">{labels.num_classes}</p>
                     </div>
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Max/Min Class Ratio</p>
-                      <p className="text-[20px] font-extrabold text-slate-800 mt-1">
+                    <div className="p-3 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl text-center">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Max/Min Class Ratio</p>
+                      <p className="text-[20px] font-extrabold text-[#202923] mt-1">
                         {labels.metrics?.max_to_min_ratio ?? 1.0}x
                       </p>
                     </div>
-                    <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl text-center">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Labeled Images</p>
-                      <p className="text-[20px] font-extrabold text-slate-800 mt-1">{labels.total_labeled_images}</p>
+                    <div className="p-3 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl text-center">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Labeled Images</p>
+                      <p className="text-[20px] font-extrabold text-[#202923] mt-1">{labels.total_labeled_images}</p>
                     </div>
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <p className="text-[12.5px] font-bold text-slate-700">Category Proportions</p>
+                    <p className="text-[12.5px] font-bold text-[#202923]">Category Proportions</p>
                     <div className="space-y-2.5">
                       {Object.entries(labels.class_percentages || {}).map(([cls, pct]) => {
                         const count = labels.class_counts[cls];
@@ -1370,7 +1392,7 @@ export default function DatasetProfilingView({
                             label={cls}
                             value={count}
                             total={labels.total_labeled_images || 1}
-                            color="bg-emerald-500"
+                            color="bg-[#24543D]"
                           />
                         );
                       })}
@@ -1378,13 +1400,13 @@ export default function DatasetProfilingView({
                   </div>
                 </div>
               ) : (
-                <div className="p-8 text-center bg-slate-50/70 border border-slate-200/60 rounded-xl space-y-2">
-                  <Tag size={24} className="text-slate-400 mx-auto" />
-                  <p className="font-extrabold text-[14px] text-slate-700">
+                <div className="p-8 text-center bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-2">
+                  <Tag size={24} className="text-[#69746A] mx-auto" />
+                  <p className="font-serif font-bold text-[15px] text-[#202923]">
                     Category information is not available for this dataset.
                   </p>
-                  <p className="text-[12.5px] text-slate-500 max-w-md mx-auto">
-                    Categories are automatically extracted when image files are organized in labeled subfolders (e.g., <code className="font-mono text-slate-600">cats/img1.jpg</code>).
+                  <p className="text-[12.5px] text-[#69746A] max-w-md mx-auto">
+                    Categories are automatically extracted when image files are organized in labeled subfolders (e.g., <code className="font-mono text-[#24543D]">cats/img1.jpg</code>).
                   </p>
                 </div>
               )}
@@ -1393,14 +1415,14 @@ export default function DatasetProfilingView({
 
           {/* SECTION 6: DUPLICATE FINDINGS */}
           {(activeSection === 'all' || activeSection === 'duplicates') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <Copy size={18} className="text-blue-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <Copy size={18} className="text-[#24543D]" />
                     <span>Duplicate Findings</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     Are there repeated or highly similar images in this dataset?
                   </p>
                 </div>
@@ -1408,7 +1430,7 @@ export default function DatasetProfilingView({
                 {onNavigateToDuplicates && duplicates?.status === 'completed' && (
                   <button
                     onClick={onNavigateToDuplicates}
-                    className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-[12.5px] font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
+                    className="px-3.5 py-1.5 bg-[#24543D]/10 hover:bg-[#24543D]/20 text-[#24543D] border border-[#D5DCD1] rounded-xl text-[12.5px] font-bold transition-all flex items-center gap-1.5 cursor-pointer self-start sm:self-auto"
                   >
                     <Eye size={14} />
                     <span>Open Detailed Duplicates Dashboard</span>
@@ -1420,47 +1442,47 @@ export default function DatasetProfilingView({
                 <div className="space-y-6">
                   {/* Duplicate KPI Cards */}
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                      <p className="text-[10.5px] font-bold text-slate-400 uppercase">Duplicate Groups</p>
-                      <p className="text-[24px] font-extrabold text-slate-800 mt-1">
+                    <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                      <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Duplicate Groups</p>
+                      <p className="text-[24px] font-extrabold text-[#202923] mt-1">
                         {duplicates.duplicate_groups_count}
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">Discovered clusters</p>
+                      <p className="text-[11px] text-[#69746A] mt-0.5">Discovered clusters</p>
                     </div>
 
-                    <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                      <p className="text-[10.5px] font-bold text-slate-400 uppercase">Images Affected</p>
-                      <p className="text-[24px] font-extrabold text-slate-800 mt-1">
+                    <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                      <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Images Affected</p>
+                      <p className="text-[24px] font-extrabold text-[#202923] mt-1">
                         {duplicates.affected_images_count}
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">Redundant samples</p>
+                      <p className="text-[11px] text-[#69746A] mt-0.5">Redundant samples</p>
                     </div>
 
-                    <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                      <p className="text-[10.5px] font-bold text-slate-400 uppercase">Dataset Share</p>
-                      <p className="text-[24px] font-extrabold text-amber-600 mt-1">
+                    <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                      <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Dataset Share</p>
+                      <p className="text-[24px] font-extrabold text-amber-700 mt-1">
                         {((duplicates.duplicate_ratio || 0) * 100).toFixed(1)}%
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">Of total volume</p>
+                      <p className="text-[11px] text-[#69746A] mt-0.5">Of total volume</p>
                     </div>
 
-                    <div className="p-4 bg-slate-50 border border-slate-200/70 rounded-xl">
-                      <p className="text-[10.5px] font-bold text-slate-400 uppercase">Match Types</p>
-                      <p className="text-[18px] font-extrabold text-slate-800 mt-1">
+                    <div className="p-4 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl">
+                      <p className="text-[10.5px] font-bold text-[#69746A] uppercase">Match Types</p>
+                      <p className="text-[18px] font-extrabold text-[#202923] mt-1">
                         {duplicates.exact_duplicate_groups} exact / {duplicates.near_duplicate_groups} similar
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">Exact matches vs Near copies</p>
+                      <p className="text-[11px] text-[#69746A] mt-0.5">Exact matches vs Near copies</p>
                     </div>
                   </div>
 
                   {/* Visual Split: Unique vs Duplicates */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-4">
+                    <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-[13px] font-extrabold text-slate-800">
+                        <span className="text-[13px] font-extrabold text-[#202923]">
                           Unique vs Duplicate Volume
                         </span>
-                        <span className="text-[11px] font-bold text-slate-400">Share</span>
+                        <span className="text-[11px] font-bold text-[#69746A]">Share</span>
                       </div>
                       <DonutChart
                         data={duplicateSplitData}
@@ -1471,12 +1493,12 @@ export default function DatasetProfilingView({
                       />
                     </div>
 
-                    <div className="p-4.5 bg-slate-50/50 border border-slate-200/70 rounded-xl space-y-3.5">
+                    <div className="p-4.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3.5">
                       <div className="flex items-center justify-between">
-                        <span className="text-[13px] font-extrabold text-slate-800">
+                        <span className="text-[13px] font-extrabold text-[#202923]">
                           Duplicate Classification
                         </span>
-                        <span className="text-[11px] font-bold text-slate-400">Method</span>
+                        <span className="text-[11px] font-bold text-[#69746A]">Method</span>
                       </div>
                       <div className="space-y-3 pt-1">
                         <HorizontalDistributionBar
@@ -1498,12 +1520,12 @@ export default function DatasetProfilingView({
                   </div>
                 </div>
               ) : (
-                <div className="p-8 text-center bg-slate-50 border border-slate-100 rounded-xl space-y-3">
-                  <PieChart size={24} className="text-slate-400 mx-auto" />
-                  <p className="font-extrabold text-[14px] text-slate-700">
+                <div className="p-8 text-center bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-3">
+                  <PieChart size={24} className="text-[#69746A] mx-auto" />
+                  <p className="font-serif font-bold text-[15px] text-[#202923]">
                     Duplicate detection has not yet been executed for this dataset.
                   </p>
-                  <p className="text-[12.5px] text-slate-500 max-w-md mx-auto">
+                  <p className="text-[12.5px] text-[#69746A] max-w-md mx-auto">
                     Execute the duplicate detection pipeline from your workspace to isolate exact SHA-256 and near-duplicate images.
                   </p>
                 </div>
@@ -1513,19 +1535,19 @@ export default function DatasetProfilingView({
 
           {/* SECTION 7: DATASET INSIGHTS */}
           {(activeSection === 'all' || activeSection === 'insights') && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-5">
+              <div className="flex items-center justify-between border-b border-[#D5DCD1]/60 pb-3">
                 <div>
-                  <h4 className="text-[16px] font-extrabold text-slate-800 flex items-center gap-2">
-                    <Sparkles size={18} className="text-indigo-600" />
+                  <h4 className="text-[16px] font-serif font-bold text-[#202923] flex items-center gap-2">
+                    <Sparkles size={18} className="text-[#24543D]" />
                     <span>Dataset Insights</span>
                   </h4>
-                  <p className="text-[12.5px] text-slate-500">
+                  <p className="text-[12.5px] text-[#69746A]">
                     Automated natural-language evaluation derived from your profiling results.
                   </p>
                 </div>
                 {metadata?.status === 'completed' && (
-                  <span className="px-3 py-1 bg-purple-50 text-purple-700 border border-purple-200 rounded-full text-[11px] font-bold flex items-center gap-1">
+                  <span className="px-3 py-1 bg-[#24543D]/10 text-[#24543D] border border-[#D5DCD1] rounded-full text-[11px] font-bold flex items-center gap-1">
                     <Zap size={12} />
                     <span>Documentation Enriched</span>
                   </span>
@@ -1542,7 +1564,7 @@ export default function DatasetProfilingView({
                         ? 'bg-emerald-50/50 border-emerald-200 text-emerald-900'
                         : ins.type === 'warning'
                         ? 'bg-amber-50/50 border-amber-200 text-amber-900'
-                        : 'bg-blue-50/50 border-blue-200 text-blue-900'
+                        : 'bg-[#24543D]/5 border-[#D5DCD1] text-[#202923]'
                     }`}
                   >
                     <div className="shrink-0 mt-0.5">
@@ -1551,7 +1573,7 @@ export default function DatasetProfilingView({
                       ) : ins.type === 'warning' ? (
                         <AlertTriangle size={16} className="text-amber-600" />
                       ) : (
-                        <Info size={16} className="text-blue-600" />
+                        <Info size={16} className="text-[#24543D]" />
                       )}
                     </div>
                     <p className="text-[13px] font-medium leading-relaxed">{ins.text}</p>
@@ -1561,27 +1583,27 @@ export default function DatasetProfilingView({
 
               {/* Documentation Metadata (Stated Purpose / Collection Method / Limitations) */}
               {metadata?.status === 'completed' && (
-                <div className="pt-4 border-t border-slate-100">
-                  <h5 className="text-[13px] font-bold text-slate-800 mb-3 flex items-center gap-1.5">
-                    <Sliders size={14} className="text-purple-600" />
+                <div className="pt-4 border-t border-[#D5DCD1]/60">
+                  <h5 className="text-[13px] font-bold text-[#202923] mb-3 flex items-center gap-1.5">
+                    <Sliders size={14} className="text-[#24543D]" />
                     <span>Documentation Findings</span>
                   </h5>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-3.5 bg-slate-50 border border-slate-200/70 rounded-xl space-y-1">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Stated Purpose</p>
-                      <p className="text-[12.5px] text-slate-700 font-medium leading-relaxed">
+                    <div className="p-3.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-1">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Stated Purpose</p>
+                      <p className="text-[12.5px] text-[#202923] font-medium leading-relaxed">
                         {metadata.stated_purpose || 'No purpose stated.'}
                       </p>
                     </div>
-                    <div className="p-3.5 bg-slate-50 border border-slate-200/70 rounded-xl space-y-1">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Collection Method</p>
-                      <p className="text-[12.5px] text-slate-700 font-medium leading-relaxed">
+                    <div className="p-3.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-1">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Collection Method</p>
+                      <p className="text-[12.5px] text-[#202923] font-medium leading-relaxed">
                         {metadata.collection_method || 'No method documented.'}
                       </p>
                     </div>
-                    <div className="p-3.5 bg-slate-50 border border-slate-200/70 rounded-xl space-y-1">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase">Known Limitations</p>
-                      <p className="text-[12.5px] text-slate-700 font-medium leading-relaxed">
+                    <div className="p-3.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl space-y-1">
+                      <p className="text-[10px] font-bold text-[#69746A] uppercase">Known Limitations</p>
+                      <p className="text-[12.5px] text-[#202923] font-medium leading-relaxed">
                         {metadata.known_limitations || 'None reported.'}
                       </p>
                     </div>
@@ -1594,51 +1616,51 @@ export default function DatasetProfilingView({
           {/* -------------------------------------------------------------
            * Collapsible Technical Details (For ML Researchers)
            * ------------------------------------------------------------- */}
-          <div className="border border-slate-200/70 rounded-2xl bg-slate-50/50 overflow-hidden">
+          <div className="border border-[#D5DCD1] rounded-2xl bg-[#FCFAF6] overflow-hidden">
             <button
               onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-              className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-slate-100/60 transition-colors cursor-pointer"
+              className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-[#E7EAE4]/50 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-2">
-                <Sliders size={16} className="text-slate-500" />
-                <span className="font-extrabold text-[13.5px] text-slate-700">
+                <Sliders size={16} className="text-[#69746A]" />
+                <span className="font-serif font-bold text-[14px] text-[#202923]">
                   Technical Details & Calculation Methodology
                 </span>
-                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-200/70 text-slate-600">
+                <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                   Advanced
                 </span>
               </div>
-              <div className="text-slate-400">
+              <div className="text-[#69746A]">
                 {showTechnicalDetails ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
               </div>
             </button>
 
             {showTechnicalDetails && (
-              <div className="px-6 pb-6 pt-2 border-t border-slate-200/60 space-y-4 text-[12px] bg-white">
+              <div className="px-6 pb-6 pt-2 border-t border-[#D5DCD1] space-y-4 text-[12px] bg-[#FCFAF6]">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1.5">
-                    <p className="font-bold text-slate-800">Quality Measurement</p>
-                    <p className="text-slate-500 leading-relaxed">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1.5">
+                    <p className="font-bold text-[#202923]">Quality Measurement</p>
+                    <p className="text-[#69746A] leading-relaxed">
                       Blur is detected via discrete 3×3 Laplacian kernel variance (threshold: &lt; {quality?.thresholds?.blur_laplacian_threshold || 100}). Mean sharpness: {quality?.laplacian_variance?.mean || 0}.
                     </p>
                   </div>
 
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1.5">
-                    <p className="font-bold text-slate-800">Visual Clustering</p>
-                    <p className="text-slate-500 leading-relaxed">
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1.5">
+                    <p className="font-bold text-[#202923]">Visual Clustering</p>
+                    <p className="text-[#69746A] leading-relaxed">
                       768-dimensional L2-normalized DINOv2 representations evaluated with DBSCAN (eps: {diversity?.parameters?.eps || 0.35}, min_samples: {diversity?.parameters?.min_samples || 2}, cosine distance).
                     </p>
                   </div>
 
-                  <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/70 space-y-1.5">
-                    <p className="font-bold text-slate-800">Storage & Checksum</p>
-                    <p className="text-slate-500 leading-relaxed">
-                      Deterministic SHA-256 over MinIO object keys and sizes. Vector embeddings cached in ChromaDB collection <code className="font-mono text-purple-600 font-bold">profiling_embeddings</code>.
+                  <div className="p-3.5 bg-[#F7F5EE] rounded-xl border border-[#D5DCD1] space-y-1.5">
+                    <p className="font-bold text-[#202923]">Storage & Checksum</p>
+                    <p className="text-[#69746A] leading-relaxed">
+                      Deterministic SHA-256 over MinIO object keys and sizes. Vector embeddings cached in ChromaDB collection <code className="font-mono text-[#24543D] font-bold">profiling_embeddings</code>.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center justify-between text-[11.5px] text-slate-400 pt-2 border-t border-slate-100">
+                <div className="flex flex-wrap items-center justify-between text-[11.5px] text-[#69746A] pt-2 border-t border-[#D5DCD1]">
                   <span>Storage: {activeDataset.dataset_storage_path || 'N/A'}</span>
                   <span>Checksum: {datasetMeta?.file_list_checksum || 'N/A'}</span>
                   <span>Engine: Python 3.12 + SQLModel + ChromaDB</span>

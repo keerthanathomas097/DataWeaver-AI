@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
           </div>
           <Link
             to="/login"
-            className="block w-full px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 text-center"
+            className="block w-full px-4 py-2.5 bg-[#24543D] text-[#F7F5EE] rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 text-center shadow-sm shadow-[#24543D]/20 cursor-pointer"
           >
             Back to login
           </Link>
@@ -53,14 +53,14 @@ export default function ForgotPasswordPage() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="flex items-start gap-2.5 p-3.5 bg-rose-50 border border-rose-100 rounded-xl text-rose-700 text-[13px]">
+            <div className="flex items-start gap-2.5 p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-[13px]">
               <AlertCircle size={16} className="shrink-0 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-[13px] font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="email" className="block text-[13px] font-semibold text-[#202923] mb-1.5">
               Email address
             </label>
             <input
@@ -71,14 +71,14 @@ export default function ForgotPasswordPage() {
               placeholder="you@research.edu"
               required
               autoComplete="email"
-              className="w-full px-4 py-2.5 text-[14px] bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all placeholder:text-slate-400"
+              className="w-full px-4 py-2.5 text-[14px] bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl focus:outline-none focus:border-[#24543D] focus:bg-white transition-all placeholder:text-[#69746A] text-[#202923]"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-blue-600/20"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-[#F7F5EE] rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-[#24543D]/20 cursor-pointer"
           >
             {loading ? (
               <>
@@ -90,9 +90,9 @@ export default function ForgotPasswordPage() {
             )}
           </button>
 
-          <p className="text-center text-[14px] text-slate-500 pt-1">
+          <p className="text-center text-[14px] text-[#69746A] pt-1">
             Remembered your password?{' '}
-            <Link to="/login" className="font-semibold text-blue-600 hover:text-blue-700 transition-colors">
+            <Link to="/login" className="font-semibold text-[#24543D] hover:text-[#1C4430] transition-colors">
               Back to login
             </Link>
           </p>

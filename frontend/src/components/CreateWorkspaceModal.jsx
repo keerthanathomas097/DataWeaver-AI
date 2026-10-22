@@ -98,10 +98,10 @@ export default function CreateWorkspaceModal({ isOpen, onClose, onCreate }) {
       />
 
       {/* Modal Container */}
-      <div className="bg-white border border-slate-100/60 rounded-2xl w-full max-w-md p-6 shadow-2xl relative z-10 animate-in zoom-in-95 duration-150">
+      <div className="bg-white border border-[#D5DCD1] rounded-2xl w-full max-w-md p-6 shadow-2xl relative z-10 animate-in zoom-in-95 duration-150">
         <button 
           onClick={onClose}
-          className="absolute top-4.5 right-4.5 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-colors"
+          className="absolute top-4.5 right-4.5 p-1.5 rounded-lg text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4]/60 transition-colors cursor-pointer"
         >
           <X size={18} />
         </button>
@@ -118,10 +118,10 @@ export default function CreateWorkspaceModal({ isOpen, onClose, onCreate }) {
             )}
           </div>
           <div>
-            <h2 className="font-bold text-slate-800 text-[17px]">
+            <h2 className="font-serif font-bold text-[#202923] text-[18px]">
               Create New Workspace
             </h2>
-            <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+            <p className="text-[11px] text-[#69746A] font-medium mt-0.5">
               Create a workspace to organize and manage your dataset engineering project.
             </p>
           </div>
@@ -250,14 +250,14 @@ export default function CreateWorkspaceModal({ isOpen, onClose, onCreate }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-slate-100 rounded-xl text-[14px] font-semibold text-slate-600 hover:bg-slate-50 transition-colors"
+              className="flex-1 px-4 py-2.5 border border-[#D5DCD1] rounded-xl text-[14px] font-semibold text-[#52725D] hover:bg-[#E7EAE4]/60 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[14px] font-semibold shadow-md shadow-blue-600/10 hover:shadow-lg transition-all flex items-center justify-center gap-1.5 disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 bg-[#24543D] hover:bg-[#1C4430] text-[#F7F5EE] rounded-xl text-[14px] font-semibold shadow-sm shadow-[#24543D]/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

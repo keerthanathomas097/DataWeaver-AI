@@ -998,7 +998,7 @@ export default function App() {
   const currentWorkspaceObj = workspaces.find(w => w.id === activeWorkspace) || workspaces[0];
 
   return (
-    <div className="flex bg-slate-50/50 min-h-screen text-slate-800 antialiased font-sans">
+    <div className="flex bg-[#F7F5EE] min-h-screen text-[#202923] antialiased font-sans">
       {/* Sidebar Navigation */}
       <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} isAdmin={authUser?.is_admin} />
 
@@ -1029,86 +1029,86 @@ export default function App() {
             <div className="space-y-8 animate-in fade-in-50 duration-200">
               {/* Welcome banner */}
               <div>
-                <h2 className="font-extrabold text-[24px] text-slate-900 tracking-tight">
+                <h2 className="font-serif font-bold text-[26px] text-[#202923] tracking-tight">
                   Welcome back, {displayUser.name.split(' ')[0]}.
                 </h2>
-                <p className="text-[14px] text-slate-500 font-medium mt-1">
+                <p className="text-[14px] text-[#69746A] font-medium mt-1">
                   Continue building and engineering high-quality image datasets for your next AI project.
                 </p>
               </div>
 
               {/* KPI metrics */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     Active Workspaces
                   </p>
-                  <p className="text-[26px] font-extrabold text-slate-800 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#202923] mt-2 leading-none">
                     {stats.activeWorkspaces.value}
                   </p>
-                  <p className="text-[11px] font-semibold text-emerald-600 mt-2.5 flex items-center gap-1">
+                  <p className="text-[11px] font-semibold text-[#24543D] mt-2.5 flex items-center gap-1">
                     <TrendingUp size={12} />
                     <span>{stats.activeWorkspaces.change}</span>
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     Datasets
                   </p>
-                  <p className="text-[26px] font-extrabold text-slate-800 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#202923] mt-2 leading-none">
                     {stats.datasets.value}
                   </p>
-                  <p className="text-[11px] text-slate-400 font-medium mt-3">
+                  <p className="text-[11px] text-[#69746A] font-medium mt-3">
                     Connected repositories
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     Images Managed
                   </p>
-                  <p className="text-[26px] font-extrabold text-slate-800 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#202923] mt-2 leading-none">
                     {stats.imagesManaged.value}
                   </p>
-                  <p className="text-[11px] text-slate-400 font-medium mt-3">
+                  <p className="text-[11px] text-[#69746A] font-medium mt-3">
                     Unstructured files
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     Storage
                   </p>
-                  <p className="text-[26px] font-extrabold text-slate-800 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#202923] mt-2 leading-none">
                     {stats.storage.value}
                   </p>
-                  <p className="text-[11px] text-slate-400 font-medium mt-3 text-slate-500 font-semibold">
+                  <p className="text-[11px] text-[#69746A] font-medium mt-3 font-semibold">
                     {stats.storage.percentUsed}% consumed
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     Merges
                   </p>
-                  <p className="text-[26px] font-extrabold text-slate-800 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#202923] mt-2 leading-none">
                     {stats.merges.value}
                   </p>
-                  <p className="text-[11px] text-slate-400 font-medium mt-3">
+                  <p className="text-[11px] text-[#69746A] font-medium mt-3">
                     Unified outputs
                   </p>
                 </div>
 
-                <div className="bg-white border border-slate-100/80 rounded-2xl p-4.5 hover:shadow-md transition-all duration-200">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                <div className="bg-white border border-[#D5DCD1] rounded-2xl p-4.5 hover:shadow-xs transition-all duration-200">
+                  <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                     AI Suggestions
                   </p>
-                  <p className="text-[26px] font-extrabold text-purple-600 mt-2 leading-none">
+                  <p className="text-[26px] font-extrabold text-[#24543D] mt-2 leading-none">
                     {stats.aiSuggestions.value}
                   </p>
-                  <p className="text-[11px] font-semibold text-purple-500 mt-2.5 flex items-center gap-1">
-                    <Zap size={12} className="fill-purple-500" />
+                  <p className="text-[11px] font-semibold text-[#52725D] mt-2.5 flex items-center gap-1">
+                    <Zap size={12} className="fill-[#C7D86B] text-[#52725D]" />
                     <span>{stats.aiSuggestions.actionable} actionable</span>
                   </p>
                 </div>
@@ -1121,7 +1121,7 @@ export default function App() {
                 <div className="lg:col-span-2 space-y-8">
                   {/* Quick actions panel */}
                   <div className="space-y-4">
-                    <h3 className="text-[12px] font-extrabold text-slate-400 uppercase tracking-widest">
+                    <h3 className="text-[12px] font-extrabold text-[#69746A] uppercase tracking-widest">
                       Quick Actions
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4.5">
@@ -1130,7 +1130,7 @@ export default function App() {
                           setActiveWorkspace(workspaces[0]?.id);
                           setActiveTab('workspace');
                         }}
-                        className="bg-gradient-to-tr from-blue-600 via-blue-600 to-indigo-600 text-white rounded-2xl p-5 shadow-lg shadow-blue-600/10 hover:shadow-xl hover:shadow-blue-600/15 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group relative overflow-hidden"
+                        className="bg-[#24543D] text-[#F7F5EE] border border-[#24543D] rounded-2xl p-5 shadow-sm shadow-[#24543D]/20 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group relative overflow-hidden"
                       >
                         <div className="absolute right-[-10px] bottom-[-10px] opacity-10 group-hover:scale-110 transition-transform duration-300">
                           <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1138,14 +1138,14 @@ export default function App() {
                             <circle cx="12" cy="12" r="3" />
                           </svg>
                         </div>
-                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                          <Play size={18} className="fill-white stroke-none" />
+                        <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0">
+                          <Play size={18} className="fill-[#F7F5EE] stroke-none" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[15px] leading-tight">
+                          <h4 className="font-serif font-bold text-[16px] leading-tight text-[#F7F5EE]">
                             Continue Workspace
                           </h4>
-                          <p className="text-[12px] text-blue-100 font-medium mt-1">
+                          <p className="text-[12px] text-[#C7D86B] font-medium mt-1">
                             {workspaces[0]?.name || 'Brain Tumor MRI Research'}
                           </p>
                         </div>
@@ -1153,16 +1153,16 @@ export default function App() {
 
                       <div 
                         onClick={() => setActiveTab('discover')}
-                        className="bg-white border border-slate-100/80 hover:border-slate-200 rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group"
+                        className="bg-white border border-[#D5DCD1] hover:border-[#24543D]/50 rounded-2xl p-5 hover:shadow-xs hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shrink-0">
                           <Compass size={20} className="group-hover:rotate-12 transition-transform" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[15px] text-slate-800 leading-tight">
+                          <h4 className="font-bold text-[15px] text-[#202923] leading-tight">
                             Discover Dataset
                           </h4>
-                          <p className="text-[12px] text-slate-400 font-medium mt-1">
+                          <p className="text-[12px] text-[#69746A] font-medium mt-1">
                             Browse 50k+ public repos
                           </p>
                         </div>
@@ -1170,16 +1170,16 @@ export default function App() {
 
                       <div 
                         onClick={() => setActiveTab('paper-analysis')}
-                        className="bg-white border border-slate-100/80 hover:border-slate-200 rounded-2xl p-5 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group"
+                        className="bg-white border border-[#D5DCD1] hover:border-[#24543D]/50 rounded-2xl p-5 hover:shadow-xs hover:-translate-y-0.5 transition-all duration-200 cursor-pointer flex flex-col justify-between h-40 group"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#E7EAE4] text-[#52725D] flex items-center justify-center shrink-0">
                           <FileText size={20} className="group-hover:scale-105 transition-transform" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-[15px] text-slate-800 leading-tight">
+                          <h4 className="font-bold text-[15px] text-[#202923] leading-tight">
                             Analyze Research Paper
                           </h4>
-                          <p className="text-[12px] text-slate-400 font-medium mt-1">
+                          <p className="text-[12px] text-[#69746A] font-medium mt-1">
                             Extract dataset specs from PDF
                           </p>
                         </div>
@@ -1190,12 +1190,12 @@ export default function App() {
                   {/* Workspaces list panel */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-[12px] font-extrabold text-slate-400 uppercase tracking-widest">
+                      <h3 className="text-[12px] font-extrabold text-[#69746A] uppercase tracking-widest">
                         My Workspaces
                       </h3>
                       <button 
                         onClick={() => setActiveTab('workspaces')}
-                        className="text-[13px] font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors hover:underline"
+                        className="text-[13px] font-semibold text-[#24543D] hover:text-[#1C4430] flex items-center gap-1 transition-colors hover:underline cursor-pointer"
                       >
                         <span>View All</span>
                         <ArrowRight size={14} />
@@ -1210,7 +1210,7 @@ export default function App() {
                             setActiveWorkspace(ws.id);
                             setActiveTab('workspace');
                           }}
-                          className="bg-white border border-slate-100/80 rounded-2xl p-5 hover:shadow-md hover:border-slate-200/80 transition-all duration-200 flex flex-col justify-between min-h-[170px] cursor-pointer group"
+                          className="bg-white border border-[#D5DCD1] rounded-2xl p-5 hover:shadow-xs hover:border-[#24543D]/50 transition-all duration-200 flex flex-col justify-between min-h-[170px] cursor-pointer group"
                         >
                           <div className="flex items-start justify-between">
                             {/* Color/Icon symbol */}
@@ -1222,43 +1222,43 @@ export default function App() {
                                 {ws.qualityScore}% QUALITY
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold px-2 py-1 rounded-md border border-slate-100 bg-slate-50 text-slate-400">
+                              <span className="text-[10px] font-bold px-2 py-1 rounded-md border border-[#D5DCD1] bg-[#F7F5EE] text-[#69746A]">
                                 EMPTY
                               </span>
                             )}
                           </div>
 
                           <div className="mt-4">
-                            <h4 className="font-bold text-slate-800 text-[16px] leading-tight group-hover:text-blue-600 transition-colors">
+                            <h4 className="font-bold text-[#202923] text-[16px] leading-tight group-hover:text-[#24543D] transition-colors">
                               {ws.name}
                             </h4>
-                            <div className="flex items-center gap-4 text-slate-400 mt-2.5">
+                            <div className="flex items-center gap-4 text-[#69746A] mt-2.5">
                               <span className="flex items-center gap-1 text-[12px] font-medium">
-                                <Folder size={14} className="text-slate-300" />
-                                <span className="text-slate-500">{ws.datasetsCount}</span> Datasets
+                                <Folder size={14} className="text-[#69746A]" />
+                                <span className="text-[#202923] font-bold">{ws.datasetsCount}</span> Datasets
                               </span>
                               {ws.datasetsCount > 0 && (
                                 <span className="flex items-center gap-1 text-[12px] font-medium">
-                                  <ImageIcon size={14} className="text-slate-300" />
-                                  <span className="text-slate-500">{ws.imagesCount}</span> Images
+                                  <ImageIcon size={14} className="text-[#69746A]" />
+                                  <span className="text-[#202923] font-bold">{ws.imagesCount}</span> Images
                                 </span>
                               )}
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between border-t border-slate-50 mt-4.5 pt-3.5">
+                          <div className="flex items-center justify-between border-t border-[#D5DCD1]/60 mt-4.5 pt-3.5">
                             <div className="flex -space-x-1.5 overflow-hidden">
                               {ws.collaborators.map((color, idx) => (
                                 <div 
                                   key={idx}
                                   style={{ backgroundColor: color }}
-                                  className="w-5.5 h-5.5 rounded-full border border-white flex items-center justify-center text-[8px] font-bold text-white shadow-sm"
+                                  className="w-5.5 h-5.5 rounded-full border border-white flex items-center justify-center text-[8px] font-bold text-white shadow-xs"
                                 >
                                   {String.fromCharCode(65 + idx)}
                                 </div>
                               ))}
                             </div>
-                            <span className="text-[11px] text-slate-400 font-medium">
+                            <span className="text-[11px] text-[#69746A] font-medium">
                               {ws.lastModified}
                             </span>
                           </div>
@@ -1268,15 +1268,15 @@ export default function App() {
                       {/* Dotted block creation action card */}
                       <div 
                         onClick={() => setIsModalOpen(true)}
-                        className="border-2 border-dashed border-slate-200/80 hover:border-blue-400 bg-white hover:bg-blue-50/5 rounded-2xl p-5 flex flex-col items-center justify-center min-h-[170px] cursor-pointer transition-all duration-200 group"
+                        className="border-2 border-dashed border-[#D5DCD1] hover:border-[#24543D] bg-white/60 hover:bg-[#24543D]/5 rounded-2xl p-5 flex flex-col items-center justify-center min-h-[170px] cursor-pointer transition-all duration-200 group"
                       >
-                        <div className="w-10 h-10 rounded-full bg-slate-50 text-slate-400 group-hover:bg-blue-50 group-hover:text-blue-600 flex items-center justify-center mb-3.5 transition-colors">
+                        <div className="w-10 h-10 rounded-full bg-[#E7EAE4] text-[#52725D] group-hover:bg-[#24543D]/15 group-hover:text-[#24543D] flex items-center justify-center mb-3.5 transition-colors">
                           <Plus size={20} />
                         </div>
-                        <p className="font-bold text-[14px] text-slate-600 group-hover:text-blue-600 transition-colors">
+                        <p className="font-bold text-[14px] text-[#202923] group-hover:text-[#24543D] transition-colors">
                           Create New Workspace
                         </p>
-                        <p className="text-[11px] text-slate-400 mt-1">
+                        <p className="text-[11px] text-[#69746A] mt-1">
                           Setup a clean dataset workspace
                         </p>
                       </div>
@@ -1286,40 +1286,40 @@ export default function App() {
 
                 {/* Right Side Cards */}
                 <div className="space-y-8">
-                  <div className="bg-white border border-slate-100/80 rounded-2xl p-5.5 hover:shadow-md transition-shadow">
+                  <div className="bg-white border border-[#D5DCD1] rounded-2xl p-5.5 hover:shadow-xs transition-shadow">
                     <div className="flex items-center gap-2 mb-4.5">
-                      <Zap size={16} className="text-purple-500 fill-purple-500" />
-                      <h3 className="text-[12px] font-extrabold text-slate-400 uppercase tracking-widest leading-none mt-0.5">
-                        AI Insights
+                      <Zap size={16} className="text-[#24543D] fill-[#C7D86B]" />
+                      <h3 className="text-[12px] font-extrabold text-[#69746A] uppercase tracking-widest leading-none mt-0.5">
+                        Atlas Insights
                       </h3>
                     </div>
 
                     <div className="space-y-4">
                       {insights.map((insight) => {
-                        let badgeBg = 'bg-indigo-50 text-indigo-600';
-                        let borderLeft = 'border-l-indigo-400';
+                        let badgeBg = 'bg-[#24543D]/10 text-[#24543D] border-[#24543D]/20';
+                        let borderLeft = 'border-l-[#24543D]';
                         if (insight.color === 'red') {
-                          badgeBg = 'bg-rose-50 text-rose-600';
-                          borderLeft = 'border-l-rose-400';
+                          badgeBg = 'bg-rose-50 text-rose-700 border-rose-200';
+                          borderLeft = 'border-l-rose-500';
                         } else if (insight.color === 'emerald') {
-                          badgeBg = 'bg-emerald-50 text-emerald-600';
-                          borderLeft = 'border-l-emerald-400';
+                          badgeBg = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                          borderLeft = 'border-l-emerald-600';
                         }
                         
                         return (
                           <div 
                             key={insight.id}
-                            className={`p-4 bg-slate-50/50 hover:bg-slate-50 border border-slate-100 border-l-4 ${borderLeft} rounded-xl transition-all duration-200`}
+                            className={`p-4 bg-[#FCFAF6] hover:bg-[#F7F5EE] border border-[#D5DCD1] border-l-4 ${borderLeft} rounded-xl transition-all duration-200`}
                           >
                             <div className="flex items-center gap-2">
-                              <span className={`text-[9px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider ${badgeBg}`}>
+                              <span className={`text-[9.5px] font-extrabold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badgeBg}`}>
                                 {insight.title}
                               </span>
                             </div>
-                            <p className="text-[13px] text-slate-600 font-medium mt-2 leading-snug">
+                            <p className="text-[13px] text-[#202923] font-medium mt-2 leading-snug">
                               {insight.description}
                             </p>
-                            <button className="text-[12px] font-bold text-blue-600 hover:text-blue-700 hover:underline mt-2.5 block text-left">
+                            <button className="text-[12px] font-bold text-[#24543D] hover:text-[#1C4430] hover:underline mt-2.5 block text-left cursor-pointer">
                               {insight.actionText}
                             </button>
                           </div>
@@ -1328,53 +1328,53 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="bg-white border border-slate-100/80 rounded-2xl p-5.5 hover:shadow-md transition-shadow">
-                    <h3 className="text-[12px] font-extrabold text-slate-400 uppercase tracking-widest">
+                  <div className="bg-white border border-[#D5DCD1] rounded-2xl p-5.5 hover:shadow-xs transition-shadow">
+                    <h3 className="text-[12px] font-extrabold text-[#69746A] uppercase tracking-widest">
                       Storage Overview
                     </h3>
 
                     <div className="flex items-baseline justify-between mt-3.5">
-                      <span className="text-[13px] font-medium text-slate-500">
-                        Used: <span className="text-slate-800 font-bold">{storage.used} TB</span>
+                      <span className="text-[13px] font-medium text-[#69746A]">
+                        Used: <span className="text-[#202923] font-bold">{storage.used} TB</span>
                       </span>
-                      <span className="text-[18px] font-extrabold text-slate-800">
+                      <span className="text-[18px] font-extrabold text-[#202923]">
                         {Math.round((storage.used / storage.total) * 100)}%
                       </span>
                     </div>
 
-                    <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden mt-3.5 flex">
+                    <div className="w-full h-3 bg-[#E7EAE4] rounded-full overflow-hidden mt-3.5 flex">
                       <div 
                         style={{ width: `${(storage.datasetFiles / storage.total) * 100}%` }}
-                        className="bg-blue-600 h-full"
+                        className="bg-[#24543D] h-full"
                         title={`Dataset Files: ${storage.datasetFiles} TB`}
                       />
                       <div 
                         style={{ width: `${(storage.aiModels / storage.total) * 100}%` }}
-                        className="bg-purple-500 h-full"
+                        className="bg-[#52725D] h-full"
                         title={`AI Models: ${storage.aiModels} TB`}
                       />
                       <div 
                         style={{ width: `${(storage.otherFiles / storage.total) * 100}%` }}
-                        className="bg-slate-300 h-full"
+                        className="bg-[#D5DCD1] h-full"
                         title={`Other Files: ${storage.otherFiles} TB`}
                       />
                     </div>
 
-                    <div className="space-y-2 mt-5 border-t border-slate-50 pt-4">
+                    <div className="space-y-2 mt-5 border-t border-[#D5DCD1]/60 pt-4">
                       <div className="flex items-center justify-between text-[12px] font-medium">
                         <div className="flex items-center gap-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0" />
-                          <span className="text-slate-500">Dataset Files</span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#24543D] shrink-0" />
+                          <span className="text-[#69746A]">Dataset Files</span>
                         </div>
-                        <span className="text-slate-700 font-bold">{storage.datasetFiles} TB</span>
+                        <span className="text-[#202923] font-bold">{storage.datasetFiles} TB</span>
                       </div>
 
                       <div className="flex items-center justify-between text-[12px] font-medium">
                         <div className="flex items-center gap-2">
-                          <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0" />
-                          <span className="text-slate-500">AI Models</span>
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#52725D] shrink-0" />
+                          <span className="text-[#69746A]">AI Models</span>
                         </div>
-                        <span className="text-slate-700 font-bold">{storage.aiModels} TB</span>
+                        <span className="text-[#202923] font-bold">{storage.aiModels} TB</span>
                       </div>
                     </div>
                   </div>
@@ -1389,27 +1389,27 @@ export default function App() {
               {/* Back CTA */}
               <button 
                 onClick={() => setActiveTab('dashboard')}
-                className="flex items-center gap-2 text-slate-500 hover:text-slate-800 text-[13px] font-bold transition-colors group"
+                className="flex items-center gap-2 text-[#52725D] hover:text-[#202923] text-[13px] font-bold transition-colors group cursor-pointer"
               >
                 <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-0.5" />
                 <span>Back to Dashboard</span>
               </button>
 
               {/* Workspace Header metadata */}
-              <div className="bg-white border border-slate-100/80 rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
+              <div className="bg-white border border-[#D5DCD1] rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-xs">
                 <div className="flex items-start gap-4">
                   {renderWorkspaceIcon(currentWorkspaceObj, 24)}
                   <div className="space-y-1">
                     <div className="flex items-center gap-3.5 flex-wrap">
-                      <h2 className="font-extrabold text-[22px] text-slate-800 tracking-tight leading-tight">
+                      <h2 className="font-serif font-bold text-[24px] text-[#202923] tracking-tight leading-tight">
                         {currentWorkspaceObj.name}
                       </h2>
-                      <span className="text-[11px] font-bold px-2.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded-md">
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 bg-[#24543D]/10 text-[#24543D] border border-[#24543D]/20 rounded-md">
                         {currentWorkspaceObj.domain || currentWorkspaceObj.category || 'General'}
                       </span>
                     </div>
                     {currentWorkspaceObj.description && (
-                      <p className="text-[13px] text-slate-500 font-medium max-w-2xl leading-normal pt-1">
+                      <p className="text-[13px] text-[#69746A] font-medium max-w-2xl leading-normal pt-1">
                         {currentWorkspaceObj.description}
                       </p>
                     )}
@@ -1417,16 +1417,16 @@ export default function App() {
                 </div>
 
                 {/* Right hand collaborators and actions */}
-                <div className="flex items-center gap-4 border-t border-slate-50 md:border-t-0 pt-4 md:pt-0 shrink-0">
+                <div className="flex items-center gap-4 border-t border-[#D5DCD1]/60 md:border-t-0 pt-4 md:pt-0 shrink-0">
                   <div className="text-right">
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
+                    <p className="text-[9px] font-bold text-[#69746A] uppercase tracking-widest">
                       Owner
                     </p>
-                    <p className="text-[13px] font-bold text-slate-700 mt-0.5">
+                    <p className="text-[13px] font-bold text-[#202923] mt-0.5">
                       Keerthana Thomas
                     </p>
                   </div>
-                  <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-[12px] font-bold text-white shadow-sm ring-4 ring-blue-50">
+                  <div className="w-9 h-9 rounded-full bg-[#24543D] flex items-center justify-center text-[12px] font-bold text-[#F7F5EE] shadow-xs ring-4 ring-[#24543D]/10">
                     KT
                   </div>
                 </div>
@@ -1532,29 +1532,29 @@ export default function App() {
                 <div className="space-y-6 animate-in fade-in-50 duration-200">
                   {/* Statistics strip */}
                   <div className="grid grid-cols-3 gap-5">
-                    <div className="bg-white border border-slate-100/80 rounded-xl p-4 flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                    <div className="bg-white border border-[#D5DCD1] rounded-xl p-4 flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shrink-0">
                         <Folder size={18} />
                       </div>
                       <div>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                        <p className="text-[9px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                           Datasets Count
                         </p>
-                        <p className="text-[17px] font-extrabold text-slate-700 mt-1 leading-none">
+                        <p className="text-[17px] font-extrabold text-[#202923] mt-1 leading-none">
                           {workspaceDatasets.length}
                         </p>
                       </div>
                     </div>
 
-                    <div className="bg-white border border-slate-100/80 rounded-xl p-4 flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                    <div className="bg-white border border-[#D5DCD1] rounded-xl p-4 flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-[#52725D]/10 text-[#52725D] flex items-center justify-center shrink-0">
                         <ImageIcon size={18} />
                       </div>
                       <div>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                        <p className="text-[9px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                           Images Count
                         </p>
-                        <p className="text-[17px] font-extrabold text-slate-700 mt-1 leading-none">
+                        <p className="text-[17px] font-extrabold text-[#202923] mt-1 leading-none">
                           {(() => {
                             const sum = workspaceDatasets.reduce((acc, ds) => acc + (ds.dataset_image_count || 0), 0);
                             return sum >= 1000 ? (sum / 1000).toFixed(1) + 'k' : sum.toString();
@@ -1563,15 +1563,15 @@ export default function App() {
                       </div>
                     </div>
 
-                    <div className="bg-white border border-slate-100/80 rounded-xl p-4 flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                    <div className="bg-white border border-[#D5DCD1] rounded-xl p-4 flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
                         <Sparkles size={18} />
                       </div>
                       <div>
-                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+                        <p className="text-[9px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
                           Quality Score
                         </p>
-                        <p className="text-[17px] font-extrabold text-emerald-600 mt-1 leading-none">
+                        <p className="text-[17px] font-extrabold text-emerald-700 mt-1 leading-none">
                           {currentWorkspaceObj.qualityScore !== null && currentWorkspaceObj.qualityScore !== undefined
                             ? `${currentWorkspaceObj.qualityScore}%`
                             : '85%'}
@@ -1581,16 +1581,16 @@ export default function App() {
                   </div>
 
                   {/* Datasets Table */}
-                  <div className="bg-white border border-slate-100/80 rounded-2xl overflow-hidden shadow-xs">
-                    <div className="px-5 py-4 border-b border-slate-100/80 flex items-center justify-between">
-                      <h3 className="font-bold text-[15px] text-slate-800">
+                  <div className="bg-white border border-[#D5DCD1] rounded-2xl overflow-hidden shadow-xs">
+                    <div className="px-5 py-4 border-b border-[#D5DCD1]/80 flex items-center justify-between">
+                      <h3 className="font-bold text-[15px] text-[#202923]">
                         Workspace Datasets ({workspaceDatasets.length})
                       </h3>
                       
                       <div className="relative">
                         <button 
                           onClick={() => setIsAddMenuOpen(!isAddMenuOpen)}
-                          className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[12px] font-semibold flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer"
+                          className="px-3.5 py-1.5 bg-[#24543D] hover:bg-[#1C4430] text-[#F7F5EE] rounded-xl text-[12px] font-bold flex items-center gap-1.5 shadow-sm shadow-[#24543D]/20 transition-colors cursor-pointer"
                         >
                           <Plus size={14} />
                           <span>Add Dataset</span>

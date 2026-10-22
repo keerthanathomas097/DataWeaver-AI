@@ -584,28 +584,28 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
       {/* -------------------------------------------------------------
        * Compact Header Card with Back Navigation & Compare Datasets CTA
        * ------------------------------------------------------------- */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-4.5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-4.5 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <button
             onClick={onBack}
-            className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer"
             title="Return to Dataset Profile"
           >
             <ArrowLeft size={18} />
           </button>
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-[#24543D] text-white flex items-center justify-center shadow-2xs shrink-0">
             <Target size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h2 className="font-extrabold text-[18px] text-slate-900 tracking-tight">
+              <h2 className="font-serif font-bold text-[18px] text-[#202923] tracking-tight">
                 Purpose Fit Analysis
               </h2>
-              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60">
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#24543D]/10 text-[#24543D] border border-[#24543D]/20">
                 {dataset?.dataset_name || 'Dataset'}
               </span>
             </div>
-            <p className="text-[12px] text-slate-500 font-medium">
+            <p className="text-[12px] text-[#69746A] font-medium">
               Choose your intended research purpose to see how this dataset matches up.
             </p>
           </div>
@@ -614,14 +614,14 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
         <div className="flex items-center gap-2.5 self-start sm:self-auto flex-wrap">
           <button
             onClick={() => setShowComparison(true)}
-            className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[12.5px] font-bold shadow-xs hover:shadow-sm transition-all flex items-center gap-2 cursor-pointer"
+            className="px-3.5 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12.5px] font-bold shadow-2xs hover:shadow-xs transition-all flex items-center gap-2 cursor-pointer"
             title={`Compare ${dataset?.dataset_name || 'this dataset'} against other workspace datasets for ${currentPurposeMeta.display_name}`}
           >
             <SlidersHorizontal size={15} />
             <span>Compare Datasets</span>
           </button>
 
-          <div className="text-[11px] text-slate-400 font-medium px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200/60">
+          <div className="text-[11px] text-[#69746A] font-medium px-2.5 py-1.5 rounded-lg bg-[#F7F5EE] border border-[#D5DCD1]">
             Heuristic Rules Engine v1.0
           </div>
         </div>
@@ -630,12 +630,12 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
       {/* -------------------------------------------------------------
        * Compact Purpose Selection Grid (Substantially Reduced Height)
        * ------------------------------------------------------------- */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-4 shadow-xs space-y-2.5">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-4 shadow-2xs space-y-2.5">
         <div className="flex items-center justify-between">
-          <span className="text-[12px] font-bold uppercase tracking-wider text-slate-400">
+          <span className="text-[12px] font-bold uppercase tracking-wider text-[#69746A]">
             What do you want to use this dataset for?
           </span>
-          <span className="text-[11px] text-slate-400">Click any purpose to update analysis</span>
+          <span className="text-[11px] text-[#69746A]">Click any purpose to update analysis</span>
         </div>
 
         {/* 4 cols x 2 rows on desktop with tight vertical footprint */}
@@ -650,15 +650,15 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                 onClick={() => setSelectedPurpose(purpose.key)}
                 className={`text-left p-2.5 px-3 rounded-xl border transition-all cursor-pointer flex items-center gap-2.5 group relative ${
                   isSelected
-                    ? 'border-blue-500 bg-blue-50/60 ring-2 ring-blue-500/15 shadow-2xs'
-                    : 'border-slate-200/70 hover:border-slate-300 hover:bg-slate-50/70'
+                    ? 'border-[#24543D] bg-[#24543D]/10 ring-2 ring-[#24543D]/20 shadow-2xs'
+                    : 'border-[#D5DCD1] hover:border-[#52725D] hover:bg-[#E7EAE4]/50 bg-[#FCFAF6]'
                 }`}
               >
                 <div
                   className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
                     isSelected
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-slate-100 text-slate-600 group-hover:bg-blue-50 group-hover:text-blue-600'
+                      ? 'bg-[#24543D] text-white'
+                      : 'bg-[#E7EAE4] text-[#69746A] group-hover:bg-[#24543D]/10 group-hover:text-[#24543D]'
                   }`}
                 >
                   <Icon size={15} />
@@ -666,17 +666,17 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                 <div className="min-w-0 flex-1">
                   <h4
                     className={`font-bold text-[12.5px] truncate leading-tight ${
-                      isSelected ? 'text-blue-900' : 'text-slate-800'
+                      isSelected ? 'text-[#24543D]' : 'text-[#202923]'
                     }`}
                   >
                     {purpose.display_name}
                   </h4>
-                  <p className="text-[10.5px] text-slate-500 truncate mt-0.5 leading-none">
+                  <p className="text-[10.5px] text-[#69746A] truncate mt-0.5 leading-none">
                     {purpose.short_description}
                   </p>
                 </div>
                 {isSelected && (
-                  <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                  <span className="w-2 h-2 rounded-full bg-[#24543D] shrink-0" />
                 )}
               </button>
             );
@@ -726,21 +726,21 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * Quick Visual AI Inspection Tools (Above-the-fold Buttons)
            * ------------------------------------------------------------- */}
-          <div className="bg-gradient-to-r from-indigo-50/90 via-blue-50/50 to-white border border-indigo-100 rounded-2xl p-3.5 px-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-3.5 px-4 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 text-white flex items-center justify-center shadow-xs shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-[#24543D] text-white flex items-center justify-center shadow-2xs shrink-0">
                 <Sparkles size={18} />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className="font-extrabold text-[13.5px] text-slate-900 leading-tight">
+                  <h4 className="font-serif font-bold text-[14px] text-[#202923] leading-tight">
                     Visual AI Inspection
                   </h4>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C7D86B]/30 text-[#202923] border border-[#C7D86B]/50">
                     Interactive
                   </span>
                 </div>
-                <p className="text-[12px] text-slate-500 font-medium">
+                <p className="text-[12px] text-[#69746A] font-medium">
                   Verify whether image labels are accurate, or test how well the dataset matches your custom needs.
                 </p>
               </div>
@@ -749,13 +749,13 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
             <div className="flex items-center gap-2.5 w-full sm:w-auto">
               <button
                 onClick={() => setIsLabelModalOpen(true)}
-                className="flex-1 sm:flex-none px-3.5 py-2 bg-white hover:bg-slate-50 text-slate-800 hover:text-indigo-700 border border-slate-200/90 rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
+                className="flex-1 sm:flex-none px-3.5 py-2 bg-[#F7F5EE] hover:bg-[#E7EAE4] text-[#202923] hover:text-[#24543D] border border-[#D5DCD1] rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer"
               >
-                <Tag size={14} className="text-indigo-600" />
+                <Tag size={14} className="text-[#24543D]" />
                 <span>Check Label Accuracy</span>
                 {clipAnalysis && clipAnalysis.has_labels && (
                   <span
-                    className={`text-[10px] font-black px-1.5 py-0.2 rounded-md ${
+                    className={`text-[10px] font-black px-1.5 py-0.5 rounded-md ${
                       clipAnalysis.mismatch_ratio > 0.15
                         ? 'bg-amber-100 text-amber-800'
                         : 'bg-emerald-100 text-emerald-800'
@@ -768,7 +768,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
 
               <button
                 onClick={() => setIsTextMatchModalOpen(true)}
-                className="flex-1 sm:flex-none px-3.5 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                className="flex-1 sm:flex-none px-3.5 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
               >
                 <Search size={14} />
                 <span>Search by Requirement</span>
@@ -866,18 +866,18 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
           {/* Grid: Radar Chart + What this means panel */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
             {/* Left Col: Radar Chart */}
-            <div className="lg:col-span-6 bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+            <div className="lg:col-span-6 bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <div>
-                    <h3 className="font-extrabold text-[15px] text-slate-900 tracking-tight">
+                    <h3 className="font-serif font-bold text-[15px] text-[#202923] tracking-tight">
                       Dataset Fit Overview
                     </h3>
-                    <p className="text-[12px] text-slate-500">
+                    <p className="text-[12px] text-[#69746A]">
                       A visual summary of how the dataset's characteristics align with your selected purpose.
                     </p>
                   </div>
-                  <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                  <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                     Radar
                   </span>
                 </div>
@@ -890,37 +890,37 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
 
             {/* Right Col: What this means for your dataset + Analysis Summary */}
             <div className="lg:col-span-6 space-y-3.5">
-              <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-3">
+              <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs space-y-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shrink-0">
                     <currentPurposeMeta.icon size={17} />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[14px] text-slate-900">
+                    <h4 className="font-serif font-bold text-[14px] text-[#202923]">
                       What this means for your dataset
                     </h4>
-                    <span className="text-[11.5px] text-slate-400 font-medium">
+                    <span className="text-[11.5px] text-[#69746A] font-medium">
                       {currentPurposeMeta.display_name} requirements
                     </span>
                   </div>
                 </div>
 
-                <p className="text-[12.5px] text-slate-600 leading-relaxed">
+                <p className="text-[12.5px] text-[#69746A] leading-relaxed">
                   {PURPOSE_EXPLANATIONS[selectedPurpose] || currentPurposeMeta.short_description}
                 </p>
 
                 {/* Collapsible Heuristic Disclaimer */}
-                <div className="pt-2 border-t border-slate-100">
+                <div className="pt-2 border-t border-[#D5DCD1]">
                   <button
                     onClick={() => setShowAboutAnalysis(!showAboutAnalysis)}
-                    className="flex items-center gap-1.5 text-[11.5px] font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 text-[11.5px] font-semibold text-[#69746A] hover:text-[#202923] transition-colors cursor-pointer"
                   >
-                    <HelpCircle size={13} className="text-slate-400" />
+                    <HelpCircle size={13} className="text-[#69746A]" />
                     <span>About this analysis</span>
                     {showAboutAnalysis ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                   </button>
                   {showAboutAnalysis && (
-                    <p className="mt-1.5 text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-2 rounded-lg border border-slate-100">
+                    <p className="mt-1.5 text-[11px] text-[#69746A] leading-relaxed bg-[#F7F5EE] p-2 rounded-lg border border-[#D5DCD1]">
                       {fitData.provenance?.description ||
                         'These findings are produced using configurable heuristic rules based on general machine-learning dataset-quality reasoning. They are intended as guidance rather than a guaranteed measure of dataset suitability.'}
                     </p>
@@ -929,12 +929,12 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
               </div>
 
               {/* Analysis Summary (Replaces technical "Rule Evaluation Distribution") */}
-              <div className="bg-white border border-slate-200/80 rounded-2xl p-4.5 shadow-xs space-y-2.5">
+              <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-4.5 shadow-2xs space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <h5 className="font-bold text-[13px] text-slate-900">
+                  <h5 className="font-serif font-bold text-[13px] text-[#202923]">
                     Analysis Summary
                   </h5>
-                  <span className="text-[11px] font-semibold text-slate-500">
+                  <span className="text-[11px] font-semibold text-[#69746A]">
                     {fitData.all_rules?.length || 0} characteristics analyzed
                   </span>
                 </div>
@@ -1016,22 +1016,22 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * SECTION 1: What needs attention? (Flagged Warnings & Critical Findings)
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-3.5">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs space-y-3.5">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-extrabold text-[15px] text-slate-900 tracking-tight flex items-center gap-2">
+                <h3 className="font-serif font-bold text-[15px] text-[#202923] tracking-tight flex items-center gap-2">
                   <span>What should I look at?</span>
                   <span
                     className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
                       fitData.flagged_findings?.length > 0
-                        ? 'bg-amber-50 text-amber-700 border border-amber-200/60'
-                        : 'bg-emerald-50 text-emerald-700 border border-emerald-200/60'
+                        ? 'bg-amber-100 text-amber-800 border border-amber-300'
+                        : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
                     }`}
                   >
                     {fitData.flagged_findings?.length || 0} items
                   </span>
                 </h3>
-                <p className="text-[12px] text-slate-500 mt-0.5">
+                <p className="text-[12px] text-[#69746A] mt-0.5">
                   Characteristics that warrant review or remediation for {currentPurposeMeta.display_name}.
                 </p>
               </div>
@@ -1050,8 +1050,8 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                       id={`finding-${item.metric_key}`}
                       className={`border rounded-xl p-3.5 transition-all ${
                         isCritical
-                          ? 'border-rose-200 bg-rose-50/40'
-                          : 'border-amber-200 bg-amber-50/40'
+                          ? 'border-rose-300 bg-rose-50/40'
+                          : 'border-amber-300 bg-amber-50/40'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
@@ -1059,45 +1059,45 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                           <div
                             className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
                               isCritical
-                                ? 'bg-rose-100 text-rose-700'
-                                : 'bg-amber-100 text-amber-700'
+                                ? 'bg-rose-100 text-rose-800'
+                                : 'bg-amber-100 text-amber-800'
                             }`}
                           >
                             {isCritical ? <AlertOctagon size={16} /> : <AlertTriangle size={16} />}
                           </div>
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <h4 className="font-bold text-[13.5px] text-slate-900">
+                              <h4 className="font-bold text-[13.5px] text-[#202923]">
                                 {plainLabel}
                               </h4>
                               <span
-                                className={`text-[9.5px] font-extrabold px-1.5 py-0.2 rounded uppercase tracking-wider ${
+                                className={`text-[9.5px] font-extrabold px-1.5 py-0.5 rounded uppercase tracking-wider ${
                                   isCritical
-                                    ? 'bg-rose-100 text-rose-800'
-                                    : 'bg-amber-100 text-amber-800'
+                                    ? 'bg-rose-100 text-rose-800 border border-rose-300'
+                                    : 'bg-amber-100 text-amber-800 border border-amber-300'
                                 }`}
                               >
                                 {isCritical ? 'Important Concern' : 'Review'}
                               </span>
                             </div>
-                            <p className="text-[12.5px] text-slate-700 mt-0.5 leading-relaxed">
+                            <p className="text-[12.5px] text-[#202923] mt-0.5 leading-relaxed">
                               {item.message}
                             </p>
 
                             {/* Measured value vs Threshold */}
                             <div className="flex items-center gap-2.5 mt-1.5 text-[11.5px]">
-                              <span className="font-medium text-slate-600">
+                              <span className="font-medium text-[#69746A]">
                                 Observed:{' '}
-                                <span className="font-bold text-slate-900">
+                                <span className="font-bold text-[#202923]">
                                   {typeof item.metric_value === 'number'
                                     ? item.metric_value.toFixed(3)
                                     : String(item.metric_value)}
                                 </span>
                               </span>
-                              <span className="text-slate-300">•</span>
-                              <span className="font-medium text-slate-500">
+                              <span className="text-[#D5DCD1]">•</span>
+                              <span className="font-medium text-[#69746A]">
                                 Threshold:{' '}
-                                <span className="font-mono text-slate-700">
+                                <span className="font-mono text-[#202923]">
                                   {item.operator} {item.threshold}
                                 </span>
                               </span>
@@ -1106,7 +1106,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                             {item.metric_key === 'label_match_mismatch_ratio' && (
                               <button
                                 onClick={() => setIsLabelModalOpen(true)}
-                                className="mt-2 text-[11.5px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/80 px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer w-fit shadow-2xs"
+                                className="mt-2 text-[11.5px] font-bold text-[#24543D] bg-[#24543D]/10 hover:bg-[#24543D]/20 border border-[#24543D]/30 px-2.5 py-1 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer w-fit shadow-2xs"
                               >
                                 <Eye size={12} />
                                 <span>Inspect Flagged Photos</span>
@@ -1117,7 +1117,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
 
                         <button
                           onClick={() => toggleExplanation(item.rule_id)}
-                          className="text-[11.5px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1 shrink-0 px-2 py-1 rounded-md hover:bg-white/80 transition-colors cursor-pointer"
+                          className="text-[11.5px] font-bold text-[#24543D] hover:underline flex items-center gap-1 shrink-0 px-2 py-1 rounded-md hover:bg-[#E7EAE4] transition-colors cursor-pointer"
                         >
                           <span>{isExpanded ? 'Hide' : 'Why does this matter?'}</span>
                           {isExpanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
@@ -1126,9 +1126,9 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
 
                       {/* Expandable Explanation */}
                       {isExpanded && (
-                        <div className="mt-2.5 pt-2.5 border-t border-slate-200/60 text-[12px] text-slate-600 pl-9 space-y-1">
+                        <div className="mt-2.5 pt-2.5 border-t border-[#D5DCD1] text-[12px] text-[#69746A] pl-9 space-y-1">
                           <p className="leading-relaxed">{item.explanation}</p>
-                          <p className="text-[10.5px] text-slate-400 font-mono pt-0.5">
+                          <p className="text-[10.5px] text-[#69746A] font-mono pt-0.5">
                             Check ID: {item.rule_id}
                           </p>
                         </div>
@@ -1138,12 +1138,12 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                 })}
               </div>
             ) : (
-              <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-5 text-center space-y-1.5">
-                <CheckCircle2 size={22} className="text-emerald-600 mx-auto" />
-                <h4 className="font-bold text-[13.5px] text-emerald-900">
+              <div className="bg-emerald-50/60 border border-emerald-300 rounded-xl p-5 text-center space-y-1.5">
+                <CheckCircle2 size={22} className="text-emerald-700 mx-auto" />
+                <h4 className="font-serif font-bold text-[13.5px] text-emerald-950">
                   Nothing significant was flagged
                 </h4>
-                <p className="text-[12px] text-emerald-700 max-w-md mx-auto">
+                <p className="text-[12px] text-emerald-800 max-w-md mx-auto">
                   No major concerns were identified by the configured checks for {currentPurposeMeta.display_name}.
                 </p>
               </div>
@@ -1154,16 +1154,16 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
            * SECTION 2: What looks good (Favorable Findings)
            * ------------------------------------------------------------- */}
           {favorableFindings.length > 0 && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-extrabold text-[15px] text-slate-900 tracking-tight flex items-center gap-2">
+                  <h3 className="font-serif font-bold text-[15px] text-[#202923] tracking-tight flex items-center gap-2">
                     <span>What looks good</span>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
                       {favorableFindings.length} positive
                     </span>
                   </h3>
-                  <p className="text-[12px] text-slate-500 mt-0.5">
+                  <p className="text-[12px] text-[#69746A] mt-0.5">
                     Characteristics that clearly support {currentPurposeMeta.display_name}.
                   </p>
                 </div>
@@ -1175,16 +1175,16 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                   return (
                     <div
                       key={item.rule_id}
-                      className="border border-emerald-200/80 bg-emerald-50/30 rounded-xl p-3 flex items-start gap-2.5"
+                      className="border border-emerald-300 bg-emerald-50/30 rounded-xl p-3 flex items-start gap-2.5"
                     >
-                      <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
                         <CheckCircle2 size={14} />
                       </div>
                       <div className="space-y-0.5">
-                        <h4 className="font-bold text-[12.5px] text-slate-800">
+                        <h4 className="font-bold text-[12.5px] text-[#202923]">
                           {plainLabel}
                         </h4>
-                        <p className="text-[11.5px] text-slate-600 leading-snug">{item.message}</p>
+                        <p className="text-[11.5px] text-[#69746A] leading-snug">{item.message}</p>
                       </div>
                     </div>
                   );
@@ -1197,16 +1197,16 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
            * SECTION 3: Other Observations (Neutral Items)
            * ------------------------------------------------------------- */}
           {neutralObservations.length > 0 && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs space-y-3">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-extrabold text-[15px] text-slate-900 tracking-tight flex items-center gap-2">
+                  <h3 className="font-serif font-bold text-[15px] text-[#202923] tracking-tight flex items-center gap-2">
                     <span>Other observations</span>
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                       {neutralObservations.length} neutral
                     </span>
                   </h3>
-                  <p className="text-[12px] text-slate-500 mt-0.5">
+                  <p className="text-[12px] text-[#69746A] mt-0.5">
                     Characteristics operating within expected baseline ranges for this purpose.
                   </p>
                 </div>
@@ -1218,16 +1218,16 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                   return (
                     <div
                       key={item.rule_id}
-                      className="border border-slate-200/70 bg-slate-50/50 rounded-xl p-3 flex items-start gap-2.5"
+                      className="border border-[#D5DCD1] bg-[#F7F5EE] rounded-xl p-3 flex items-start gap-2.5"
                     >
-                      <div className="w-6 h-6 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+                      <div className="w-6 h-6 rounded-lg bg-[#E7EAE4] text-[#24543D] flex items-center justify-center shrink-0 mt-0.5">
                         <Check size={13} />
                       </div>
                       <div className="space-y-0.5">
-                        <h4 className="font-bold text-[12.5px] text-slate-800">
+                        <h4 className="font-bold text-[12.5px] text-[#202923]">
                           {plainLabel}
                         </h4>
-                        <p className="text-[11.5px] text-slate-600 leading-snug">{item.message}</p>
+                        <p className="text-[11.5px] text-[#69746A] leading-snug">{item.message}</p>
                       </div>
                     </div>
                   );
@@ -1239,25 +1239,25 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
           {/* -------------------------------------------------------------
            * SECTION 4: Expandable Technical Details
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl shadow-xs overflow-hidden">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl shadow-2xs overflow-hidden">
             <button
               onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
-              className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-50 transition-colors cursor-pointer"
+              className="w-full p-4 flex items-center justify-between text-left hover:bg-[#E7EAE4]/50 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-[#E7EAE4] text-[#24543D] flex items-center justify-center">
                   <Layers size={15} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-[13px] text-slate-900">
+                  <h4 className="font-serif font-bold text-[13px] text-[#202923]">
                     Technical Details
                   </h4>
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-[#69746A]">
                     View raw rule IDs, operator conditions, source profile paths, and unavailable metrics.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-[12px] font-bold text-slate-600">
+              <div className="flex items-center gap-1 text-[12px] font-bold text-[#69746A]">
                 <span>{showTechnicalDetails ? 'Collapse' : 'Expand'}</span>
                 {showTechnicalDetails ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
               </div>
@@ -1367,26 +1367,26 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
       {isLabelModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-150">
           <div
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-[#202923]/50 backdrop-blur-xs transition-opacity"
             onClick={() => setIsLabelModalOpen(false)}
           />
-          <div className="relative bg-white rounded-3xl shadow-2xl border border-slate-200/90 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
+          <div className="relative bg-[#FCFAF6] rounded-3xl shadow-2xl border border-[#D5DCD1] w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50/70 shrink-0">
+            <div className="px-6 py-4.5 border-b border-[#D5DCD1] flex items-center justify-between gap-3 bg-[#F7F5EE] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-10 h-10 rounded-2xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shadow-2xs shrink-0">
                   <Tag size={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-extrabold text-[16px] text-slate-900 tracking-tight">
+                    <h3 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
                       Label & Category Accuracy Check
                     </h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                       Visual AI Audit
                     </span>
                   </div>
-                  <p className="text-[12px] text-slate-500">
+                  <p className="text-[12px] text-[#69746A]">
                     Checks whether images in your dataset visually match their assigned folder or class names.
                   </p>
                 </div>
@@ -1397,7 +1397,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                   <button
                     onClick={handleTriggerClipAnalysis}
                     disabled={isClipLoading}
-                    className="px-3 py-1.5 text-[11.5px] font-bold text-slate-700 hover:text-indigo-700 hover:bg-white border border-slate-200 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs disabled:opacity-50"
+                    className="px-3 py-1.5 text-[11.5px] font-bold text-[#202923] hover:text-[#24543D] hover:bg-[#E7EAE4] border border-[#D5DCD1] rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs disabled:opacity-50"
                     title="Re-run CLIP analysis"
                   >
                     <RefreshCw size={13} className={isClipLoading ? 'animate-spin' : ''} />
@@ -1406,7 +1406,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                 )}
                 <button
                   onClick={() => setIsLabelModalOpen(false)}
-                  className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer"
                   title="Close"
                 >
                   <X size={18} />
@@ -1681,13 +1681,13 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-3.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/60 shrink-0">
-              <span className="text-[11.5px] text-slate-400 font-medium">
+            <div className="px-6 py-3.5 border-t border-[#D5DCD1] flex items-center justify-between bg-[#F7F5EE] shrink-0">
+              <span className="text-[11.5px] text-[#69746A] font-medium">
                 Zero-shot vision analysis via CLIP ViT-B/32
               </span>
               <button
                 onClick={() => setIsLabelModalOpen(false)}
-                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-[12px] font-bold transition-colors cursor-pointer"
+                className="px-4 py-1.5 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12px] font-bold transition-colors cursor-pointer"
               >
                 Close
               </button>
@@ -1702,26 +1702,26 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
       {isTextMatchModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 animate-in fade-in duration-150">
           <div
-            className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-[#202923]/50 backdrop-blur-xs transition-opacity"
             onClick={() => setIsTextMatchModalOpen(false)}
           />
-          <div className="relative bg-white rounded-3xl shadow-2xl border border-slate-200/90 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
+          <div className="relative bg-[#FCFAF6] rounded-3xl shadow-2xl border border-[#D5DCD1] w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-150">
             {/* Modal Header */}
-            <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between gap-3 bg-slate-50/70 shrink-0">
+            <div className="px-6 py-4.5 border-b border-[#D5DCD1] flex items-center justify-between gap-3 bg-[#F7F5EE] shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-10 h-10 rounded-2xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shadow-2xs shrink-0">
                   <Search size={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-extrabold text-[16px] text-slate-900 tracking-tight">
+                    <h3 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
                       Search Dataset by Requirement
                     </h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] border border-[#D5DCD1]">
                       Natural Language AI
                     </span>
                   </div>
-                  <p className="text-[12px] text-slate-500">
+                  <p className="text-[12px] text-[#69746A]">
                     Type what kind of images you need in plain words to see how well this dataset matches.
                   </p>
                 </div>
@@ -1729,7 +1729,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
 
               <button
                 onClick={() => setIsTextMatchModalOpen(false)}
-                className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                className="p-2 rounded-xl text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -1739,7 +1739,7 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
             {/* Modal Scrollable Body */}
             <div className="p-6 overflow-y-auto space-y-5 flex-1">
               {/* Search Input Card */}
-              <div className="bg-slate-50/90 border border-slate-200/80 rounded-2xl p-4.5 space-y-3">
+              <div className="bg-[#F7F5EE] border border-[#D5DCD1] rounded-2xl p-4.5 space-y-3">
                 <form onSubmit={handleCheckTextMatch} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
                   <div className="relative flex-1">
                     <input
@@ -1747,14 +1747,14 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
                       value={textQuery}
                       onChange={(e) => setTextQuery(e.target.value)}
                       placeholder="e.g. dark nighttime street, macro insect photos, bright sunny outdoors..."
-                      className="w-full px-4 py-2.5 pl-10 bg-white border border-slate-200 rounded-xl text-[13px] text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-2xs"
+                      className="w-full px-4 py-2.5 pl-10 bg-white border border-[#D5DCD1] rounded-xl text-[13px] text-[#202923] placeholder:text-[#69746A]/60 focus:outline-hidden focus:ring-2 focus:ring-[#24543D]/20 focus:border-[#24543D] transition-all shadow-2xs"
                     />
-                    <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                    <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#69746A] pointer-events-none" />
                   </div>
                   <button
                     type="submit"
                     disabled={isTextMatching || !textQuery.trim()}
-                    className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-[13px] font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 shadow-xs"
+                    className="px-5 py-2.5 bg-[#24543D] hover:bg-[#1C4430] disabled:opacity-50 text-white rounded-xl text-[13px] font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shrink-0 shadow-2xs hover:shadow-xs"
                   >
                     {isTextMatching ? <Loader2 size={15} className="animate-spin" /> : <Sparkles size={15} />}
                     <span>{isTextMatching ? 'Scanning...' : 'Search Dataset'}</span>
@@ -1968,13 +1968,13 @@ export default function DatasetPurposeFit({ dataset, onBack }) {
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-3.5 border-t border-slate-100 flex items-center justify-between bg-slate-50/60 shrink-0">
-              <span className="text-[11.5px] text-slate-400 font-medium">
+            <div className="px-6 py-3.5 border-t border-[#D5DCD1] flex items-center justify-between bg-[#F7F5EE] shrink-0">
+              <span className="text-[11.5px] text-[#69746A] font-medium">
                 Zero-shot similarity search via CLIP ViT-B/32
               </span>
               <button
                 onClick={() => setIsTextMatchModalOpen(false)}
-                className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-[12px] font-bold transition-colors cursor-pointer"
+                className="px-4 py-1.5 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12px] font-bold transition-colors cursor-pointer"
               >
                 Close
               </button>

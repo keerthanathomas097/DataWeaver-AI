@@ -288,35 +288,35 @@ export default function PurposeFitComparison({
       {/* -------------------------------------------------------------
        * SECTION 1: Top Navigation & Workspace Comparison Context
        * ------------------------------------------------------------- */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-xs">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-5 shadow-2xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex items-start gap-3.5">
             <button
               onClick={onBack}
-              className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-50 transition-colors cursor-pointer shrink-0 mt-0.5"
+              className="w-9 h-9 rounded-xl border border-[#D5DCD1] flex items-center justify-center text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer shrink-0 mt-0.5"
               title="Return to Purpose Fitting View"
             >
               <ArrowLeft size={18} />
             </button>
             <div className="space-y-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60 flex items-center gap-1.5">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#24543D] bg-[#24543D]/10 px-2.5 py-0.5 rounded-full border border-[#24543D]/20 flex items-center gap-1.5">
                   <SlidersHorizontal size={12} />
                   <span>Workspace Comparison</span>
                 </span>
-                <span className="text-slate-300">•</span>
-                <span className="text-[12px] font-semibold text-slate-600">
-                  Workspace: <strong className="text-slate-800">{comparisonData?.workspace_name || 'Active Workspace'}</strong>
+                <span className="text-[#D5DCD1]">•</span>
+                <span className="text-[12px] font-semibold text-[#69746A]">
+                  Workspace: <strong className="text-[#202923]">{comparisonData?.workspace_name || 'Active Workspace'}</strong>
                 </span>
-                <span className="text-slate-300">•</span>
-                <span className="text-[12px] font-semibold text-slate-600">
-                  Reference: <strong className="text-slate-900">{referenceDataset?.dataset_name || 'Current Dataset'}</strong>
+                <span className="text-[#D5DCD1]">•</span>
+                <span className="text-[12px] font-semibold text-[#69746A]">
+                  Reference: <strong className="text-[#202923]">{referenceDataset?.dataset_name || 'Current Dataset'}</strong>
                 </span>
               </div>
-              <h2 className="font-extrabold text-[21px] text-slate-900 tracking-tight">
+              <h2 className="font-serif font-bold text-[21px] text-[#202923] tracking-tight">
                 Purpose Fitting Dataset Comparison
               </h2>
-              <p className="text-[12.5px] text-slate-500">
+              <p className="text-[12.5px] text-[#69746A]">
                 Compare candidate datasets in this workspace side-by-side to evaluate which dataset best fits your intended research purpose.
               </p>
             </div>
@@ -324,19 +324,19 @@ export default function PurposeFitComparison({
 
           {/* Quick Stats Pill */}
           <div className="flex items-center gap-2 self-start lg:self-center shrink-0">
-            <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-[12px] text-slate-600 flex items-center gap-3">
+            <div className="px-3.5 py-2 rounded-xl bg-[#F7F5EE] border border-[#D5DCD1] text-[12px] text-[#69746A] flex items-center gap-3">
               <div>
-                <span className="text-slate-400 block text-[10.5px] font-medium">Eligible Candidates</span>
-                <span className="font-extrabold text-[15px] text-slate-900">
+                <span className="text-[#69746A] block text-[10.5px] font-medium">Eligible Candidates</span>
+                <span className="font-extrabold text-[15px] text-[#202923]">
                   {evaluatedCandidates.length}
-                  <span className="text-[11px] text-slate-400 font-normal ml-1">
+                  <span className="text-[11px] text-[#69746A] font-normal ml-1">
                     of {comparisonData?.total_datasets_in_workspace ?? 0}
                   </span>
                 </span>
               </div>
               {unevaluatedCandidates.length > 0 && (
-                <div className="pl-3 border-l border-slate-200">
-                  <span className="text-slate-400 block text-[10.5px] font-medium">Awaiting Profile</span>
+                <div className="pl-3 border-l border-[#D5DCD1]">
+                  <span className="text-[#69746A] block text-[10.5px] font-medium">Awaiting Profile</span>
                   <span className="font-extrabold text-[15px] text-amber-700">
                     {unevaluatedCandidates.length}
                   </span>
@@ -349,12 +349,12 @@ export default function PurposeFitComparison({
         {/* -------------------------------------------------------------
          * Interactive Purpose Selector Tabs (8 Purposes)
          * ------------------------------------------------------------- */}
-        <div className="mt-5 pt-4 border-t border-slate-100 space-y-2">
+        <div className="mt-5 pt-4 border-t border-[#D5DCD1] space-y-2">
           <div className="flex items-center justify-between text-[11.5px]">
-            <span className="font-bold uppercase tracking-wider text-slate-400">
+            <span className="font-bold uppercase tracking-wider text-[#69746A]">
               Select Research Purpose to Compare:
             </span>
-            <span className="text-slate-400 italic">
+            <span className="text-[#69746A] italic">
               Each purpose applies its own verified criteria matrix
             </span>
           </div>
@@ -370,22 +370,22 @@ export default function PurposeFitComparison({
                   onClick={() => handleSelectPurpose(purpose.key)}
                   className={`p-2 rounded-xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected
-                      ? 'border-indigo-600 bg-indigo-50/70 shadow-2xs ring-1 ring-indigo-500/20'
-                      : 'border-slate-200/70 hover:border-slate-300 hover:bg-slate-50/70'
+                      ? 'border-[#24543D] bg-[#24543D]/10 shadow-2xs ring-1 ring-[#24543D]/20'
+                      : 'border-[#D5DCD1] hover:border-[#52725D] hover:bg-[#E7EAE4]/50'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <Icon
                       size={14}
-                      className={isSelected ? 'text-indigo-600' : 'text-slate-400'}
+                      className={isSelected ? 'text-[#24543D]' : 'text-[#69746A]'}
                     />
                     {isSelected && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#24543D]" />
                     )}
                   </div>
                   <span
                     className={`font-bold text-[11px] leading-tight truncate ${
-                      isSelected ? 'text-indigo-950 font-black' : 'text-slate-700'
+                      isSelected ? 'text-[#24543D] font-black' : 'text-[#202923]'
                     }`}
                   >
                     {purpose.display_name}
@@ -422,12 +422,12 @@ export default function PurposeFitComparison({
        * Loading State
        * ------------------------------------------------------------- */}
       {isLoading && (
-        <div className="bg-white border border-slate-200/80 rounded-2xl p-12 text-center space-y-3 shadow-xs">
-          <RefreshCw size={28} className="animate-spin text-indigo-600 mx-auto" />
-          <h4 className="font-extrabold text-[15px] text-slate-800">
+        <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-12 text-center space-y-3 shadow-2xs">
+          <RefreshCw size={28} className="animate-spin text-[#24543D] mx-auto" />
+          <h4 className="font-serif font-bold text-[16px] text-[#202923]">
             Evaluating Workspace Candidates for {currentPurposeMeta.display_name}...
           </h4>
-          <p className="text-[12px] text-slate-500">
+          <p className="text-[12px] text-[#69746A]">
             Running deterministic criteria checks across eligible workspace datasets.
           </p>
         </div>
@@ -441,22 +441,22 @@ export default function PurposeFitComparison({
           {/* -------------------------------------------------------------
            * SECTION 2: Ranked Horizontal Comparison Chart (Centerpiece)
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-5">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-2xs space-y-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                   Primary Comparison Centerpiece
                 </span>
-                <h3 className="font-extrabold text-[18px] text-slate-900 tracking-tight mt-0.5">
+                <h3 className="font-serif font-bold text-[18px] text-[#202923] tracking-tight mt-0.5">
                   Which eligible dataset fits {currentPurposeMeta.display_name} best?
                 </h3>
-                <p className="text-[12.5px] text-slate-600 mt-1">
+                <p className="text-[12.5px] text-[#69746A] mt-1">
                   Ranked by adherence to purpose criteria. Datasets in higher tiers meet all required quality baselines with fewer warnings and concerns.
                 </p>
               </div>
 
               {/* Chart Legend */}
-              <div className="flex items-center gap-3 text-[11px] font-semibold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/70 self-start sm:self-auto">
+              <div className="flex items-center gap-3 text-[11px] font-semibold text-[#69746A] bg-[#F7F5EE] px-3 py-1.5 rounded-xl border border-[#D5DCD1] self-start sm:self-auto">
                 <div className="flex items-center gap-1.5" title="Favorable characteristics meeting target thresholds">
                   <span className="w-2.5 h-2.5 rounded-sm bg-emerald-600" />
                   <span>Favorable</span>
@@ -478,14 +478,14 @@ export default function PurposeFitComparison({
 
             {/* Evaluated Candidates Horizontal Bar Chart */}
             {evaluatedCandidates.length === 0 ? (
-              <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl p-10 text-center space-y-3">
-                <div className="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+              <div className="bg-[#F7F5EE] border border-dashed border-[#D5DCD1] rounded-2xl p-10 text-center space-y-3">
+                <div className="w-11 h-11 rounded-2xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center mx-auto">
                   <Database size={22} />
                 </div>
-                <h4 className="font-bold text-[14px] text-slate-800">
+                <h4 className="font-serif font-bold text-[14px] text-[#202923]">
                   No Profiled Datasets Found in this Workspace
                 </h4>
-                <p className="text-[12px] text-slate-500 max-w-md mx-auto">
+                <p className="text-[12px] text-[#69746A] max-w-md mx-auto">
                   To compare datasets for {currentPurposeMeta.display_name}, profile at least one dataset in this workspace first.
                 </p>
               </div>
@@ -513,10 +513,10 @@ export default function PurposeFitComparison({
                       onClick={() => setInspectedCandidateId(candidate.dataset_id)}
                       className={`p-4 rounded-xl border transition-all cursor-pointer relative ${
                         isInspected
-                          ? 'border-indigo-500 ring-2 ring-indigo-500/20 bg-indigo-50/20 shadow-xs'
+                          ? 'border-[#24543D] ring-2 ring-[#24543D]/20 bg-[#24543D]/5 shadow-2xs'
                           : isRef
-                          ? 'border-indigo-200/80 bg-slate-50/50 hover:bg-slate-50 hover:border-indigo-300'
-                          : 'border-slate-200/80 bg-white hover:border-slate-300 hover:bg-slate-50/50'
+                          ? 'border-[#D5DCD1] bg-[#F7F5EE]/60 hover:bg-[#E7EAE4]/50'
+                          : 'border-[#D5DCD1] bg-[#FCFAF6] hover:border-[#52725D] hover:bg-[#E7EAE4]/30'
                       }`}
                     >
                       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -525,10 +525,10 @@ export default function PurposeFitComparison({
                           <div
                             className={`w-8 h-8 rounded-xl font-black text-[13px] flex items-center justify-center shrink-0 border ${
                               candidate.rank === 1
-                                ? 'bg-amber-100 text-amber-900 border-amber-300 shadow-2xs'
+                                ? 'bg-[#24543D] text-white border-[#24543D] shadow-2xs'
                                 : candidate.rank === 2
-                                ? 'bg-slate-200 text-slate-800 border-slate-300'
-                                : 'bg-slate-100 text-slate-700 border-slate-200'
+                                ? 'bg-[#E7EAE4] text-[#202923] border-[#D5DCD1]'
+                                : 'bg-[#F7F5EE] text-[#69746A] border-[#D5DCD1]'
                             }`}
                             title={`Rank #${candidate.rank}${candidate.is_tied ? ' (Tied)' : ''}`}
                           >
@@ -538,23 +538,23 @@ export default function PurposeFitComparison({
                           <div className="min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
                               <h4
-                                className="font-bold text-[13.5px] text-slate-900 truncate leading-snug"
+                                className="font-bold text-[13.5px] text-[#202923] truncate leading-snug"
                                 title={candidate.dataset_name}
                               >
                                 {candidate.dataset_name}
                               </h4>
                               {isRef && (
-                                <span className="text-[10px] font-black uppercase px-2 py-0.2 rounded-md bg-indigo-100 text-indigo-700 border border-indigo-200/80 shrink-0">
+                                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-[#24543D]/10 text-[#24543D] border border-[#24543D]/20 shrink-0">
                                   Current Reference
                                 </span>
                               )}
                               {candidate.is_tied && (
-                                <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded shrink-0">
+                                <span className="text-[10px] font-semibold text-[#69746A] bg-[#E7EAE4] px-1.5 py-0.5 rounded shrink-0">
                                   Tied
                                 </span>
                               )}
                             </div>
-                            <span className="text-[11px] text-slate-400 font-medium">
+                            <span className="text-[11px] text-[#69746A] font-medium">
                               {candidate.dataset_image_count.toLocaleString()} images
                             </span>
                           </div>
@@ -562,7 +562,7 @@ export default function PurposeFitComparison({
 
                         {/* Middle: Horizontal Stacked Bar */}
                         <div className="flex-1 px-2 space-y-1.5">
-                          <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden flex shadow-inner">
+                          <div className="h-3 w-full bg-[#E7EAE4] rounded-full overflow-hidden flex shadow-inner">
                             {favPct > 0 && (
                               <div
                                 style={{ width: `${favPct}%` }}
@@ -594,17 +594,17 @@ export default function PurposeFitComparison({
                           </div>
 
                           {/* Metric breakdown labels */}
-                          <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium">
-                            <span className="text-emerald-700 font-bold">
+                          <div className="flex items-center justify-between text-[11px] text-[#69746A] font-medium">
+                            <span className="text-emerald-800 font-bold">
                               {candidate.favorable_count} favorable
                             </span>
-                            <span className="text-blue-700 font-bold">
+                            <span className="text-blue-800 font-bold">
                               {candidate.neutral_count} neutral
                             </span>
-                            <span className={candidate.warning_count > 0 ? 'text-amber-700 font-bold' : 'text-slate-400'}>
+                            <span className={candidate.warning_count > 0 ? 'text-amber-800 font-bold' : 'text-[#69746A]'}>
                               {candidate.warning_count} warnings
                             </span>
-                            <span className={candidate.critical_count > 0 ? 'text-rose-700 font-bold' : 'text-slate-400'}>
+                            <span className={candidate.critical_count > 0 ? 'text-rose-800 font-bold' : 'text-[#69746A]'}>
                               {candidate.critical_count} critical
                             </span>
                           </div>
@@ -621,7 +621,7 @@ export default function PurposeFitComparison({
 
                           <span
                             className={`text-[11px] font-bold flex items-center gap-0.5 ${
-                              isInspected ? 'text-indigo-600' : 'text-slate-400 group-hover:text-slate-600'
+                              isInspected ? 'text-[#24543D]' : 'text-[#69746A] group-hover:text-[#202923]'
                             }`}
                           >
                             <span>{isInspected ? 'Selected' : 'Inspect'}</span>
@@ -652,17 +652,17 @@ export default function PurposeFitComparison({
                   {unevaluatedCandidates.map((cand) => (
                     <div
                       key={cand.dataset_id}
-                      className="p-3 bg-slate-50/70 border border-slate-200/70 rounded-xl flex items-center justify-between gap-3 text-[12px]"
+                      className="p-3 bg-[#F7F5EE]/70 border border-[#D5DCD1] rounded-xl flex items-center justify-between gap-3 text-[12px]"
                     >
                       <div className="min-w-0">
-                        <span className="font-bold text-slate-800 truncate block">
+                        <span className="font-bold text-[#202923] truncate block">
                           {cand.dataset_name}
                         </span>
-                        <span className="text-[11px] text-slate-500">
+                        <span className="text-[11px] text-[#69746A]">
                           {cand.status_message || 'Profiling not yet executed.'}
                         </span>
                       </div>
-                      <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 shrink-0">
+                      <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#24543D] shrink-0 border border-[#D5DCD1]">
                         {cand.eligibility_status === 'profiling' ? 'Profiling...' : 'Unprofiled'}
                       </span>
                     </div>
@@ -672,24 +672,24 @@ export default function PurposeFitComparison({
             )}
 
             {/* Transparent Methodology Disclaimer */}
-            <div className="bg-slate-50/80 border border-slate-200/70 rounded-xl p-3 text-[11px] text-slate-500 leading-relaxed">
-              <strong>Evaluation Methodology:</strong> {comparisonData.methodology_note}
+            <div className="bg-[#F7F5EE]/80 border border-[#D5DCD1] rounded-xl p-3 text-[11px] text-[#69746A] leading-relaxed">
+              <strong className="text-[#202923]">Evaluation Methodology:</strong> {comparisonData.methodology_note}
             </div>
           </div>
 
           {/* -------------------------------------------------------------
            * SECTION 3: Supporting Criteria Comparison Matrix
            * ------------------------------------------------------------- */}
-          <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-100">
+          <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#D5DCD1]/60">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#69746A]">
                   Supporting Evidence
                 </span>
-                <h3 className="font-extrabold text-[17px] text-slate-900 tracking-tight mt-0.5">
+                <h3 className="font-serif font-bold text-[18px] text-[#202923] tracking-tight mt-0.5">
                   Purpose Criteria Comparison Matrix
                 </h3>
-                <p className="text-[12px] text-slate-500 mt-0.5">
+                <p className="text-[12px] text-[#69746A] mt-0.5">
                   Side-by-side metric comparison for {currentPurposeMeta.display_name}. Click any row or cell to view detailed rule explanations.
                 </p>
               </div>
@@ -708,7 +708,7 @@ export default function PurposeFitComparison({
                 <span className="px-2 py-0.5 rounded-md bg-rose-50 text-rose-800 border border-rose-200">
                   ! Critical
                 </span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+                <span className="px-2 py-0.5 rounded-md bg-[#E7EAE4] text-[#69746A] border border-[#D5DCD1]">
                   — N/A
                 </span>
               </div>
@@ -718,8 +718,8 @@ export default function PurposeFitComparison({
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-[12px]">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-400 uppercase text-[10.5px] font-bold">
-                    <th className="py-2.5 px-3 min-w-[200px] sticky left-0 bg-white z-10 shadow-2xs">
+                  <tr className="border-b border-[#D5DCD1] text-[#69746A] uppercase text-[10.5px] font-bold">
+                    <th className="py-2.5 px-3 min-w-[200px] sticky left-0 bg-[#FCFAF6] z-10 shadow-2xs">
                       Criterion / Characteristic
                     </th>
                     {evaluatedCandidates.map((cand) => (
@@ -727,15 +727,15 @@ export default function PurposeFitComparison({
                         key={cand.dataset_id}
                         className={`py-2.5 px-3 min-w-[150px] text-center ${
                           cand.is_reference
-                            ? 'bg-indigo-50/60 text-indigo-900 font-extrabold border-x border-indigo-200/60'
-                            : 'text-slate-700'
+                            ? 'bg-[#24543D]/5 text-[#24543D] font-extrabold border-x border-[#D5DCD1]'
+                            : 'text-[#202923]'
                         }`}
                       >
                         <div className="truncate max-w-[160px] mx-auto" title={cand.dataset_name}>
                           {cand.dataset_name}
                         </div>
                         {cand.is_reference && (
-                          <span className="text-[9.5px] uppercase tracking-wider block text-indigo-600 font-bold">
+                          <span className="text-[9.5px] uppercase tracking-wider block text-[#24543D] font-bold">
                             (Reference)
                           </span>
                         )}
@@ -743,7 +743,7 @@ export default function PurposeFitComparison({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-slate-700">
+                <tbody className="divide-y divide-[#D5DCD1]/50 text-[#202923]">
                   {comparisonData.matrix_criteria.map((crit) => {
                     const isMetricHighlighted = highlightedMetricKey === crit.metric_key;
 
@@ -753,16 +753,16 @@ export default function PurposeFitComparison({
                         onClick={() =>
                           setHighlightedMetricKey(isMetricHighlighted ? null : crit.metric_key)
                         }
-                        className={`hover:bg-slate-50/70 transition-colors cursor-pointer ${
-                          isMetricHighlighted ? 'bg-indigo-50/30' : ''
+                        className={`hover:bg-[#F7F5EE]/80 transition-colors cursor-pointer ${
+                          isMetricHighlighted ? 'bg-[#24543D]/5' : ''
                         }`}
                       >
                         {/* Criterion Label & Threshold */}
-                        <td className="py-3 px-3 font-semibold sticky left-0 bg-white z-10 space-y-0.5 shadow-2xs">
-                          <span className="text-slate-900 font-bold block">
+                        <td className="py-3 px-3 font-semibold sticky left-0 bg-[#FCFAF6] z-10 space-y-0.5 shadow-2xs">
+                          <span className="text-[#202923] font-bold block">
                             {crit.plain_label}
                           </span>
-                          <span className="text-[10.5px] text-slate-400 block font-normal">
+                          <span className="text-[10.5px] text-[#69746A] block font-normal">
                             Target rule: {crit.operator || ''} {crit.threshold !== null ? crit.threshold : 'configured'} {crit.unit || ''}
                           </span>
                         </td>
@@ -794,12 +794,12 @@ export default function PurposeFitComparison({
                               key={cand.dataset_id}
                               className={`py-3 px-3 text-center align-middle ${
                                 cand.is_reference
-                                  ? 'bg-indigo-50/20 border-x border-indigo-200/40'
+                                  ? 'bg-[#24543D]/5 border-x border-[#D5DCD1]/60'
                                   : ''
                               }`}
                             >
                               <div className="flex flex-col items-center justify-center gap-1">
-                                <span className="font-extrabold text-[12px] text-slate-800">
+                                <span className="font-extrabold text-[12px] text-[#202923]">
                                   {formattedVal}
                                 </span>
                                 <span
@@ -825,27 +825,27 @@ export default function PurposeFitComparison({
            * SECTION 4: Detailed Candidate Inspection Panel
            * ------------------------------------------------------------- */}
           {inspectedCandidate && inspectedCandidate.fit_result && (
-            <div className="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-xs space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+            <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#D5DCD1]/60">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-[13px] border border-indigo-200">
+                  <div className="w-9 h-9 rounded-xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center font-bold text-[13px] border border-[#24543D]/20">
                     #{inspectedCandidate.rank || '—'}
                   </div>
                   <div>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="font-extrabold text-[16px] text-slate-900">
+                      <h4 className="font-serif font-bold text-[17px] text-[#202923]">
                         {inspectedCandidate.dataset_name}
                       </h4>
                       {inspectedCandidate.is_reference && (
-                        <span className="text-[10px] font-black uppercase px-2 py-0.2 rounded-md bg-indigo-100 text-indigo-700">
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-md bg-[#24543D]/15 text-[#24543D] border border-[#24543D]/25">
                           Current Reference
                         </span>
                       )}
-                      <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border bg-slate-50 text-slate-700">
+                      <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-[#D5DCD1] bg-[#F7F5EE] text-[#202923]">
                         {inspectedCandidate.overall_status}
                       </span>
                     </div>
-                    <p className="text-[12px] text-slate-500 mt-0.5">
+                    <p className="text-[12px] text-[#69746A] mt-0.5">
                       Detailed purpose-fitting findings and supporting evidence for {currentPurposeMeta.display_name}.
                     </p>
                   </div>
@@ -853,11 +853,11 @@ export default function PurposeFitComparison({
 
                 {/* Candidate Selector Pill */}
                 <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <span className="text-[11.5px] font-semibold text-slate-500">Inspect candidate:</span>
+                  <span className="text-[11.5px] font-semibold text-[#69746A]">Inspect candidate:</span>
                   <select
                     value={inspectedCandidate.dataset_id}
                     onChange={(e) => setInspectedCandidateId(e.target.value)}
-                    className="px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-[12px] font-semibold text-slate-700 outline-none focus:border-indigo-400 cursor-pointer"
+                    className="px-2.5 py-1.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl text-[12px] font-semibold text-[#202923] outline-none focus:border-[#24543D] cursor-pointer"
                   >
                     {evaluatedCandidates.map((c) => (
                       <option key={c.dataset_id} value={c.dataset_id}>
@@ -870,7 +870,7 @@ export default function PurposeFitComparison({
 
               {/* Flagged Findings List */}
               <div className="space-y-2.5">
-                <h5 className="font-bold text-[13px] text-slate-800 flex items-center gap-2">
+                <h5 className="font-bold text-[13px] text-[#202923] flex items-center gap-2">
                   <AlertTriangle size={15} className="text-amber-600" />
                   <span>Flagged Findings for Review ({inspectedCandidate.fit_result.flagged_findings?.length ?? 0})</span>
                 </h5>
@@ -905,8 +905,8 @@ export default function PurposeFitComparison({
                             {finding.verdict}
                           </span>
                         </div>
-                        <p className="font-semibold text-slate-800">{finding.message}</p>
-                        <p className="text-[11.5px] text-slate-600 leading-snug">{finding.explanation}</p>
+                        <p className="font-semibold text-[#202923]">{finding.message}</p>
+                        <p className="text-[11.5px] text-[#69746A] leading-snug">{finding.explanation}</p>
                       </div>
                     ))}
                   </div>
@@ -915,8 +915,8 @@ export default function PurposeFitComparison({
 
               {/* Favorable Characteristics Summary */}
               {inspectedCandidate.fit_result.dataset_characteristics && inspectedCandidate.fit_result.dataset_characteristics.length > 0 && (
-                <div className="pt-2 border-t border-slate-100 space-y-2">
-                  <h5 className="font-bold text-[13px] text-slate-800 flex items-center gap-2">
+                <div className="pt-2 border-t border-[#D5DCD1]/60 space-y-2">
+                  <h5 className="font-bold text-[13px] text-[#202923] flex items-center gap-2">
                     <CheckCircle2 size={15} className="text-emerald-600" />
                     <span>Favorable Characteristics ({inspectedCandidate.favorable_count})</span>
                   </h5>
@@ -926,12 +926,12 @@ export default function PurposeFitComparison({
                       .map((char) => (
                         <div
                           key={char.rule_id}
-                          className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg space-y-0.5"
+                          className="p-2.5 bg-[#F7F5EE] border border-[#D5DCD1] rounded-lg space-y-0.5"
                         >
-                          <span className="font-bold text-slate-800 block truncate">
+                          <span className="font-bold text-[#202923] block truncate">
                             {char.metric_display_name}
                           </span>
-                          <span className="text-slate-500 text-[11px] block leading-tight">
+                          <span className="text-[#69746A] text-[11px] block leading-tight">
                             {char.message}
                           </span>
                         </div>
@@ -946,3 +946,4 @@ export default function PurposeFitComparison({
     </div>
   );
 }
+

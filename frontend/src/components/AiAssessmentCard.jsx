@@ -123,32 +123,32 @@ export default function AiAssessmentCard({ datasetId, purposeKey }) {
   return (
     <>
       {/* Compact Entry Bar / Button at top of page */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl p-3 px-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all hover:border-indigo-200">
+      <div className="bg-[#FCFAF6] border border-[#D5DCD1] rounded-2xl p-3 px-4 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-all hover:border-[#52725D]">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shrink-0">
             {isFallback ? <Brain size={16} /> : <Sparkles size={16} />}
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="text-[13.5px] font-bold text-slate-900">
+              <h4 className="font-serif font-bold text-[14px] text-[#202923]">
                 Executive AI Assessment
               </h4>
               {loading ? (
-                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#69746A]">
                   Analyzing...
                 </span>
               ) : isFallback ? (
-                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">
+                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#E7EAE4] text-[#69746A] border border-[#D5DCD1]">
                   Automatic summary
                 </span>
               ) : (
-                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/60 flex items-center gap-1">
+                <span className="text-[10.5px] font-semibold px-2 py-0.5 rounded-full bg-[#C7D86B]/30 text-[#202923] border border-[#C7D86B]/50 flex items-center gap-1">
                   <Sparkles size={10} />
                   AI Generated
                 </span>
               )}
             </div>
-            <p className="text-[11.5px] text-slate-500 line-clamp-1 mt-0.5">
+            <p className="text-[11.5px] text-[#69746A] line-clamp-1 mt-0.5">
               {loading
                 ? 'Synthesizing dataset findings and purpose criteria...'
                 : assessment?.headline || 'Evaluate dataset suitability, critical concerns, and recommended next steps.'}
@@ -160,7 +160,7 @@ export default function AiAssessmentCard({ datasetId, purposeKey }) {
           {error ? (
             <button
               onClick={() => fetchAssessment(false)}
-              className="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[12px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#F7F5EE] hover:bg-[#E7EAE4] text-[#202923] border border-[#D5DCD1] rounded-xl text-[12px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <RefreshCw size={12} />
               <span>Retry</span>
@@ -168,7 +168,7 @@ export default function AiAssessmentCard({ datasetId, purposeKey }) {
           ) : (
             <button
               onClick={() => setIsOpen(true)}
-              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[12.5px] font-bold flex items-center gap-1.5 shadow-xs hover:shadow-sm transition-all cursor-pointer"
+              className="px-4 py-2 bg-[#24543D] hover:bg-[#1C4430] text-white rounded-xl text-[12.5px] font-bold flex items-center gap-1.5 shadow-2xs hover:shadow-xs transition-all cursor-pointer"
             >
               <Sparkles size={13} />
               <span>Open Assessment</span>
@@ -180,29 +180,29 @@ export default function AiAssessmentCard({ datasetId, purposeKey }) {
 
       {/* Modal Dialog for the full AI Assessment Card */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-150">
+        <div className="fixed inset-0 z-50 bg-[#202923]/50 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-150">
           <div
-            className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col max-h-[88vh] overflow-hidden my-auto"
+            className="relative w-full max-w-3xl bg-[#FCFAF6] rounded-2xl shadow-2xl border border-[#D5DCD1] flex flex-col max-h-[88vh] overflow-hidden my-auto"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="bg-white border-b border-slate-100 p-4 px-5 flex items-center justify-between shrink-0">
+            <div className="bg-[#F7F5EE] border-b border-[#D5DCD1] p-4 px-5 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-[#24543D]/10 text-[#24543D] flex items-center justify-center shrink-0">
                   {isFallback ? <Brain size={17} /> : <Sparkles size={17} />}
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-[15px] text-slate-900 tracking-tight">
+                  <h3 className="font-serif font-bold text-[16px] text-[#202923] tracking-tight">
                     Executive AI Assessment
                   </h3>
                   <div className="flex items-center gap-2 mt-0.5">
                     {isFallback ? (
-                      <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                      <span className="text-[11px] font-semibold text-[#69746A] flex items-center gap-1">
                         <Info size={11} />
                         Automatic summary (AI unavailable)
                       </span>
                     ) : (
-                      <span className="text-[11px] font-semibold text-indigo-600 flex items-center gap-1">
+                      <span className="text-[11px] font-semibold text-[#24543D] flex items-center gap-1">
                         <Sparkles size={11} />
                         AI-generated from measured dataset statistics
                       </span>
@@ -216,14 +216,14 @@ export default function AiAssessmentCard({ datasetId, purposeKey }) {
                   onClick={() => fetchAssessment(true)}
                   disabled={regenerating}
                   title="Re-run assessment with fresh evaluation"
-                  className="px-2.5 py-1.5 rounded-lg text-[11.5px] font-bold text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-2.5 py-1.5 rounded-lg text-[11.5px] font-bold text-[#202923] hover:text-[#24543D] bg-[#FCFAF6] hover:bg-[#E7EAE4] border border-[#D5DCD1] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <RefreshCw size={11} className={regenerating ? 'animate-spin' : ''} />
                   <span>{regenerating ? 'Regenerating...' : 'Regenerate'}</span>
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-lg text-[#69746A] hover:text-[#202923] hover:bg-[#E7EAE4] transition-colors cursor-pointer"
                   title="Close dialog"
                 >
                   <X size={18} />

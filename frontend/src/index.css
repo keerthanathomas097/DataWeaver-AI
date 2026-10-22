@@ -2,19 +2,116 @@
 
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', 'Source Serif 4', Georgia, serif;
+
+  --color-forest: #24543D;
+  --color-forest-dark: #1C4430;
+  --color-forest-hover: #1C4430;
+  --color-forest-light: rgba(36, 84, 61, 0.08);
+  --color-ivory: #F7F5EE;
+  --color-ivory-dark: #ECE9DE;
+  --color-lime: #C7D86B;
+  --color-lime-light: rgba(199, 216, 107, 0.22);
+  --color-ink: #202923;
+  --color-ink-light: #3A453E;
+  --color-sage: #E7EAE4;
+  --color-sage-light: #F0F3EE;
+  --color-muted-forest: #52725D;
+  --color-sage-border: #D5DCD1;
+  --color-text-secondary: #69746A;
+  --color-card-white: #FFFFFF;
+  --color-card-ivory: #FCFAF6;
+}
+
+:root {
+  --atlas-forest: #24543D;
+  --atlas-forest-hover: #1C4430;
+  --atlas-forest-tint: rgba(36, 84, 61, 0.08);
+  --atlas-ivory: #F7F5EE;
+  --atlas-ivory-dark: #ECE9DE;
+  --atlas-lime: #C7D86B;
+  --atlas-lime-tint: rgba(199, 216, 107, 0.22);
+  --atlas-ink: #202923;
+  --atlas-ink-secondary: #3A453E;
+  --atlas-sage: #E7EAE4;
+  --atlas-sage-light: #F0F3EE;
+  --atlas-muted-forest: #52725D;
+  --atlas-border: #D5DCD1;
+  --atlas-text-secondary: #69746A;
+  --atlas-card: #FFFFFF;
+  --atlas-card-ivory: #FCFAF6;
+  
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', 'Source Serif 4', Georgia, serif;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #f8fafc;
-  color: #1e293b;
+  background-color: var(--atlas-ivory);
+  color: var(--atlas-ink);
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(36, 84, 61, 0.018) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(199, 216, 107, 0.025) 0%, transparent 40%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cpath d='M0 40 Q 40 20, 80 40 T 160 40 M0 80 Q 40 60, 80 80 T 160 80 M0 120 Q 40 100, 80 120 T 160 120' fill='none' stroke='%2324543D' stroke-width='0.45' stroke-opacity='0.038'/%3E%3Cpath d='M40 0 Q 20 40, 40 80 T 40 160 M80 0 Q 60 40, 80 80 T 80 160 M120 0 Q 100 40, 120 80 T 120 160' fill='none' stroke='%2324543D' stroke-width='0.45' stroke-opacity='0.025'/%3E%3C/svg%3E");
+  background-attachment: fixed;
 }
 
-/* Custom scrollbar style */
+/* Editorial serif headings */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.atlas-title {
+  font-family: var(--font-serif);
+  color: var(--atlas-ink);
+  letter-spacing: -0.015em;
+}
+
+/* Atlas Editorial Card & Surface Styles */
+.atlas-panel {
+  background-color: #FFFFFF;
+  border: 1px solid var(--atlas-border);
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(32, 41, 35, 0.03);
+}
+
+.atlas-panel-ivory {
+  background-color: var(--atlas-card-ivory);
+  border: 1px solid var(--atlas-border);
+  border-radius: 1rem;
+}
+
+.atlas-panel-sage {
+  background-color: var(--atlas-sage);
+  border: 1px solid var(--atlas-border);
+  border-radius: 1rem;
+}
+
+/* Primary buttons in Forest Green */
+.atlas-btn-primary {
+  background-color: var(--atlas-forest);
+  color: var(--atlas-ivory);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.atlas-btn-primary:hover:not(:disabled) {
+  background-color: var(--atlas-forest-hover);
+  box-shadow: 0 2px 8px rgba(36, 84, 61, 0.2);
+}
+
+/* Mineral Lime restrained accent */
+.atlas-accent-lime {
+  background-color: var(--atlas-lime-tint);
+  border: 1px solid rgba(199, 216, 107, 0.5);
+  color: var(--atlas-ink);
+}
+
+/* Refined custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -23,9 +120,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e2e8f0;
+  background: var(--atlas-border);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #cbd5e1;
+  background: var(--atlas-muted-forest);
 }

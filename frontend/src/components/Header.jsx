@@ -35,24 +35,24 @@ export default function Header({
   };
 
   return (
-    <header className="h-18 border-b border-slate-100 bg-white px-8 flex items-center justify-between sticky top-0 z-40">
+    <header className="h-18 border-b border-[#D5DCD1] bg-[#FCFAF6]/90 backdrop-blur-xs px-8 flex items-center justify-between sticky top-0 z-40">
       <div className="flex items-center gap-6 flex-1 max-w-lg">
         <div className="relative w-full">
-          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#69746A]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search datasets, workspaces..."
-            className="w-full pl-10 pr-4 py-2 text-[14px] bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-blue-400 focus:bg-white transition-all duration-200 placeholder:text-slate-400"
+            className="w-full pl-10 pr-4 py-2 text-[14px] bg-[#F7F5EE] border border-[#D5DCD1] rounded-xl focus:outline-none focus:border-[#24543D] focus:bg-white transition-all duration-200 placeholder:text-[#69746A] text-[#202923]"
           />
         </div>
       </div>
 
       <div className="flex items-center gap-6">
-        <div className="flex items-center gap-4 h-9 border-r border-slate-100 pr-6">
+        <div className="flex items-center gap-4 h-9 border-r border-[#D5DCD1] pr-6">
           <div className="text-right">
-            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none">
+            <p className="text-[9px] font-bold text-[#69746A] uppercase tracking-widest leading-none">
               Active Workspace
             </p>
           </div>
@@ -60,7 +60,7 @@ export default function Header({
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 text-blue-600 rounded-lg text-[13px] font-semibold hover:bg-blue-100/80 transition-colors duration-200"
+              className="flex items-center gap-2 px-3.5 py-1.5 bg-[#24543D]/10 text-[#24543D] border border-[#24543D]/20 rounded-lg text-[13px] font-bold hover:bg-[#24543D]/15 transition-colors duration-200 cursor-pointer"
             >
               <span className="truncate max-w-[150px]">
                 {selectedWorkspace?.name.toUpperCase()}
@@ -74,9 +74,9 @@ export default function Header({
             {dropdownOpen && (
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
-                <div className="absolute right-0 mt-2 w-64 bg-white border border-slate-100 rounded-xl shadow-xl py-1.5 z-50">
-                  <div className="px-3 py-1.5 border-b border-slate-50">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <div className="absolute right-0 mt-2 w-64 bg-white border border-[#D5DCD1] rounded-xl shadow-xl py-1.5 z-50">
+                  <div className="px-3 py-1.5 border-b border-[#D5DCD1]/60">
+                    <p className="text-[10px] font-bold text-[#69746A] uppercase tracking-wider">
                       Switch Workspace
                     </p>
                   </div>
@@ -88,17 +88,19 @@ export default function Header({
                           setActiveWorkspace(ws.id);
                           setDropdownOpen(false);
                         }}
-                        className="w-full flex items-center justify-between px-3.5 py-2.5 text-left text-[13px] hover:bg-slate-50 transition-colors"
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-[13px] hover:bg-[#E7EAE4]/60 transition-colors cursor-pointer ${
+                          ws.id === activeWorkspace ? 'bg-[#24543D]/10 font-bold' : ''
+                        }`}
                       >
                         <span
                           className={`truncate font-medium ${
-                            ws.id === activeWorkspace ? 'text-blue-600' : 'text-slate-700'
+                            ws.id === activeWorkspace ? 'text-[#24543D]' : 'text-[#202923]'
                           }`}
                         >
                           {ws.name}
                         </span>
                         {ws.id === activeWorkspace && (
-                          <Check size={14} className="text-blue-600 shrink-0" />
+                          <Check size={14} className="text-[#24543D] shrink-0" />
                         )}
                       </button>
                     ))}
@@ -110,28 +112,28 @@ export default function Header({
         </div>
 
         <div className="flex items-center gap-4.5">
-          <button className="relative p-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors group">
+          <button className="relative p-2 rounded-xl text-[#52725D] hover:bg-[#E7EAE4] hover:text-[#202923] transition-colors group cursor-pointer">
             <Bell size={20} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white group-hover:scale-110 transition-transform" />
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#C7D86B] rounded-full ring-2 ring-[#FCFAF6] group-hover:scale-110 transition-transform" />
           </button>
 
-          <button className="p-2 rounded-xl text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors">
+          <button className="p-2 rounded-xl text-[#52725D] hover:bg-[#E7EAE4] hover:text-[#202923] transition-colors cursor-pointer">
             <SettingsIcon size={20} />
           </button>
         </div>
 
-        <div className="w-px h-8 bg-slate-100" />
+        <div className="w-px h-8 bg-[#D5DCD1]" />
 
         <div className="relative">
           <button
             onClick={() => setProfileOpen(!profileOpen)}
-            className="flex items-center gap-3 hover:opacity-90 transition-opacity"
+            className="flex items-center gap-3 hover:opacity-90 transition-opacity cursor-pointer"
           >
             <div className="text-right hidden sm:block">
-              <p className="text-[13px] font-bold text-slate-800 leading-tight">
+              <p className="text-[13px] font-bold text-[#202923] leading-tight">
                 {user?.name || 'Researcher'}
               </p>
-              <p className="text-[11px] text-slate-500 font-medium">
+              <p className="text-[11px] text-[#69746A] font-medium">
                 {user?.role || 'Researcher'}
               </p>
             </div>
@@ -139,16 +141,16 @@ export default function Header({
               <img
                 src={user.avatar}
                 alt="User Profile"
-                className="w-9.5 h-9.5 rounded-full object-cover border border-slate-100 ring-2 ring-slate-100/50"
+                className="w-9.5 h-9.5 rounded-full object-cover border border-[#D5DCD1] ring-2 ring-[#D5DCD1]/50"
               />
             ) : (
-              <div className="w-9.5 h-9.5 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-[12px] font-bold border border-slate-100 ring-2 ring-slate-100/50">
+              <div className="w-9.5 h-9.5 rounded-full bg-[#24543D] text-[#F7F5EE] border border-[#C7D86B]/30 flex items-center justify-center text-[12px] font-bold shadow-xs">
                 {getInitials(user?.name)}
               </div>
             )}
             <ChevronDown
               size={14}
-              className={`text-slate-400 hidden sm:block transition-transform duration-200 ${
+              className={`text-[#69746A] hidden sm:block transition-transform duration-200 ${
                 profileOpen ? 'rotate-180' : ''
               }`}
             />
@@ -157,21 +159,21 @@ export default function Header({
           {profileOpen && (
             <>
               <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-xl py-1.5 z-50">
-                <div className="px-3.5 py-2.5 border-b border-slate-50">
-                  <p className="text-[13px] font-bold text-slate-800 truncate">{user?.name}</p>
-                  <p className="text-[11px] text-slate-500 truncate">{user?.email}</p>
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-[#D5DCD1] rounded-xl shadow-xl py-1.5 z-50">
+                <div className="px-3.5 py-2.5 border-b border-[#D5DCD1]/60">
+                  <p className="text-[13px] font-bold text-[#202923] truncate">{user?.name}</p>
+                  <p className="text-[11px] text-[#69746A] truncate">{user?.email}</p>
                 </div>
                 <button
                   onClick={() => setProfileOpen(false)}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-slate-700 hover:bg-slate-50 transition-colors"
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-[#202923] hover:bg-[#E7EAE4]/60 transition-colors cursor-pointer"
                 >
-                  <User size={15} className="text-slate-400" />
+                  <User size={15} className="text-[#69746A]" />
                   View Profile
                 </button>
                 <button
                   onClick={handleSignOut}
-                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-rose-600 hover:bg-rose-50 transition-colors"
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-left text-[13px] text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer"
                 >
                   <LogOut size={15} />
                   Sign out

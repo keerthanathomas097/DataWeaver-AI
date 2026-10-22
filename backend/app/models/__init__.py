@@ -6,6 +6,7 @@ from app.models.profiling import DatasetProfilingResult
 from app.models.clip_finding import DatasetClipFinding
 from app.models.ai_assessment import DatasetAiAssessment
 from app.models.domain_gap import DomainSampleSet, DatasetDomainGapResult, WorkspaceDomainGapComparison
+from app.models.learning_curve import DatasetLearningCurveResult
 
 __all__ = [
     "User",
@@ -20,4 +21,6 @@ __all__ = [
     "DomainSampleSet",
     "DatasetDomainGapResult",
     "WorkspaceDomainGapComparison",
+    "DatasetLearningCurveResult",
 ]
+

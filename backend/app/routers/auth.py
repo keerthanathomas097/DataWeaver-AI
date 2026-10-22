@@ -80,7 +80,25 @@ def reset_password(data: ResetPasswordRequest, session: Session = Depends(get_se
         raise HTTPException(status_code=400, detail="Invalid or expired reset link")
     return {"message": "Password reset successfully. You can now log in."}
 @router.get("/google/login")
-async def google_login(request: Request):
+async def google_login(request: Request, return_to: str | None = None):
+    origin = return_to or request.headers.get("referer")
+    if origin:
+        from urllib.parse import urlparse
+        parsed = urlparse(origin)
+        if parsed.scheme and parsed.netloc:
+            origin = f"{parsed.scheme}://{parsed.netloc}"
+        else:
+            origin = None
+
+    allowed_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+    if settings.frontend_url:
+        allowed_origins.append(settings.frontend_url.rstrip("/"))
+
+    if origin and (origin in allowed_origins or "localhost" in origin or "127.0.0.1" in origin or "vercel.app" in origin):
+        request.session["oauth_frontend_url"] = origin
+    else:
+        request.session["oauth_frontend_url"] = settings.frontend_url or "http://localhost:5173"
+
     redirect_uri = settings.google_redirect_uri
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
@@ -100,7 +118,8 @@ async def google_callback(request: Request, session: Session = Depends(get_sessi
     )
 
     access_token = auth_service.create_access_token(str(user.user_id))
-    return RedirectResponse(url=f"{settings.frontend_url.rstrip('/')}/oauth-success?token={access_token}")
+    target_frontend = request.session.pop("oauth_frontend_url", None) or settings.frontend_url or "http://localhost:5173"
+    return RedirectResponse(url=f"{target_frontend.rstrip('/')}/oauth-success?token={access_token}")
 
 @router.get("/me", response_model=UserRead)
 def get_me(current_user: User = Depends(get_current_user)):

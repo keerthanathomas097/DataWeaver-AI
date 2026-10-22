@@ -273,7 +273,7 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl text-[14px] font-semibold hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-blue-600/20"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-[#24543D] text-[#F7F5EE] rounded-xl text-[14px] font-semibold hover:bg-[#1C4430] transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed shadow-sm shadow-[#24543D]/20 cursor-pointer"
         >
           {loading ? (
             <>
@@ -286,20 +286,20 @@ export default function SignupPage() {
         </button>
 
         <div className="relative flex items-center py-1">
-          <div className="flex-1 border-t border-slate-100" />
-          <span className="px-3 text-[12px] font-medium text-slate-400 uppercase tracking-wider">
+          <div className="flex-1 border-t border-[#D5DCD1]" />
+          <span className="px-3 text-[12px] font-medium text-[#69746A] uppercase tracking-wider">
             or
           </span>
-          <div className="flex-1 border-t border-slate-100" />
+          <div className="flex-1 border-t border-[#D5DCD1]" />
         </div>
 
         <GoogleSignInButton onClick={handleGoogleSignIn} disabled={loading} label="Sign up with Google" />
 
-        <p className="text-center text-[14px] text-slate-500 pt-1">
+        <p className="text-center text-[14px] text-[#69746A] pt-1">
           Already have an account?{' '}
           <Link
             to="/login"
-            className="font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+            className="font-semibold text-[#24543D] hover:text-[#1C4430] transition-colors"
           >
             Sign in
           </Link>

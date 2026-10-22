@@ -1,0 +1,21 @@
+{
+  "fractions": [0.10, 0.25, 0.50, 0.75, 1.0],
+  "n_splits": 5,
+  "n_repeats": 3,
+  "random_seed": 42,
+  "min_images_per_class": 20,
+  "recommended_images_per_class": 50,
+  "min_classes": 2,
+  "max_images_used": 5000,
+  "group_confidence_min": 0.95,
+  "max_group_share": 0.25,
+  "flat_from_start_tolerance": 0.02,
+  "improving_gain_min": 0.03,
+  "weak_signal_margin": 0.10,
+  "class_benefit_gain_min": 0.05,
+  "per_class_compare_fraction": 0.25,
+  "confused_pairs_max": 5,
+  "mislabel_candidates_max": 24,
+  "mislabel_min_confidence": 0.80,
+  "job_timeout_seconds": 600
+}
